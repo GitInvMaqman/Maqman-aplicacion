@@ -6,10 +6,19 @@
 {% endblock titulo %}
 
 {% block contenido %}
+<style>
+    .btn-iniciar-sesion{
+        width: 300px; height: 90px; 
+        font-size: 36px; 
+        background-color: gray; 
+        border-radius: 20px;
+        cursor: pointer;
+    }
+    .btn-iniciar-sesion:hover{
+        background-color: #93E3FF;
+    }
+</style>
 <a href="{% url 'reportesMaqman:login' %}">
-    <button>Iniciar Sesión</button>
-</a>
-<a href="{% url 'reportesMaqman:excel' %}">
-    <button>Excel</button>
+    <input class="btn-iniciar-sesion"type="button" value="Iniciar Sesión">
 </a>
 {% endblock contenido %}

@@ -7,7 +7,7 @@ from openpyxl.styles import Font, Alignment, Border, Side, PatternFill
 
 class ReportesExcel():
 
-    def reportes(self, request, *args, **kwargs):
+    def reportes(self):
         wb              = Workbook()
         reportes        = Reporte.objects.all().order_by('id_reporte')
         lista_letras    = 'BCDEFGHIJKLMNOP'
@@ -104,7 +104,7 @@ class ReportesExcel():
         return response
 
 
-    def reportes_mes(self, request, *args, **kwargs):
+    def reportes_mes(self):
         wb          = Workbook()
         lista_meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
 
@@ -211,7 +211,7 @@ class ReportesExcel():
 
 
 
-    def reportes_persona(self, request, *args, **kwargs):
+    def reportes_persona(self):
         wb          = Workbook()
         operadores  = Usuario.objects.filter(r_id_rol = 1)
 

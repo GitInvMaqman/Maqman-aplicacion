@@ -111,7 +111,7 @@ body {
 .sidenav__list-logout {
   position: relative;
   padding: 0;
-  bottom: -50%;
+  bottom: -45%;
   list-style-type: none;
 }
 

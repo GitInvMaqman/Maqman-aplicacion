@@ -7,16 +7,16 @@
 
 {% block contenido %}
 <style>
-    table, th, td{
+    table, th, td, select{
         border: 2px solid black;
         font-size: 36px;
         color: black;
     }
-    input, textarea{
+    input, textarea, select{
         font-size: 24px;
     }
-    input.text{
-        width: 100%;
+    input.text, select{
+        width: 90%;
     }
     input.fechahora{
         content: center;
@@ -58,8 +58,21 @@
         <tr>
             <td>Fecha:</td>
             <td>{{ form.fecha }}</td>
-            <td colspan="2">Operador: <input type="text" name="nombre_usuario" value="{{ user.p_id_persona.nombres }} {{ user.p_id_persona.apellido_paterno }} {{ user.p_id_persona.apellido_materno }}" style="width: 100%;" readonly></td>
-            <input type="hidden" name="p_id_persona"  value="{{ user.p_id_persona.id_persona }}">
+            
+            {% if user.r_id_rol.id_rol == 1 %}
+                <td colspan="2">Operador: <input type="text" name="nombre_usuario"  id="id_nombre_usuario" value="{{ user.p_id_persona.nombres }} {{ user.p_id_persona.apellido_paterno }} {{ user.p_id_persona.apellido_materno }}" style="width: 100%;" readonly></td>
+                <input type="hidden" name="p_id_persona"  value="{{ user.p_id_persona.id_persona }}">
+            {% else %}
+                <td colspan="2">Operador: 
+                    <select name="idUsuarioSelect" class="form-control" required name="nombre_usuario" id="id_nombre_usuario" onchange="changeFunc();">
+                        <option value>- Elegir Operador -</option>
+                        {% for o in operadores %}
+                        <option value="{{ o.p_id_persona.id_persona }}">{{ o.p_id_persona.nombres }} {{ o.p_id_persona.apellido_paterno }} {{ o.p_id_persona.apellido_materno }}</option>
+                        {% endfor %}
+                    </select>
+                <div id="idUsuarioInput"></div>
+            {% endif %}
+                
         </tr>
         <th colspan="4">Horómetro</th>
         <tr>
@@ -91,9 +104,13 @@
             
             {% if a.id_accesorio == 1 or a.id_accesorio == 3 %}
             <tr>
-                <td colspan="2"><input class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}">{{ a.accesorio_minicargador }}</td>
+                <td colspan="2">
+                    <input class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}">{{ a.accesorio_minicargador }}
+                </td>
             {% else %}
-                <td colspan="2"><input class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}">{{ a.accesorio_minicargador }}</td>
+                <td colspan="2">
+                    <input class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}">{{ a.accesorio_minicargador }}
+                </td>
             </tr>
             {% endif %}
             
@@ -103,16 +120,28 @@
         <tr>
             <td colspan="4">{{ form.observaciones }}</td>
         </tr>
-    </table>
-    <table>
+    <!-- </table>
+    <table> -->
         <tr>
-            <td><input class="file" type="file" name="img_maquinaria" id="id_img_maquinaria" value="null"></td>
-            <td><input class="file" type="file" name="img_report" id="id_img_report"></td>
-            <td><button type="submit">Mandar Reporte</button></td>
+            <td style="background-color: rgb(255, 99, 99);">
+                <!-- <input class="file" type="file" name="img_maquinaria" id="id_img_maquinaria" value="null"> -->
+            </td>
+            <td style="background-color: rgb(255, 99, 99);">
+                <!-- <input class="file" type="file" name="img_report" id="id_img_report"> -->
+            </td>
+            <td colspan="2">
+                <input type="submit" value="Mandar Reporte" style="width: 100%; height: 90px;">
+            </td>
         </tr>
     </table>
 </form>
-<script>
+<script type="text/javascript">
+
+    function changeFunc() {
+        var selectBox = document.getElementById("id_nombre_usuario");
+        let selectedValue = selectBox.options[selectBox.selectedIndex].value;
+        document.getElementById("idUsuarioInput").innerHTML = '<input type="hidden" name="p_id_persona"   id="id_p_id_persona" value="'+selectedValue+'">'
+    }
 
 </script>
 

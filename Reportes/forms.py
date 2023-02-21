@@ -55,7 +55,6 @@ class ReporteForm(forms.ModelForm):
             'obra' : forms.TextInput(attrs={
                 'class' : 'text',
                 'placeholder' : 'Obra',
-                'style' : 'width: 100%;',
                 'required' : 'true',
             }),
             'fecha' : forms.DateInput(format=('%d-%m-%Y'), attrs={

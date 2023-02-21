@@ -21,22 +21,40 @@
             top: 0;
         }
     </style>
+    
+    {% if user.r_id_rol.id_rol == 1 %}
+    <h1>Mis Reportes</h1>
+    {% else %}
     <h1>Ver Reportes</h1>
+    {% endif %}
+        
     <div class="row">
 
         <div class="cartas-principales">
             {% for r in reportes %}
-            {% if r.u_p_id_persona.p_id_persona == user.p_id_persona %}
-                <div class="carta-principal">
-                    <a href="{% url 'reportesMaqman:detReport' r.id_reporte %}" class="card">
-                        <div class="contenido-card">
-                            <textarea rows="3" cols="20" style="border:0px; background-color:rgba(0, 0, 0, 0);resize: none; cursor:pointer; font-size: 20px; text-align: center; font-family: monospace;" readonly>{{r.cliente}}
-                                {{r.obra}}</textarea>
+                {% if user.r_id_rol.id_rol == 2 %}
+                    <div class="carta-principal">
+                        <a href="{% url 'reportesMaqman:detReport' r.id_reporte %}" class="card">
+                            <div class="contenido-card">
+                                <textarea rows="3" cols="20" style="border:0px; background-color:rgba(0, 0, 0, 0);resize: none; cursor:pointer; font-size: 20px; text-align: center; font-family: monospace;" readonly>{{r.cliente}}
+                                    {{r.obra}}</textarea>
+                            </div>
+                            <p class="pie-card">{{ r.fecha|date:'F d' }}</p>
+                        </a>
+                    </div>
+                {% else %}
+                    {% if r.u_p_id_persona.p_id_persona == user.p_id_persona %}
+                        <div class="carta-principal">
+                            <a href="{% url 'reportesMaqman:detReport' r.id_reporte %}" class="card">
+                                <div class="contenido-card">
+                                    <textarea rows="3" cols="20" style="border:0px; background-color:rgba(0, 0, 0, 0);resize: none; cursor:pointer; font-size: 20px; text-align: center; font-family: monospace;" readonly>{{r.cliente}}
+                                        {{r.obra}}</textarea>
+                                </div>
+                                <p class="pie-card">{{ r.fecha|date:'F d' }}</p>
+                            </a>
                         </div>
-                        <p class="pie-card">{{ r.fecha|date:'F d' }}</p>
-                    </a>
-                </div>
-            {% endif %}
+                    {% endif %}
+                {% endif %}
             {% endfor %}
         </div>
     </div>

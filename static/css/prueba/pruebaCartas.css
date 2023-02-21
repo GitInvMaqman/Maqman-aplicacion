@@ -7,7 +7,7 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     padding: 45px;
     text-align: center;
-    background-color: #f1f1f1;
+    background-color: #93E3FF;
     cursor: pointer;
     border-radius: 10px;
     position: relative;
@@ -30,6 +30,7 @@
     position: absolute;
     justify-content: center;
     align-items: center;
+    text-align: left;
     background-color: rgba(219, 219, 219, 0.5);
     width: 100%;
     height: 34px;

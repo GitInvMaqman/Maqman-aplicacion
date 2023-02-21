@@ -57,52 +57,65 @@
                 <td>Fecha:</td>
                 <td>{{ reporte.fecha | date:'Y-m-d' }}</td>
                 <td colspan="2">Operador: <br>
-                    {{ user.p_id_persona.nombres }} {{ user.p_id_persona.apellido_paterno }} {{ user.p_id_persona.apellido_materno }}</td>
-                <input type="hidden" name="p_id_persona"  value="{{ user.p_id_persona.id_persona }}">
+                    {{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}</td>
+                <input type="hidden" name="p_id_persona"  value="{{ reporte.u_p_id_persona.p_id_persona.id_persona }}">
             </tr>
             <th colspan="4">Horómetro</th>
             <tr>
                 <td>Hora Ingreso:</td>
                 <td>{{ reporte.hora_ingreso|time:'H:i' }}</td>
-                <td>Hora Término:</td>
-                <td>{{ reporte.hora_termino|time:'H:i' }}</td>
-            </tr>
-            <tr>
                 <td>Horómetro Inicial:</td>
                 <td>{{ reporte.horometro_inicial }}</td>
+
+            </tr>
+            <tr>
+                <td>Hora Término:</td>
+                <td>{{ reporte.hora_termino|time:'H:i' }}</td>
                 <td>Horómetro Final:</td>
                 <td>{{ reporte.horometro_final }}</td>
             </tr>
             <tr>
+                <td>N° Horas Arriendo:</td>
+                <td>{{ reporte.horas_arriendo }}</td>
+                <td>Horómetro Total:</td>
+                <td>{{ reporte.horometro_total }}</td>
+            </tr>
+            <tr>
                 <td>Equipo N°:</td>
                 <td>{{ reporte.equipo_numero }}</td>
-                <td>N° Horas Arriendo</td>
-                <td>{{ reporte.horas_arriendo }}</td>
+                <td>Hora Mínima:</td>
+                <td>{{ reporte.hora_minima }}</td>
             </tr>
             <th colspan="4">Accesorios Minicargador</th>
             {% for a in accesorios %}
                 {% if a.id_accesorio == 1 or a.id_accesorio == 3 %}
                     <tr>
-                        <td colspan="2">
-                            <input {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}">{{ a.accesorio_minicargador }}
+                        <td colspan="2" {% for d in detalles %}{% if d == a %}style="background-color: #93E3FF;"{% endif %}{% endfor %}>
+                            <input {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="return false;">{{ a.accesorio_minicargador }}
                         </td>
                 {% else %}
-                        <td colspan="2">
-                            <input {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}">{{ a.accesorio_minicargador }}
+                        <td colspan="2"  {% for d in detalles %}{% if d == a %}style="background-color: #93E3FF;"{% endif %}{% endfor %}>
+                            <input {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="return false;">{{ a.accesorio_minicargador }}
                         </td>
                     </tr>
                 {% endif %}
             {% endfor %}
             <th colspan="4">Observaciones</th>
             <tr>
-                <td colspan="4"><textarea name="" id="" cols="70" rows="10">{{ reporte.observaciones }}</textarea></td>
+                <td colspan="4"><textarea name="" id="" cols="70" rows="10" readonly>{{ reporte.observaciones }}</textarea></td>
             </tr>
         </table>
         <table>
             <tr>
-                <td><input type="file" name="" id=""></td>
-                <td><input type="file" name="" id=""></td>
-                <td><button>Editar Reporte</button></td>
+                <td style="background-color: rgb(255, 99, 99); height: 90px;">
+                    <!-- <input type="file" name="" id=""> -->
+                </td>
+                <td style="background-color: rgb(255, 99, 99);">
+                    <!-- <input type="file" name="" id=""> -->
+                </td>
+                <td style="background-color: rgb(255, 99, 99);">
+                    <!-- <input type="submit" value="Editar Reporte"> -->
+                </td>
             </tr>
         </table>
     <!-- </form> -->

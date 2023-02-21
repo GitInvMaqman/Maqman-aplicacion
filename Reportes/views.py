@@ -89,6 +89,7 @@ class GenReportFormView(FormView):
         context               = super().get_context_data(**kwargs)
         context['nombres']    = self.request.user.p_id_persona.nombres.split()
         context["accesorios"] = Accesorio.objects.all()
+        context["operadores"] = Usuario.objects.filter(r_id_rol = 1)
         return context
 
 class VerReportListView(ListView):
@@ -125,3 +126,19 @@ class excelReportesTemplateView(TemplateView):
 
     def get(self, request, *args, **kwargs):
        return ReportesExcel.reportes_persona(self, request, *args, **kwargs)
+
+class DescargarExcelTemplateView(TemplateView):
+    template_name = "vistas/descargarExcel.html"
+
+    def reportes_totales(self):
+        return ReportesExcel.reportes(self)
+    def reportes_mes(self):
+        return ReportesExcel.reportes_mes(self)
+    def reportes_persona(self):
+        return ReportesExcel.reportes_persona(self)
+
+    # Obtención de otros datos.
+    def get_context_data(self, *args, **kwargs):
+        context               = super().get_context_data(**kwargs)
+        context['nombres']    = self.request.user.p_id_persona.nombres.split()
+        return context
