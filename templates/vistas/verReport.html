@@ -1,0 +1,44 @@
+{% extends 'baseCuenta.html' %}
+{% load static %}
+
+{% block titulo %}
+    Ver Reporte
+{% endblock titulo %}
+
+{% block contenido %}
+    <style>
+        .carta{
+            width: 300px;
+            background-color: grey;
+            border: 2px solid black;
+            color: white;
+            margin: 5px;
+        }
+        .carta:hover{
+            background-color: red;
+        }
+        textarea{
+            top: 0;
+        }
+    </style>
+    <h1>Ver Reportes</h1>
+    <div class="row">
+
+        <div class="cartas-principales">
+            {% for r in reportes %}
+            {% if r.u_p_id_persona.p_id_persona == user.p_id_persona %}
+                <div class="carta-principal">
+                    <a href="{% url 'reportesMaqman:detReport' r.id_reporte %}" class="card">
+                        <div class="contenido-card">
+                            <textarea rows="3" cols="20" style="border:0px; background-color:rgba(0, 0, 0, 0);resize: none; cursor:pointer; font-size: 20px; text-align: center; font-family: monospace;" readonly>{{r.cliente}}
+                                {{r.obra}}</textarea>
+                        </div>
+                        <p class="pie-card">{{ r.fecha|date:'F d' }}</p>
+                    </a>
+                </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+        
+{% endblock contenido %}

@@ -1,0 +1,32 @@
+.button {
+    margin-right: 15px;
+    width: 45%;
+    height: 50%;
+    padding-top: 5%;
+    cursor: pointer;
+    display: inline-block;
+    border: 3px solid black;
+    border-radius: 5px;
+    color: black;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 48px;
+    -webkit-transition: all .15s ease-in-out;
+    transition: all .15s ease-in-out;
+}
+
+.button-1 {
+    background-color: grey;
+}
+
+.button-1:hover {
+    transform: scale( 1.05 );
+    box-shadow: 0 0 10px 0 black inset, 0 0 20px 2px black;
+    border: 3px solid black;
+    filter: invert(100%);
+}
+.button-2 {
+    background-color: gray;
+    width: 100px;
+}

@@ -1,0 +1,53 @@
+{% load static %}
+<html lang="en">
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="{% static 'img/Logo-ProcessSA.png' %}">
+        
+        <title>Inversiones Maqman S.P.A. - {% block titulo %}{% endblock titulo %}</title>
+    </head>
+    
+    <body>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <style>
+            body{
+                background: radial-gradient(circle at center, black 0, #383838, #858585 100%);
+                color: white;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+                align-content: center;
+            }
+            a{
+                text-decoration: none;
+                color: white;
+            }
+            .LogoMaqman{
+                margin: 100px;
+                font-size: 40px;
+                font-family: monospace;
+                align-content: center;
+            }
+            h1{
+                margin: 5px;
+                text-align: center;
+            }
+        </style>
+        <div class="LogoMaqman">
+            <a href="{% url 'reportesMaqman:home' %}">
+                <h1>Inversiones Maqman</h1>
+                <h1>S.P.A.</h1>
+                <center><img src="/static/img/Logo inv maqman.png" alt="Logo de Inversiones Maqman S.P.A."></center>
+            </a>
+        </div>
+
+        {% block contenido %}
+        {% endblock contenido %}
+    </body>
+
+</html>

@@ -1,0 +1,61 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/estilos/unicos.css' %}">
+
+<aside class="sidenav">
+    
+    <div class="menu-icon">
+        <img src="/static/img/Logo inv maqman.jpg" alt="Logo de Inversiones Maqman S.P.A.">
+        <p>Inversiones Maqman S.P.A.</p>
+    </div>
+    <style>
+        .sidenav__icon {
+            width: 30px;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+    </style>
+    <ul class="sidenav__list-perfil">
+        <a href="{% url 'reportesMaqman:perfil' %}">
+            <li class="sidenav__list-item" style="position: relative;">
+                <span class="sidenav__icon"><svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"></path></svg></span>
+                <p class="fs-14px" style="margin: 0px;">{{ user.r_id_rol.rol }} - {{ nombres.0 }}</p>
+            </li>
+        </a>
+    </ul>
+
+    <ul class="sidenav__list">
+
+        <a href="{% url 'reportesMaqman:operador' %}">
+            <li class="sidenav__list-item">
+                <span class="sidenav__icon"><svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z"></path></svg></span>    
+                <p class="fs-14px" style="margin: 0px;">Página Principal</p>
+            </li>
+        </a>
+        <a href="{% url 'reportesMaqman:genReport' %}">
+            <li class="sidenav__list-item">
+                <span class="sidenav__icon"><svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6c-.55 0-1 .45-1 1v13c0 1.1.9 2 2 2h13c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1-.45-1-1V7c0-.55-.45-1-1-1zm17-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 9h-3v3c0 .55-.45 1-1 1s-1-.45-1-1v-3h-3c-.55 0-1-.45-1-1s.45-1 1-1h3V6c0-.55.45-1 1-1s1 .45 1 1v3h3c.55 0 1 .45 1 1s-.45 1-1 1z"></path></svg></span>
+                <p class="fs-14px" style="margin: 0px;">Generar Report.</p>
+            </li>
+        </a>
+
+        <a href="{% url 'reportesMaqman:verReport' %}">
+            <li class="sidenav__list-item">
+                <span class="sidenav__icon"><svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6c-.55 0-1 .45-1 1v13c0 1.1.9 2 2 2h13c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1-.45-1-1V7c0-.55-.45-1-1-1zm17-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 9h-8c-.55 0-1-.45-1-1s.45-1 1-1h8c.55 0 1 .45 1 1s-.45 1-1 1zm-4 4h-4c-.55 0-1-.45-1-1s.45-1 1-1h4c.55 0 1 .45 1 1s-.45 1-1 1zm4-8h-8c-.55 0-1-.45-1-1s.45-1 1-1h8c.55 0 1 .45 1 1s-.45 1-1 1z"></path></svg></span>    
+                <p class="fs-14px" style="margin: 0px;">Ver Report.</p>
+            </li>
+        </a>
+
+        </ul>
+
+        <div class="sidenav__list-logout">
+            <a href="{% url 'reportesMaqman:logout' %}">
+                <li class="sidenav__list-item">
+                    <span class="sidenav__icon"><svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13.89 8.7L12 10.59 10.11 8.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 8.7 13.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l1.89 1.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l1.89-1.89c.39-.39.39-1.02 0-1.41-.39-.38-1.03-.38-1.41 0zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg></span>
+                    <p class="fs-14px" style="margin: 0px;">Cerrar Sesión</p>
+                </li>
+            </a>
+        </div>
+
+
+</aside>

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+    Home
+{% endblock titulo %}
+
+{% block contenido %}
+<a href="{% url 'reportesMaqman:login' %}">
+    <button>Iniciar Sesión</button>
+</a>
+<a href="{% url 'reportesMaqman:excel' %}">
+    <button>Excel</button>
+</a>
+{% endblock contenido %}
