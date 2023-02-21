@@ -32,7 +32,6 @@ class LogoutView(View):
     def get(self, request):
         return Login.cerrar_sesion(self, request)
 
-
 class PerfilTemplateView(TemplateView):
     template_name = "vistas/perfil.html"
 
@@ -51,7 +50,7 @@ class OperadorTemplateView(TemplateView):
         context['nombres']    = self.request.user.p_id_persona.nombres.split()
         return context
     
-    
+
 class AsistenteTemplateView(TemplateView):
     template_name = "vistas/asistente.html"
 
