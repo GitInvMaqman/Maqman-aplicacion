@@ -169,29 +169,6 @@ button.left {
     border-bottom-left-radius: 15px;
 }
 
-/* ---------- */
-/* Perfil     */
-/* ---------- */
- .tarjeta-perfil {
-    grid-template-columns: 1000px;
-    grid-template-rows: 130px 826px auto;
-    grid-template-areas: "imagen-perfil" "texto" "stats-perfil";
-    background-color: #ffcc7bcb;
-    text-align: center;
- }
-
- .tarjeta-perfil-imagen {
-    grid-area: imagen-perfil;
-    background: url("/static/img/iconos app/perfilUsuario.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
- }
-
- .tarjeta-perfil-stats {
-    grid-area: stats-perfil;
-    background-color: orange;
- }
 
 /* ---------- */
 /* Formulario */
@@ -224,28 +201,6 @@ button.left {
     grid-area: titulo-tabla;
     background-color: rgb(97, 15, 173);
     text-align: center;
-}
-/* --------------- */
-/* Perfil chiquito */
-/* --------------- */
-.tarjeta {
-    grid-template-columns: 300px;
-    grid-template-rows: 150px 200px 80px;
-    grid-template-areas: "imagen" "texto" "stats";
-    cursor: pointer;
-    text-align: center;
-}
-
-.tarjeta-imagen {
-    grid-area: imagen;
-    background: url("/static/img/iconos/usuario.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.tarjeta-stats {
-    grid-area: stats;
 }
 
 /* --------------------------------------------- */
