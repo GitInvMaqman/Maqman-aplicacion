@@ -14,6 +14,7 @@ from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
 import json
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,13 +35,16 @@ def get_secret(secret_name, secrets=secret):
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_secret('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', default=get_secret('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
 
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Application definition
 
@@ -62,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'MaqmanSite.urls'
@@ -87,12 +92,14 @@ TEMPLATES = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE'    : 'django.db.backends.oracle',
-        'NAME'      : get_secret('SID'),
-        'USER'      : get_secret('USER'),
-        'PASSWORD'  : get_secret('PASSWORD'),
-    }
+
+    'default': dj_database_url.config()
+    # 'default': {
+    #     'ENGINE'    : 'django.db.backends.oracle',
+    #     'NAME'      : get_secret('SID'),
+    #     'USER'      : get_secret('USER'),
+    #     'PASSWORD'  : get_secret('PASSWORD'),
+    # }
 }
 
 WSGI_APPLICATION = 'MaqmanSite.wsgi.application'
@@ -133,6 +140,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+if not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

@@ -65,21 +65,33 @@ class ReporteForm(forms.ModelForm):
             'hora_ingreso' : forms.TimeInput(format=('%H:%M'), attrs={
                 'class' : 'fechahora',
                 'type': 'time',
+                'value' : '00:00',
+                'id' : 'time1',
+                'onchange' : 'CalculoHorasArriendo();',
                 'required' : 'true',
             }),
             'hora_termino' : forms.TimeInput(format=('%H:%M'), attrs={
                 'class' : 'fechahora',
                 'type': 'time',
+                'value' : '00:00',
+                'id' : 'time2',
+                'onchange' : 'CalculoHorasArriendo();',
                 'required' : 'true',
             }),
             'horometro_inicial' : forms.NumberInput(attrs={
                 'class' : 'form-reporte',
                 'placeholder' : 'Horómetro Inicial',
+                'value' : 0,
+                'id' : 'horometer1',
+                'onchange' : 'CalculoHorometroTotal();',
                 'required' : 'true',
             }),
             'horometro_final' : forms.NumberInput(attrs={
                 'class' : 'form-reporte',
                 'placeholder' : 'Horómetro Final',
+                'value' : 0,
+                'id' : 'horometer2',
+                'onchange' : 'CalculoHorometroTotal();',
                 'required' : 'true',
             }),
             'horometro_total' : forms.NumberInput(attrs={
