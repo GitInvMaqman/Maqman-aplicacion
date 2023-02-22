@@ -39,7 +39,7 @@ def get_secret(secret_name, secrets=secret):
 SECRET_KEY = get_secret('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'RENDER' not in os.environ
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -94,7 +94,9 @@ TEMPLATES = [
 
 DATABASES = {
 
-    'default': dj_database_url.config()
+    'default': dj_database_url.config(
+     default='oracle://'+str(get_secret('USER'))+':'+str(get_secret('PASSWORD'))+'@localhost:1521/'+str(get_secret('SID'))
+    )
     # 'default': {
     #     'ENGINE'    : 'django.db.backends.oracle',
     #     'NAME'      : get_secret('SID'),
@@ -141,7 +143,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-if not DEBUG:
+if 'RENDER' in os.environ:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
