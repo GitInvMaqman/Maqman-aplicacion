@@ -21,6 +21,8 @@ class Persona(models.Model):
     celular             = models.CharField(max_length=12, blank=True, null=True)
     correo              = models.CharField(max_length=50, blank=True, null=True)
 
+    objects = PersonaManager()
+
     class Meta:
         managed     = False
         db_table    = 'persona'

@@ -70,6 +70,18 @@ class Login():
         return HttpResponseRedirect(reverse('reportesMaqman:login'))
     
 class ModificacionesTablas():
+    def crear_datos_prueba():
+        OperRol      = Rol.objects.crear_rol('Operador')
+        AsistRol     = Rol.objects.crear_rol('Asistente')
+        AdminRol     = Rol.objects.crear_rol('Administrador')
+        OperPersona  = Persona.objects.crear_persona('Operador De','Prueba','Uno','+56999999999','Correodepruebados@gmail.com',)
+        AsistPersona = Persona.objects.crear_persona('Asistente De','Prueba','Uno','+56987654321','Correodepruebauno@gmail.com',)
+        AdminPersona = Persona.objects.crear_persona('Antonio Andrés','Abarca','Millán','+56950101500','antonio.abarca.millan@gmail.com',)
+        OperUsuario  = Usuario.objects.crear_usuario(1, 'operPrueba', '123', 1)
+        AsistUsuario = Usuario.objects.crear_usuario(2, 'asistPrueba', '123', 2)
+        AdminUsuario = Usuario.objects.crear_usuario(3, 'admAntonio', '123', 3)
+
+
     def crear_reporte(datos, idPersona):
         idUsuario = Usuario(idPersona)
         reporteCreado = Reporte.objects.crear_reporte(

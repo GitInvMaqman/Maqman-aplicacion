@@ -9,39 +9,28 @@ from django.db.models import Q
 #----------------------------------------------------------------------------------------------------------------#
 # Managers
 #----------------------------------------------------------------------------------------------------------------#
-
+class PersonaManager(models.Manager):
+    def crear_persona(self, Nombres, apellidoPaterno, apellidoMaterno, Celular, Correo, **extra_fields):
+        persona = self.create(
+            nombres          = Nombres,
+            apellido_paterno = apellidoPaterno,
+            apellido_materno = apellidoMaterno,
+            celular = Celular,
+            correo = Correo,
+            **extra_fields
+        )
+        return persona
 class UsuarioManager(models.Manager):
     # Permite crear un nuevo Usuario.
-    # def crear_usuario(
-    #                 self, 
-    #                 nombreUsuario, 
-    #                 contraUsuario, 
-    #                 nombresUsuario, 
-    #                 apellidosUsuario, 
-    #                 rutUsuario, 
-    #                 correoUsuario, 
-    #                 celularUsuario, 
-    #                 idCalle, 
-    #                 idJerarquia, 
-    #                 idRol, 
-    #                 idUnidad, 
-    #                 **extra_fields
-    #             ):
-    #     usuario = self.create(
-    #         usuario                 = nombreUsuario,
-    #         contraseña              = contraUsuario,
-    #         nombres                 = nombresUsuario,
-    #         apellidos               = apellidosUsuario,
-    #         rut                     = rutUsuario,
-    #         correo                  = correoUsuario,
-    #         celular                 = celularUsuario,
-    #         calle_id_calle          = idCalle,
-    #         jerarquia_id_jerarquia  = idJerarquia,
-    #         rol_id_rol              = idRol,
-    #         unidad_id_unidad        = idUnidad,
-    #         **extra_fields
-    #     )
-    #     return usuario
+    def crear_usuario(self,idPersona, nombreUsuario, contraseñaUsuario, idRol, **extra_fields):
+        usuario = self.create(
+            p_id_persona        = idPersona,
+            nombre_usuario      = nombreUsuario,
+            contraseña_usuario  = contraseñaUsuario,
+            r_id_rol            = idRol,
+            **extra_fields
+        )
+        return usuario
     # Usuario
     def traer_datos_usuario(self, username, password):
         return self.filter(
@@ -64,12 +53,12 @@ class RolManager(models.Manager):
             id_rol = rol_id
         ).exists()
 
-    # def crear_rol(self, nombreRol, **extra_fields):
-    #     rol = self.create(
-    #         rol = nombreRol,
-    #         **extra_fields,
-    #     )
-    #     return rol
+    def crear_rol(self, nombreRol, **extra_fields):
+        rol = self.create(
+            rol = nombreRol,
+            **extra_fields,
+        )
+        return rol
 
     def traer_datos_rol(self):
         return self.all()
