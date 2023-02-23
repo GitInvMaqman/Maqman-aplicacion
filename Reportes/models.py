@@ -8,6 +8,9 @@ class Rol(models.Model):
 
     objects = RolManager()
 
+    def init(self,  id_rol):
+       self.p_id_rol= id_rol
+
     class Meta:
         managed = False
         db_table = 'rol'
@@ -22,6 +25,9 @@ class Persona(models.Model):
     correo              = models.CharField(max_length=50, blank=True, null=True)
 
     objects = PersonaManager()
+
+    def init(self,  id_persona):
+       self.p_id_persona= id_persona
 
     class Meta:
         managed     = False
@@ -39,7 +45,7 @@ class Usuario(models.Model):
     objects = UsuarioManager()
 
     def init(self,  id_usuario):
-       self.id_usuario= id_usuario
+       self.p_id_usuario= id_usuario
 
     class Meta:
         managed     = False
@@ -66,6 +72,9 @@ class Reporte(models.Model):
 
     objects = ReporteManager()
 
+    def init(self,  id_reporte):
+       self.id_reporte= id_reporte
+
     class Meta:
         managed     = False
         db_table    = 'reporte'
@@ -73,6 +82,9 @@ class Reporte(models.Model):
 class Accesorio(models.Model):
     id_accesorio            = models.AutoField(primary_key=True)
     accesorio_minicargador  = models.CharField(max_length=50)
+
+    def init(self,  id_accesorio):
+       self.p_id_accesorio= id_accesorio
 
     class Meta:
         managed     = False

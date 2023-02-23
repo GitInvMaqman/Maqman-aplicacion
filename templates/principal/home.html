@@ -24,4 +24,17 @@
 <a href="{% url 'reportesMaqman:btn_prueba' %}">
     <input class="btn-iniciar-sesion"type="button" value="crear usuarios">
 </a>
+
+<table>
+    <tr>
+        <th>usuario</th>
+    </tr>
+    
+    {% for d in datos %}
+        <tr>
+            <td>{{d.nombre_usuario}}</td>
+        </tr>
+    {% endfor %}
+        
+</table>
 {% endblock contenido %}
