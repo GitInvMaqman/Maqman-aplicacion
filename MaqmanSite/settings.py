@@ -35,11 +35,12 @@ def get_secret(secret_name, secrets=secret):
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.environ.get('SECRET_KEY', default=get_secret('SECRET_KEY'))
-SECRET_KEY = get_secret('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', default=get_secret('SECRET_KEY'))
+# SECRET_KEY = get_secret('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'RENDER' not in os.environ
+# DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -61,13 +62,13 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'MaqmanSite.urls'
@@ -95,7 +96,7 @@ TEMPLATES = [
 DATABASES = {
 
     'default': dj_database_url.config(
-     default='oracle://'+str(get_secret('USER'))+':'+str(get_secret('PASSWORD'))+'@localhost:1521/'+str(get_secret('SID'))
+        default='oracle://'+str(get_secret('USER'))+':'+str(get_secret('PASSWORD'))+'@localhost:1521/'+str(get_secret('SID'))
     )
     # 'default': {
     #     'ENGINE'    : 'django.db.backends.oracle',
