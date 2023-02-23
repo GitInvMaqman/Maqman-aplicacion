@@ -81,6 +81,12 @@ class ModificacionesTablas():
         AsistUsuario = Usuario.objects.crear_usuario(2, 'asistPrueba', '123', 2)
         AdminUsuario = Usuario.objects.crear_usuario(3, 'admAntonio', '123', 3)
 
+        lista_personas = {}
+        lista_personas[0] = {'Usuario': OperUsuario,'Persona': OperPersona, 'Rol': OperRol}
+        lista_personas[1] = {'Usuario': AsistUsuario,'Persona': AsistPersona, 'Rol': AsistRol}
+        lista_personas[2] = {'Usuario': AdminUsuario,'Persona': AdminPersona, 'Rol': AdminRol}
+
+        return lista_personas
 
     def crear_reporte(datos, idPersona):
         idUsuario = Usuario(idPersona)
