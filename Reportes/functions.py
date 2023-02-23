@@ -77,14 +77,11 @@ class ModificacionesTablas():
         OperPersona  = Persona.objects.crear_persona('Operador De','Prueba','Uno','+56999999999','Correodepruebados@gmail.com',)
         AsistPersona = Persona.objects.crear_persona('Asistente De','Prueba','Uno','+56987654321','Correodepruebauno@gmail.com',)
         AdminPersona = Persona.objects.crear_persona('Antonio Andrés','Abarca','Millán','+56950101500','antonio.abarca.millan@gmail.com',)
-        OperUsuario  = Usuario.objects.crear_usuario(1, 'operPrueba', '123', 1)
-        AsistUsuario = Usuario.objects.crear_usuario(2, 'asistPrueba', '123', 2)
-        AdminUsuario = Usuario.objects.crear_usuario(3, 'admAntonio', '123', 3)
+        OperUsuario  = Usuario.objects.crear_usuario(OperPersona, 'operPrueba', '123', OperRol)
+        AsistUsuario = Usuario.objects.crear_usuario(AsistPersona, 'asistPrueba', '123', AsistRol)
+        AdminUsuario = Usuario.objects.crear_usuario(AdminPersona, 'admAntonio', '123', AdminRol)
 
-        lista_personas = {}
-        lista_personas[0] = {'Usuario': OperUsuario,'Persona': OperPersona, 'Rol': OperRol}
-        lista_personas[1] = {'Usuario': AsistUsuario,'Persona': AsistPersona, 'Rol': AsistRol}
-        lista_personas[2] = {'Usuario': AdminUsuario,'Persona': AdminPersona, 'Rol': AdminRol}
+        lista_personas = [OperUsuario, AsistUsuario, AdminUsuario]
 
         return lista_personas
 
