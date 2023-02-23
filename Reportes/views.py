@@ -23,12 +23,6 @@ class HomeTemplateView(TemplateView):
         print("Usuarios creados!!")
         print("----------------------------------------")
         return usuarios
-    
-        # Obtención de otros datos.
-    def get_context_data(self, *args, **kwargs):
-        context               = super().get_context_data(**kwargs)
-        context['datos']      = Usuario.objects.all()
-        return context
 
 class LoginFormView(FormView):
     template_name = "principal/login.html"
