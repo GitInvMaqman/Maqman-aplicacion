@@ -17,12 +17,12 @@ import time
 class HomeTemplateView(TemplateView):
     template_name = "principal/home.html"
 
-    # def boton_prueba():
-    #     usuarios = ModificacionesTablas.crear_datos_prueba()
-    #     print("----------------------------------------")
-    #     print("Usuarios creados!!")
-    #     print("----------------------------------------")
-    #     return usuarios
+    def boton_prueba():
+        usuarios = ModificacionesTablas.crear_datos_prueba()
+        print("----------------------------------------")
+        print("Usuarios creados!!")
+        print("----------------------------------------")
+        return usuarios
 
 class LoginFormView(FormView):
     template_name = "principal/login.html"
