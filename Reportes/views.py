@@ -17,7 +17,7 @@ import time
 class HomeTemplateView(TemplateView):
     template_name = "principal/home.html"
 
-    def boton_prueba():
+    def boton_prueba(self):
         usuarios = ModificacionesTablas.crear_datos_prueba()
         print("----------------------------------------")
         print("Usuarios creados!!")
