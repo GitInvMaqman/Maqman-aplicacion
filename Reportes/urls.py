@@ -5,7 +5,7 @@ app_name = 'reportesMaqman'
 
 urlpatterns = [
     path(''                          , views.HomeTemplateView.as_view()          , name = 'home'),
-    path('1'                         , views.HomeTemplateView.boton_prueba    , name = 'btn_prueba'),
+    # path('1'                         , views.HomeTemplateView.boton_prueba    , name = 'btn_prueba'),
 
     path('Inicio-Sesión/'            , views.LoginFormView.as_view()             , name = 'login'),
     path('Cerrar-Sesión/'            , views.LogoutView.as_view()                , name = 'logout'),

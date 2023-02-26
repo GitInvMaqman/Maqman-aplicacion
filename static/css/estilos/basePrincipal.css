@@ -1,0 +1,69 @@
+body{
+    background: radial-gradient(circle at center, black 0, #383838, #858585 100%);
+    color: white;
+    padding: 10px;
+}
+
+.caja{
+    width: none;
+    margin: 10px;
+    padding: 10px;
+}
+.LogoMaqman{
+    font-size: 4vw;
+    font-family: monospace;
+    align-content: center;
+    margin-bottom: 50vw;
+}
+.LogoMaqman .texto-maqman{
+    z-index: -1;
+    height: 20%;
+    border-radius: 25px;
+    background-image: linear-gradient(to bottom left, black 20%, gray 99.9%, white 100%);
+}
+.LogoMaqman img{
+    border-radius: 15px;
+    width: 50vw;
+}
+h1{
+    margin: 5px;
+    text-align: center;
+}
+a{
+    text-decoration: none;
+    color: white;
+}
+
+.inicio-sesion {
+    align-content: center;
+}
+
+/* ------------------------------------------------------ */
+/* Pantallas medianas, punto de quiebre: 1024px de ancho  */
+/* ------------------------------------------------------ */
+@media only screen and (min-width: 64em) {
+    body{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        align-content: center;
+    }
+    .caja{
+        width: 50%;
+    }
+    .LogoMaqman{
+        font-size: 2vw;
+        font-family: monospace;
+        padding: 30px;
+        margin-bottom: 400px;
+    }
+    .LogoMaqman img{
+        border-radius: 15px;
+        width: 500px;
+    }
+    .inicio-sesion{
+        padding: 50px;
+    }
+    
+}

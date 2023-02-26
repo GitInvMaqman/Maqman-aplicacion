@@ -25,7 +25,7 @@ class Login():
 # Mensaje de alerta por si existen problemas con el login.
     def problemas_login(self): 
         messages.error(self.request, 'No se ha podido iniciar sesión')
-        return HttpResponseRedirect(reverse('reportesMaqman:home'))
+        return HttpResponseRedirect(reverse('reportesMaqman:login'))
 
 # Autenticación de usuario al loguearse.
     def login_autenticacion(self, usuario, nomUsuario, contraseña):

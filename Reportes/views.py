@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+#----------------------------------------------------------------------------------------------------------------#
+# Importaciones necesarias
+#----------------------------------------------------------------------------------------------------------------#
 
 from django.urls                import reverse_lazy
 from django.views.generic       import TemplateView, ListView, FormView, DetailView, View
@@ -10,25 +11,31 @@ from .forms     import *
 from .functions import *
 from .excel     import *
 
-import time
+#----------------------------------------------------------------------------------------------------------------#
+# Vistas
+#----------------------------------------------------------------------------------------------------------------#
 
-# Create your views here.
-
+# ------------------------- #
+# Home                      #
+# ------------------------- #
 class HomeTemplateView(TemplateView):
     template_name = "principal/home.html"
+    # def boton_prueba(self):
+    #     usuarios = ModificacionesTablas.crear_datos_prueba()
+    #     print("----------------------------------------")
+    #     print("Usuarios creados!!")
+    #     print("----------------------------------------")
+    #     return usuarios
 
-    def boton_prueba(self):
-        usuarios = ModificacionesTablas.crear_datos_prueba()
-        print("----------------------------------------")
-        print("Usuarios creados!!")
-        print("----------------------------------------")
-        return usuarios
+# ------------------------- #
+# Inicio y cierre de Sesión #
+# ------------------------- #
 
 class LoginFormView(FormView):
     template_name = "principal/login.html"
     form_class    = LoginForm
-    success_url   = reverse_lazy("reportesMaqman:home")
 
+    # Validación de los datos para su posterior inicio de sesión
     def form_valid(self, form):
         nomUsuario = form.cleaned_data['nombre_usuario']
         contraseña = form.cleaned_data['contraseña_usuario']
@@ -39,16 +46,20 @@ class LogoutView(View):
     def get(self, request):
         return Login.cerrar_sesion(self, request)
 
-class PerfilTemplateView(TemplateView):
+# ------------------------- #
+# Usuario                   #
+# ------------------------- #
+
+class PerfilTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "vistas/perfil.html"
 
     # Obtención de otros datos.
     def get_context_data(self, *args, **kwargs):
-        context               = super().get_context_data(**kwargs)
-        context['nombres']    = self.request.user.p_id_persona.nombres.split()
+        context            = super().get_context_data(**kwargs)
+        context['nombres'] = self.request.user.p_id_persona.nombres.split()
         return context
 
-class OperadorTemplateView(TemplateView):
+class OperadorTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "vistas/operador.html"
 
     # Obtención de otros datos.
@@ -56,9 +67,8 @@ class OperadorTemplateView(TemplateView):
         context               = super().get_context_data(**kwargs)
         context['nombres']    = self.request.user.p_id_persona.nombres.split()
         return context
-    
 
-class AsistenteTemplateView(TemplateView):
+class AsistenteTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "vistas/asistente.html"
 
     # Obtención de otros datos.
@@ -67,7 +77,11 @@ class AsistenteTemplateView(TemplateView):
         context['nombres']    = self.request.user.p_id_persona.nombres.split()
         return context
 
-class GenReportFormView(FormView):
+# ------------------------- #
+# Reportes                  #
+# ------------------------- #
+
+class GenReportFormView(LoginRequiredMixin, FormView):
     model         = Reporte
     form_class    = ReporteForm
     template_name = "vistas/genReport.html"
@@ -75,9 +89,9 @@ class GenReportFormView(FormView):
 
     # Validación del formulario y posterior creación de tarea.
     def form_valid(self, form):
-        idPersona   = self.request.POST.get('p_id_persona')
-        datos       = form.cleaned_data
-        lista = self.request.POST.getlist('accesorios')
+        datos     = form.cleaned_data
+        idPersona = self.request.POST.get('p_id_persona')
+        lista     = self.request.POST.getlist('accesorios')
 
         reporteCreado = ModificacionesTablas.crear_reporte(datos, idPersona)
         if lista:
@@ -107,8 +121,8 @@ class VerReportListView(ListView):
 
     # Obtención de otros datos.
     def get_context_data(self, *args, **kwargs):
-        context               = super().get_context_data(**kwargs)
-        context['nombres']    = self.request.user.p_id_persona.nombres.split()
+        context            = super().get_context_data(**kwargs)
+        context['nombres'] = self.request.user.p_id_persona.nombres.split()
         return context
 
 class DetReportDetailView(DetailView):
@@ -118,21 +132,21 @@ class DetReportDetailView(DetailView):
 
     # Obtención de otros datos.
     def get_context_data(self, **kwargs):
-        idReporte = self.object.id_reporte
+        idReporte             = self.object.id_reporte
         context               = super().get_context_data(**kwargs)
-        context['nombres']    = self.request.user.p_id_persona.nombres.split()
         context["accesorios"] = Accesorio.objects.all()
-        detalle = AccesorioReporte.objects.filter(r_id_reporte = idReporte).values_list()
-        context['detalles'] = []
+        context['nombres']    = self.request.user.p_id_persona.nombres.split()
+        # Se obtienen los accesorios seleccionados en el reporte.
+        detalle               = AccesorioReporte.objects.filter(r_id_reporte = idReporte).values_list()
+        context['detalles']   = []
         for d in detalle:
             context['detalles'].append(Accesorio.objects.get(id_accesorio = d[1]))
+        
         return context
     
-
-class excelReportesTemplateView(TemplateView):
-
-    def get(self, request, *args, **kwargs):
-       return ReportesExcel.reportes_persona(self, request, *args, **kwargs)
+# ------------------------- #
+# Excel                     #
+# ------------------------- #
 
 class DescargarExcelTemplateView(TemplateView):
     template_name = "vistas/descargarExcel.html"
@@ -146,6 +160,6 @@ class DescargarExcelTemplateView(TemplateView):
 
     # Obtención de otros datos.
     def get_context_data(self, *args, **kwargs):
-        context               = super().get_context_data(**kwargs)
-        context['nombres']    = self.request.user.p_id_persona.nombres.split()
+        context            = super().get_context_data(**kwargs)
+        context['nombres'] = self.request.user.p_id_persona.nombres.split()
         return context
