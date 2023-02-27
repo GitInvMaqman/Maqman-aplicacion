@@ -5,15 +5,12 @@ app_name = 'reportesMaqman'
 
 urlpatterns = [
     path(''                          , views.HomeTemplateView.as_view()          , name = 'home'),
-    # path('1'                         , views.HomeTemplateView.boton_prueba    , name = 'btn_prueba'),
 
     path('Inicio-Sesión/'            , views.LoginFormView.as_view()             , name = 'login'),
     path('Cerrar-Sesión/'            , views.LogoutView.as_view()                , name = 'logout'),
 
     path('Perfil/'                   , views.PerfilTemplateView.as_view()        , name = 'perfil'),
-
-    path('Vista-Operador/'           , views.OperadorTemplateView.as_view()      , name = 'operador'),
-    path('Vista-Asistente/'          , views.AsistenteTemplateView.as_view()     , name = 'asistente'),
+    path('Vista-Principal/'          , views.PrincipalTemplateView.as_view()     , name = 'vistaPrincipal'),
 
     path('Generar-Report/'           , views.GenReportFormView.as_view()         , name = 'genReport'),
     path('Ver-Reportes/'             , views.VerReportListView.as_view()         , name = 'verReport'),

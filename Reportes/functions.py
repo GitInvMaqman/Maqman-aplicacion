@@ -47,7 +47,7 @@ class Login():
         login(self.request, autUsuario) # Guarda la información para no tener que loguearse en cada instante.
 
         rol       = self.request.user.r_id_rol.rol
-        redirect_to = 'reportesMaqman:'+rol.lower() # Se guarda en una variable la redirección dependiendo del rol.
+        redirect_to = 'reportesMaqman:vistaPrincipal'
 
         messages.success(self.request,'Ha iniciado sesión como '+ rol)
 

@@ -53,17 +53,8 @@ class PerfilTemplateView(LoginRequiredMixin, TemplateView):
         context['nombres'] = self.request.user.p_id_persona.nombres.split()
         return context
 
-class OperadorTemplateView(LoginRequiredMixin, TemplateView):
-    template_name = "vistas/operador.html"
-
-    # Obtención de otros datos.
-    def get_context_data(self, *args, **kwargs):
-        context               = super().get_context_data(**kwargs)
-        context['nombres']    = self.request.user.p_id_persona.nombres.split()
-        return context
-
-class AsistenteTemplateView(LoginRequiredMixin, TemplateView):
-    template_name = "vistas/asistente.html"
+class PrincipalTemplateView(LoginRequiredMixin, TemplateView):
+    template_name = "vistas/vista-principal.html"
 
     # Obtención de otros datos.
     def get_context_data(self, *args, **kwargs):

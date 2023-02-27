@@ -7,14 +7,6 @@
         <img src="/static/img/Logo inv maqman.jpg" alt="Logo de Inversiones Maqman S.P.A.">
         <p>Inversiones Maqman S.P.A.</p>
     </div>
-    <style>
-        .sidenav__icon {
-            width: 30px;
-            position: absolute;
-            top: 5px;
-            left: 5px;
-        }
-    </style>
     <ul class="sidenav__list-perfil">
         <a href="{% url 'reportesMaqman:perfil' %}">
             <li class="sidenav__list-item" style="position: relative;">
@@ -29,13 +21,7 @@
     </ul>
 
     <ul class="sidenav__list">
-        
-        {% if user.r_id_rol.id_rol == 1 %}
-        <a href="{% url 'reportesMaqman:operador' %}">
-        {% else %}
-        <a href="{% url 'reportesMaqman:asistente' %}">
-        {% endif %}
-            
+        <a href="{% url 'reportesMaqman:vistaPrincipal' %}">
             <li class="sidenav__list-item">
                 <span class="sidenav__icon">
                     <svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

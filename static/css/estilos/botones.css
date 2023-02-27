@@ -1,21 +1,35 @@
 .button {
-    margin-right: 15px;
-    width: 90%;
-    height: 90%;
-    padding-top: 5%;
-    cursor: pointer;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: stretch;
+    justify-content: center;
+    width: 70vw; height: 40vw;
+    margin-right: 0px;
+    margin-bottom: 15px;
     border: 3px solid black;
     border-radius: 5px;
     color: black;
     text-align: center;
     text-transform: uppercase;
     font-weight: 600;
-    font-size: 48px;
+    font-size: 4vw;
+    cursor: pointer;
     -webkit-transition: all .15s ease-in-out;
     transition: all .15s ease-in-out;
+    align-items: center;
 }
-
+.button svg{
+    width: 20vw;
+}
+/* Non-mobile styles, 1024px breakpoint */
+@media only screen and (min-width: 64em) {
+    .button{
+        width: 25vw; height: 25vw;
+        margin-right: 15px;
+        font-size: 2.5vw;
+    }
+}
 .button-1 {
     background-color: grey;
 }
@@ -54,4 +68,17 @@
 .btnis2{
     width: 95%; height: 50px;
     padding: 5px 10px;
+}
+
+.btn-movil{
+    width: 50px;
+    border: 2px solid black;
+    border-radius: 50px;
+    filter: invert(100%);
+    transition: .3s ease all;
+}
+
+.btn-movil:hover{
+    box-shadow: 0 0 10px 0 black inset, 0 0 20px 2px black;
+    transform: scale( 1.3 );
 }
