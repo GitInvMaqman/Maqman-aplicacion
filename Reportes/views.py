@@ -21,18 +21,6 @@ from .excel     import *
 class HomeTemplateView(TemplateView):
     template_name = "principal/home.html"
 
-    # Obtención de otros datos.
-    def get_context_data(self, *args, **kwargs):
-        context            = super().get_context_data(**kwargs)
-        context['roles'] = Rol.objects.all()
-        return context
-    # def boton_prueba(self):
-    #     usuarios = ModificacionesTablas.crear_datos_prueba()
-    #     print("----------------------------------------")
-    #     print("Usuarios creados!!")
-    #     print("----------------------------------------")
-    #     return usuarios
-
 # ------------------------- #
 # Inicio y cierre de Sesión #
 # ------------------------- #
