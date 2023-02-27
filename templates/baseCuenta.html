@@ -25,12 +25,16 @@
         <div class="grid-container">
 
             {% include 'includes/sidenav.html' %}
+            {% include 'includes/header.html' %}
 
             <main class="main">
 
                 {% block contenido %}{% endblock contenido %}
 
             </main>
+
+            {% include 'includes/footer.html' %}
+
         </div>
     </body>
 </html>
