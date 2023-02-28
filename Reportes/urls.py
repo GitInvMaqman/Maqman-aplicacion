@@ -17,7 +17,7 @@ urlpatterns = [
     path('Detalle-Reporte/<int:pk>/' , views.DetReportDetailView.as_view()       , name = 'detReport'),
     path('Descargar-Reportes/'       , views.DescargarExcelTemplateView.as_view(), name = 'descargarReport'),
 
-    path('reporteTotal'      , views.DescargarExcelTemplateView.reportes_totales , name = 'reporteTotal'),
-    path('reportePersona'    , views.DescargarExcelTemplateView.reportes_persona , name = 'reportePersona'),
-    path('reporteMes'        , views.DescargarExcelTemplateView.reportes_mes     , name = 'reporteMes'),
+    path('reporteTotal'     , views.DescargarExcelTemplateView.reportes_totales , name = 'reporteTotal'),
+    path('reportePersona'   , views.DescargarExcelTemplateView.reportes_persona , name = 'reportePersona'),
+    path('reporteMes'       , views.DescargarExcelTemplateView.reportes_mes     , name = 'reporteMes'),
 ]

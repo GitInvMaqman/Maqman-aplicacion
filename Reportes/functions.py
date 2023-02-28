@@ -23,8 +23,10 @@ from django.urls import reverse_lazy, reverse
 class Login():
 
 # Mensaje de alerta por si existen problemas con el login.
-    def problemas_login(self): 
-        messages.error(self.request, 'No se ha podido iniciar sesión')
+    def problemas_login(self):
+        titulo = '<h1>No se ha podido iniciar sesión</h1>'
+        texto = '<p style="font-size:24px;">Verifica que el "Usuario" y/o la "Contraseña" estén correctos.</p>'
+        messages.error(self.request, titulo+texto)
         return HttpResponseRedirect(reverse('reportesMaqman:login'))
 
 # Autenticación de usuario al loguearse.
@@ -47,26 +49,27 @@ class Login():
         login(self.request, autUsuario) # Guarda la información para no tener que loguearse en cada instante.
 
         rol       = self.request.user.r_id_rol.rol
+        nombre    = self.request.user.p_id_persona.nombres.split()
         redirect_to = 'reportesMaqman:vistaPrincipal'
 
-        messages.success(self.request,'Ha iniciado sesión como '+ rol)
+        titulo = '<h1>Has iniciado sesión como '+ rol.upper() + ': '+ nombre[0] +'</h1>'
+        texto = '<p style="font-size:24px;">¡Inicio de sesión exitoso!</p>'
+        messages.success(self.request,titulo+texto)
 
         return HttpResponseRedirect(reverse(redirect_to))
 
 # Verificación de los permisos según el rol para ingresar a ciertas páginas.
-    # def verificar_permisos_rol(permiso, request):
-    #     if permiso == 'Diseñador de Procesos':
-    #         permiso = 'diseñador'
-
-    #     redirect_to = 'AppWebHome:'+permiso.lower() # Se guarda en una variable la redirección dependiendo del rol.
-
-    #     messages.warning(request, 'No posees los permisos necesarios para ingresar a esta página')
-    #     return HttpResponseRedirect(reverse(redirect_to))
+    def verificar_permisos_rol(rol, request):
+        titulo = '<h1>Eres ' + rol.upper() + '</h1>'
+        texto = '<p style="font-size:24px;">No posees los permisos necesarios para ingresar a esta página.</p>'
+        messages.warning(request, titulo+texto)
+        return HttpResponseRedirect(reverse('reportesMaqman:vistaPrincipal'))
 
 # Cerrado de sesión con su respectivo mensaje de alerta y redirección.
     def cerrar_sesion(sel, request):
         logout(request)
-        messages.success(request, 'Se ha cerrado la sesión correctamente.')
+        titulo = '<h1>Se ha cerrado la sesión correctamente.</h1>'
+        messages.success(request, titulo)
         return HttpResponseRedirect(reverse('reportesMaqman:login'))
     
 class ModificacionesTablas():

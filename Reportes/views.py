@@ -48,7 +48,7 @@ class PerfilTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "vistas/perfil.html"
 
     # Obtención de otros datos.
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, **kwargs):
         context            = super().get_context_data(**kwargs)
         context['nombres'] = self.request.user.p_id_persona.nombres.split()
         return context
@@ -98,7 +98,7 @@ class GenReportFormView(LoginRequiredMixin, FormView):
         context["operadores"] = Usuario.objects.filter(r_id_rol = 1)
         return context
 
-class VerReportListView(ListView):
+class VerReportListView(LoginRequiredMixin, ListView):
     model               = Reporte
     paginate_by         = 9
     template_name       = "vistas/verReport.html"
@@ -110,7 +110,7 @@ class VerReportListView(ListView):
         context['nombres'] = self.request.user.p_id_persona.nombres.split()
         return context
 
-class DetReportDetailView(DetailView):
+class DetReportDetailView(LoginRequiredMixin, DetailView):
     model               = Reporte
     template_name       = "vistas/detReport.html"
     context_object_name = "reporte"
@@ -133,11 +133,24 @@ class DetReportDetailView(DetailView):
 # Excel                     #
 # ------------------------- #
 
-class DescargarExcelTemplateView(TemplateView):
+class DescargarExcelTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "vistas/descargarExcel.html"
 
-    def reportes_totales(self):
-        return ReportesExcel.reportes(self)
+    def get(self, request, *args, **kwargs):
+        permiso = request.user.r_id_rol.rol
+        rol     = 'Asistente'
+        if permiso == rol:
+            return super(DescargarExcelTemplateView, self).get(request, *args, **kwargs)
+        else:
+            return Login.verificar_permisos_rol(permiso, request)
+
+    def reportes_totales(request):
+        permiso = request.user.r_id_rol.rol
+        rol     = 'Asistente'
+        if permiso == rol:
+            return ReportesExcel.reportes(request)
+        else:
+            return Login.verificar_permisos_rol(permiso, request)
     def reportes_mes(self):
         return ReportesExcel.reportes_mes(self)
     def reportes_persona(self):
