@@ -6,47 +6,10 @@
 {% endblock titulo %}
 
 {% block contenido %}
-<style>
-    table, th, td, select{
-        border: 2px solid black;
-        font-size: 36px;
-        color: black;
-    }
-    input, textarea, select{
-        font-size: 24px;
-    }
-    input.text, select{
-        width: 90%;
-    }
-    input.fechahora{
-        content: center;
-    }
-    input.check{
-        width: 25px;
-        height: 25px;
-    }
-    input.file{
-        height: 100px;
-    }
-    textarea{
-        width: 100%;
-        text-align: center;
-    }
-    table{
-        background-color: black;
-        width: 100%;
-    }
-    th{
-        background-color: gray;
-    }
-    td {
-        background-color: gainsboro;
-    }
-</style>
-<form action="{% url 'reportesMaqman:genReport' %}" method="POST"> {% csrf_token %}
+<form action="{% url 'reportesMaqman:generarReport' %}" method="POST"> {% csrf_token %}
     <table>
         <h1>Generar Reporte</h1>
-        <th colspan="4">Control de Equipos</th>
+        <th class="first" colspan="4">Control de Equipos</th>
         <tr>
             <td>Cliente:</td>
             <td colspan="3">{{ form.cliente }}</td>
@@ -60,11 +23,11 @@
             <td>{{ form.fecha }}</td>
             
             {% if user.r_id_rol.id_rol == 1 %}
-                <td colspan="2">Operador: <input type="text" name="nombre_usuario"  id="id_nombre_usuario" value="{{ user.p_id_persona.nombres }} {{ user.p_id_persona.apellido_paterno }} {{ user.p_id_persona.apellido_materno }}" style="width: 100%;" readonly></td>
+                <td colspan="2">Operador:<input style="background-color: palegreen;"class="text" type="text" name="nombre_usuario"  id="id_nombre_usuario" value="{{ user.p_id_persona.nombres }} {{ user.p_id_persona.apellido_paterno }} {{ user.p_id_persona.apellido_materno }}" readonly></td>
                 <input type="hidden" name="p_id_persona"  value="{{ user.p_id_persona.id_persona }}">
             {% else %}
                 <td colspan="2">Operador: 
-                    <select name="idUsuarioSelect" class="form-control" required name="nombre_usuario" id="id_nombre_usuario" onchange="changeFunc();">
+                    <select class="text" name="idUsuarioSelect" class="form-control" required name="nombre_usuario" id="id_nombre_usuario" onchange="changeFunc();">
                         <option value>- Elegir Operador -</option>
                         {% for o in operadores %}
                         <option value="{{ o.p_id_persona.id_persona }}">{{ o.p_id_persona.nombres }} {{ o.p_id_persona.apellido_paterno }} {{ o.p_id_persona.apellido_materno }}</option>
@@ -104,12 +67,12 @@
             
             {% if a.id_accesorio == 1 or a.id_accesorio == 3 %}
             <tr>
-                <td colspan="2">
-                    <input class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}">{{ a.accesorio_minicargador }}
+                <td id="am{{a.id_accesorio}}" colspan="2">
+                    <input onclick="ChangeColColor(this,'am{{a.id_accesorio}}')" class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}">{{ a.accesorio_minicargador }}
                 </td>
             {% else %}
-                <td colspan="2">
-                    <input class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}">{{ a.accesorio_minicargador }}
+                <td id="am{{a.id_accesorio}}" colspan="2">
+                    <input onclick="ChangeColColor(this,'am{{a.id_accesorio}}')" class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}">{{ a.accesorio_minicargador }}
                 </td>
             </tr>
             {% endif %}
@@ -123,10 +86,10 @@
     <!-- </table>
     <table> -->
         <tr>
-            <td style="background-color: rgb(255, 99, 99);">
+            <td style="background-color: rgb(255, 99, 99); width: 25%;">
                 <!-- <input class="file" type="file" name="img_maquinaria" id="id_img_maquinaria" value="null"> -->
             </td>
-            <td style="background-color: rgb(255, 99, 99);">
+            <td style="background-color: rgb(255, 99, 99); width: 25%;">
                 <!-- <input class="file" type="file" name="img_report" id="id_img_report"> -->
             </td>
             <td colspan="2">
@@ -136,7 +99,14 @@
     </table>
 </form>
 <script type="text/javascript">
-
+    function ChangeColColor(chkCol,col) {
+        var varCol = document.getElementById(col);
+        var varColor = "gainsboro";
+        if (chkCol.checked == true) {
+            varColor = "palegreen";
+        }
+        varCol.style.backgroundColor = varColor;
+    }
     function changeFunc() {
         var selectBox = document.getElementById("id_nombre_usuario");
         let selectedValue = selectBox.options[selectBox.selectedIndex].value;
@@ -169,7 +139,7 @@
 
         strMsg = horas_arriendo;
 
-        document.getElementById('horasArriendo').innerHTML = '<input value="'+strMsg+'" type="number" name="horas_arriendo" class="form-reporte" placeholder="Horas de Arriendo" id="id_horas_arriendo" required="" step="0.01">';
+        document.getElementById('horasArriendo').innerHTML = '<input value="'+strMsg+'" min="1" type="number" name="horas_arriendo" class="form-reporte" placeholder="Horas de Arriendo" id="id_horas_arriendo" required="" step="0.01">';
     }
     function CalculoHorometroTotal(){
         var input1 = document.getElementById('horometer1');

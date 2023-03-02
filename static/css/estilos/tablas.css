@@ -1,0 +1,129 @@
+table, th, td, select{
+    font-size: 2vw;
+    color: black;
+}
+table{
+    border: 2px solid black;
+    background-color: black;
+    width: 100%;
+}
+table, th.first{
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+}
+th{
+    background-color: gray;
+}
+td {
+    background-color: gainsboro;
+}
+
+.tabla-usuario{
+    width: 90%;
+}
+.tabla-usuario th,
+.tabla-usuario td,
+.tabla-usuario input,
+.tabla-usuario select{
+    font-size: 3vw;
+}
+.tu1, .tu2{
+    width: 100%;
+}
+.tu2 {
+    border-radius: 0;
+    height: 200px;
+    max-height: 300px;
+    overflow-y: scroll;
+}
+table.tu2{
+    table-layout: fixed;
+}
+.tu2 td{
+    height: 7vw;
+    max-height: 7vw;
+    overflow-x: hidden;
+}
+.tu1 th,
+.tu2 td{
+    font-size: 2.5vw;
+}
+.tu1 th.first{
+    font-size: 3vw;
+}
+/* Dimensiones para la tabla de usuarios */
+.t1{
+    width: 3vw;
+}
+.t2{
+    width: 12vw;
+}
+.t3{
+    width: 17vw;
+}
+.t4{
+    width: 7vw;
+}
+
+table.excel,
+table.excel tr,
+table.excel td {
+    background-color: rgba(0, 0, 0, 0);
+    border: 0;
+}
+.trUsuario:hover > td{
+    background-color: rgb(255, 166, 0);
+    color: white;
+    transition: all .2s ease-in-out;
+}
+
+/* Non-mobile styles, 1024px breakpoint */
+@media only screen and (min-width: 64em) {
+    .tabla-usuario{
+        width: 40%;
+        margin-left: 15px;
+    }
+    .tabla-usuario th,
+    .tabla-usuario td,
+    .tabla-usuario input,
+    .tabla-usuario select{
+        font-size: 1.5vw;
+    }
+    .tu2 td.t1,
+    .tu2 td.t2,
+    .tu2 td.t3,
+    .tu2 td.t4{
+        height: 5vw;
+        max-height: 5vw;
+        overflow-x: hidden;
+    }
+    .tu1, .tu2{
+        width: 90%;
+        overflow-y: scroll;
+    }
+    .tu2{
+        height: 26vw;
+        max-height: 26vw;
+    }
+    table.tu1,
+    table.tu2{
+        margin: 0;
+    }
+    table.tu2{
+        width: 100%;
+    }
+    /* Dimensiones para la tabla de usuarios */
+    .t1{
+        width: 3vw;
+    }
+    .t2{
+        width: 7vw;
+    }
+    .t3{
+        width: 6vw;
+    }
+    .t4{
+        width: 5vw;
+    }
+
+}

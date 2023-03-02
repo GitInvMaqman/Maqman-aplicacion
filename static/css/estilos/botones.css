@@ -22,6 +22,9 @@
 .button svg{
     width: 20vw;
 }
+.btn-submit{
+    width: 100%; height: 10vw;
+}
 /* Non-mobile styles, 1024px breakpoint */
 @media only screen and (min-width: 64em) {
     .button{
@@ -29,6 +32,9 @@
         width: 25vw; height: 25vw;
         margin-right: 15px;
         font-size: 2.5vw;
+    }
+    .btn-submit{
+        height: 5vw;
     }
 }
 .button-1 {

@@ -34,7 +34,7 @@
             {% for r in reportes %}
                 {% if user.r_id_rol.id_rol == 2 %}
                     <div class="carta-principal">
-                        <a href="{% url 'reportesMaqman:detReport' r.id_reporte %}" class="card">
+                        <a href="{% url 'reportesMaqman:detalleReport' r.id_reporte %}" class="card">
                             <div class="contenido-card">
                                 <textarea rows="3" cols="20" style="border:0px; background-color:rgba(0, 0, 0, 0);resize: none; cursor:pointer; font-size: 20px; text-align: center; font-family: monospace;" readonly>{{r.cliente}}
                                     {{r.obra}}</textarea>
@@ -45,7 +45,7 @@
                 {% else %}
                     {% if r.u_p_id_persona.p_id_persona == user.p_id_persona %}
                         <div class="carta-principal">
-                            <a href="{% url 'reportesMaqman:detReport' r.id_reporte %}" class="card">
+                            <a href="{% url 'reportesMaqman:detalleReport' r.id_reporte %}" class="card">
                                 <div class="contenido-card">
                                     <textarea rows="3" cols="20" style="border:0px; background-color:rgba(0, 0, 0, 0);resize: none; cursor:pointer; font-size: 20px; text-align: center; font-family: monospace;" readonly>{{r.cliente}}
                                         {{r.obra}}</textarea>

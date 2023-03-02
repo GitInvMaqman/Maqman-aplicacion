@@ -66,6 +66,7 @@ class ReporteForm(forms.ModelForm):
                 'class' : 'fechahora',
                 'type': 'time',
                 'value' : '00:00',
+                'min' : '00:01',
                 'id' : 'time1',
                 'onchange' : 'CalculoHorasArriendo();',
                 'required' : 'true',
@@ -74,6 +75,7 @@ class ReporteForm(forms.ModelForm):
                 'class' : 'fechahora',
                 'type': 'time',
                 'value' : '00:00',
+                'min' : '00:01',
                 'id' : 'time2',
                 'onchange' : 'CalculoHorasArriendo();',
                 'required' : 'true',
@@ -97,6 +99,7 @@ class ReporteForm(forms.ModelForm):
             'horometro_total' : forms.NumberInput(attrs={
                 'class' : 'form-reporte',
                 'placeholder' : 'Horómetro Total',
+                'value': 0,
                 'required' : 'true',
             }),
             'equipo_numero' : forms.TextInput(attrs={
@@ -121,5 +124,43 @@ class ReporteForm(forms.ModelForm):
                 'rows'      : '10',
                 'style'     : 'resize: none; font-family: monospace;',
                 'required' : 'true',
+            }),
+        }
+
+class PersonaForm(forms.ModelForm):
+    class Meta:
+        model = Persona
+        fields= [
+            'nombres',
+            'apellido_paterno',
+            'apellido_materno',
+            'celular',
+            'correo',
+        ]
+        widgets ={
+            'nombres': forms.TextInput(attrs={
+                'class' : 'text',
+                'placeholder' : 'Primer y segundo nombre',
+                'required' : 'true',
+            }),
+            'apellido_paterno': forms.TextInput(attrs={
+                'class' : 'text',
+                'placeholder' : 'Apellido paterno',
+                'required' : 'true',
+            }),
+            'apellido_materno': forms.TextInput(attrs={
+                'class' : 'text',
+                'placeholder' : 'Apellido materno',
+                'required' : 'true',
+            }),
+            'celular': forms.NumberInput(attrs={
+                'class' : 'number',
+                'placeholder' : '9 9999 9999',
+                'min' : "100000000",
+                'max' : "999999999",
+            }),
+            'correo': forms.EmailInput(attrs={
+                'class' : 'email',
+                'placeholder' : 'Correo@email.com',
             }),
         }

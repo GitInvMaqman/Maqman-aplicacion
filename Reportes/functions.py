@@ -73,22 +73,8 @@ class Login():
         return HttpResponseRedirect(reverse('reportesMaqman:login'))
     
 class ModificacionesTablas():
-    def crear_datos_prueba():
-        OperRol      = Rol.objects.crear_rol('Operador')
-        AsistRol     = Rol.objects.crear_rol('Asistente')
-        AdminRol     = Rol.objects.crear_rol('Administrador')
-        OperPersona  = Persona.objects.crear_persona('Operador De','Prueba','Uno','+56999999999','Correodepruebados@gmail.com',)
-        AsistPersona = Persona.objects.crear_persona('Asistente De','Prueba','Uno','+56987654321','Correodepruebauno@gmail.com',)
-        AdminPersona = Persona.objects.crear_persona('Antonio Andrés','Abarca','Millán','+56950101500','antonio.abarca.millan@gmail.com',)
-        OperUsuario  = Usuario.objects.crear_usuario(OperPersona, 'operPrueba', '123', OperRol)
-        AsistUsuario = Usuario.objects.crear_usuario(AsistPersona, 'asistPrueba', '123', AsistRol)
-        AdminUsuario = Usuario.objects.crear_usuario(AdminPersona, 'admAntonio', '123', AdminRol)
 
-        lista_personas = [OperUsuario, AsistUsuario, AdminUsuario]
-
-        return lista_personas
-
-    def crear_reporte(datos, idPersona):
+    def crear_reporte(request, datos, idPersona):
         idUsuario = Usuario(idPersona)
         reporteCreado = Reporte.objects.crear_reporte(
             datos['cliente'],
@@ -105,6 +91,8 @@ class ModificacionesTablas():
             datos['horometro_total'],
             datos['hora_minima'],
         )
+        titulo = '<h1>Reporte N° '+ str(reporteCreado.id_reporte) +' creado exitosamente!</h1>'
+        messages.success(request, titulo)
         return reporteCreado
     
     def crear_detalle(lista, reporte):
@@ -115,6 +103,29 @@ class ModificacionesTablas():
             detalleCreado = AccesorioReporte.objects.crear_detalle(accesorio, reporte)
             lista_detalles.append(detalleCreado)
         return lista_detalles
+    
+    def crear_persona(request, datos):
+        personaCreada = Persona.objects.crear_persona(
+            datos['nombres'],
+            datos['apellido_paterno'],
+            datos['apellido_materno'],
+            datos['celular'],
+            datos['correo'],
+        )
+        return personaCreada
+    def crear_usuario(request, idPersona, nUsuario, cUsuario, idRol):
+        rol = Rol(idRol)
+        usuarioCreado = Usuario.objects.crear_usuario(
+            idPersona,
+            nUsuario,
+            cUsuario,
+            rol,
+        )
+        persona = usuarioCreado.p_id_persona
+        titulo = '<h1>El usuario "'+ persona.nombres + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno +'"</h1>'
+        texto = '<p style="font-size:24px;">¡ha sido creado exitosamente!</p>'
+        messages.success(request, titulo + texto)
+        return usuarioCreado
 
     
 class operacionesFechas():
