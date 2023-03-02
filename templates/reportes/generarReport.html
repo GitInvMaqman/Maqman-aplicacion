@@ -83,14 +83,60 @@
         <tr>
             <td colspan="4">{{ form.observaciones }}</td>
         </tr>
-    <!-- </table>
-    <table> -->
+    </table>
+    <table>
         <tr>
-            <td style="background-color: rgb(255, 99, 99); width: 25%;">
-                <!-- <input class="file" type="file" name="img_maquinaria" id="id_img_maquinaria" value="null"> -->
+            <style>
+                input.file{
+                    /* display: none; */
+                    font-size: 1vw;
+                    border: 1px solid black;
+                    border-radius: 20px;
+                    cursor: pointer;
+                    margin-left: 20px;
+                }
+                input.file::file-selector-button{
+                    display: none;
+                    /* visibility: hidden; */
+                }
+                /* td.td-img{
+                    width: 200px;
+                } */
+                td.td-img:hover{
+                    background-color: orange;
+                }
+                label{
+                    /* color: white; */
+                    text-align: center;
+                    font-size: 2vw;
+                    cursor: pointer;
+                }
+            </style>
+            <td class="td-img">
+                <label for="id_img_report">
+                    <center>
+                        Reporte físico
+                        <br>
+                        <img src="" alt="" id="imgReport" height="150px" width="150px">
+                        <!-- <svg preserveAspectRatio="none" width="4vw" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.02 5H19V2.98c0-.54-.44-.98-.98-.98h-.03c-.55 0-.99.44-.99.98V5h-2.01c-.54 0-.98.44-.99.98v.03c0 .55.44.99.99.99H17v2.01c0 .54.44.99.99.98h.03c.54 0 .98-.44.98-.98V7h2.02c.54 0 .98-.44.98-.98v-.04c0-.54-.44-.98-.98-.98zM16 9.01V8h-1.01c-.53 0-1.03-.21-1.41-.58-.37-.38-.58-.88-.58-1.44 0-.36.1-.69.27-.98H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8.28c-.3.17-.64.28-1.02.28-1.09-.01-1.98-.9-1.98-1.99zM15.96 19H6c-.41 0-.65-.47-.4-.8l1.98-2.63c.21-.28.62-.26.82.02L10 18l2.61-3.48c.2-.26.59-.27.79-.01l2.95 3.68c.26.33.03.81-.39.81z"></path>
+                        </svg> -->
+                        <input class="file" required type="file" name="img_report" id="id_img_report" value="null" accept="image/png, image/jpg, image/gif, image/jpeg">
+                    </center>
+                </label>
             </td>
-            <td style="background-color: rgb(255, 99, 99); width: 25%;">
-                <!-- <input class="file" type="file" name="img_report" id="id_img_report"> -->
+            <td class="td-img">
+                <label for="id_img_maquinaria">
+                    <center>
+                        Maquinaria
+                        <br>
+                        <img src="" alt="" id="imgMaquinaria" height="150px" width="150px">
+                        <!-- <svg preserveAspectRatio="none" width="4vw" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.02 5H19V2.98c0-.54-.44-.98-.98-.98h-.03c-.55 0-.99.44-.99.98V5h-2.01c-.54 0-.98.44-.99.98v.03c0 .55.44.99.99.99H17v2.01c0 .54.44.99.99.98h.03c.54 0 .98-.44.98-.98V7h2.02c.54 0 .98-.44.98-.98v-.04c0-.54-.44-.98-.98-.98zM16 9.01V8h-1.01c-.53 0-1.03-.21-1.41-.58-.37-.38-.58-.88-.58-1.44 0-.36.1-.69.27-.98H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8.28c-.3.17-.64.28-1.02.28-1.09-.01-1.98-.9-1.98-1.99zM15.96 19H6c-.41 0-.65-.47-.4-.8l1.98-2.63c.21-.28.62-.26.82.02L10 18l2.61-3.48c.2-.26.59-.27.79-.01l2.95 3.68c.26.33.03.81-.39.81z"></path>
+                        </svg> -->
+                        <input class="file" required type="file" name="img_maquinaria" id="id_img_maquinaria" value="null" accept="image/png, image/jpg, image/gif, image/jpeg"/>
+                    </center>
+                </label>
             </td>
             <td colspan="2">
                 <input type="submit" value="Mandar Reporte" style="width: 100%; height: 90px;">
@@ -98,7 +144,24 @@
         </tr>
     </table>
 </form>
+<script src="{% static 'js/calculos.js'%} "></script>
 <script type="text/javascript">
+    function mostrarImagen(input, prev){
+        const image = document.getElementById(prev);
+        //CAPTURAMOS LA IMAGEN SELECCIONADA
+        input.addEventListener("change", (e) => {
+            console.log(e.target.files[0]);
+            let imageBinary = null;
+            //LEEMOS EL BINARIO DE LA IMAGEN
+            const reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = (e) => {
+                e.preventDefault();
+                image.setAttribute('src', e.target.result)
+            };
+        });
+
+    }
     function ChangeColColor(chkCol,col) {
         var varCol = document.getElementById(col);
         var varColor = "gainsboro";
@@ -111,52 +174,6 @@
         var selectBox = document.getElementById("id_nombre_usuario");
         let selectedValue = selectBox.options[selectBox.selectedIndex].value;
         document.getElementById("idUsuarioInput").innerHTML = '<input type="hidden" name="p_id_persona"   id="id_p_id_persona" value="'+selectedValue+'">'
-    }
-
-    function CalculoHorasArriendo(){
-        var input1 = document.getElementById('time1');
-        var input2 = document.getElementById('time2');
-        var strMsg = '';
-
-        var date1 = input1.valueAsDate;
-        var date2 = input2.valueAsDate;
-
-        var s = (date2.getTime() - date1.getTime());
-
-        var ms = s % 1000;
-        s = (s - ms) / 1000;
-        var secs = s % 60;
-        s = (s - secs) / 60;
-        var mins = s % 60;
-        var decimal = mins/60;
-        var hrs = (s - mins) / 60;
-        var horas_arriendo = parseFloat(hrs)+parseFloat((decimal).toFixed(2))
-
-        if ( horas_arriendo < 0 )
-            horas_arriendo = 0
-        else if ( horas_arriendo > 6)
-            horas_arriendo -= 1
-
-        strMsg = horas_arriendo;
-
-        document.getElementById('horasArriendo').innerHTML = '<input value="'+strMsg+'" min="1" type="number" name="horas_arriendo" class="form-reporte" placeholder="Horas de Arriendo" id="id_horas_arriendo" required="" step="0.01">';
-    }
-    function CalculoHorometroTotal(){
-        var input1 = document.getElementById('horometer1');
-        var input2 = document.getElementById('horometer2');
-        var strMsg = '';
-
-        var horometer1 = input1.value;
-        var horometer2 = input2.value;
-
-        var horometro_total = (horometer2 - horometer1);
-
-        if ( horometro_total < 0 )
-            horometro_total = 0
-
-        strMsg = horometro_total.toFixed(2);
-
-        document.getElementById('horometroTotal').innerHTML = '<input value="'+strMsg+'" type="number" name="horometro_total" class="form-reporte" placeholder="Horómetro Total" id="id_horometro_total" required="" step="0.01">';
     }
 
 </script>
