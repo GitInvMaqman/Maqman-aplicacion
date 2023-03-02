@@ -66,8 +66,8 @@ class Reporte(models.Model):
     hora_minima         = models.DecimalField(max_digits=4, decimal_places=2)
     equipo_numero       = models.CharField(max_length=50)
     observaciones       = models.CharField(max_length=1024)
-    img_maquinaria      = models.BinaryField(blank=True, null=True)
-    img_report          = models.BinaryField(blank=True, null=True)
+    img_maquinaria      = models.ImageField(upload_to="máquinas", null=True)
+    img_report          = models.ImageField(upload_to="reportes", null=True)
     u_p_id_persona      = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='u_p_id_persona')
 
     objects = ReporteManager()

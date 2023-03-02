@@ -52,7 +52,7 @@
 /* Cartas Principales                                 */
 /* -------------------------------------------------- */
 .cartas-principales {
-    column-count: 1;
+    column-count: 2;
     column-gap: 20px;
     margin: 20px;
 }
@@ -214,6 +214,6 @@ button.left {
 
     /* Divide las cartas principales en 3 columnas */
     .cartas-principales {
-        column-count: 3;
+        column-count: 5;
     }
 }

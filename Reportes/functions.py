@@ -23,9 +23,9 @@ from django.urls import reverse_lazy, reverse
 class Login():
 
 # Mensaje de alerta por si existen problemas con el login.
-    def problemas_login(self):
+    def problemas_login(self, problema):
         titulo = '<h1>No se ha podido iniciar sesión</h1>'
-        texto = '<p style="font-size:24px;">Verifica que el "Usuario" y/o la "Contraseña" estén correctos.</p>'
+        texto = '<p style="font-size:24px;">' + problema + '</p>'
         messages.error(self.request, titulo+texto)
         return HttpResponseRedirect(reverse('reportesMaqman:login'))
 
@@ -33,18 +33,29 @@ class Login():
     def login_autenticacion(self, usuario, nomUsuario, contraseña):
         # Si el usuario no existe manda un mensaje de alerta, de lo contrario continúa.
         if not usuario:
-            return Login.problemas_login(self)
+            problema = 'Verifica que la "Contraseñas" y/o el "Usuario" sean los correctos.'
+            return Login.problemas_login(self, problema)
+        
+        activo = Usuario.objects.traer_datos_usuario(nomUsuario, contraseña)[0][5]
+
+        if not activo:
+            problema = 'Esta cuenta ya no está activa, contáctate con la empresa o intena iniciar sesión con otra cuenta.'
+            return Login.problemas_login(self, problema)
+
+        
 
         rol_id = Usuario.objects.traer_datos_usuario(nomUsuario, contraseña)[0][3]
         is_rol = Rol.objects.is_rol_nombre(rol_id)
         # Si el rol del usuario no existe en la base de datos manda un mensaje de alerta, de lo contrario continúa.
         if not is_rol:
-            return Login.problemas_login(self)
+            problema = 'El rol de esta cuenta no existe, contáctate con la empres o intenta iniciar sesión con otra cuenta.'
+            return Login.problemas_login(self, problema)
         
         autUsuario = authenticate(username=nomUsuario, password=contraseña)
         # Si la autenticación del usuario es negada manda un mensaje de alerta, de lo contrario continúa.
         if autUsuario is None:
-            return Login.problemas_login(self)
+            problema = 'La autenticación del usuario ha sido negada, contáctate con la empresa o intenta iniciar sesión con otra cuenta.'
+            return Login.problemas_login(self, problema)
 
         login(self.request, autUsuario) # Guarda la información para no tener que loguearse en cada instante.
 

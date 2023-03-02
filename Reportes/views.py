@@ -113,7 +113,7 @@ class DetalleUsuarioFormView(LoginRequiredMixin, DetailView):
 class GenerarReportFormView(LoginRequiredMixin, FormView):
     model         = Reporte
     form_class    = ReporteForm
-    template_name = "reportes/generarReport.html"
+    template_name = "reportes/GenerarReport.html"
     success_url   = reverse_lazy("reportesMaqman:generarReport")
 
     # Validación del formulario y posterior creación de tarea.
