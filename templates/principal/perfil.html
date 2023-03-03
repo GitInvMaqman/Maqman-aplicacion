@@ -6,58 +6,25 @@
 {% endblock titulo %}
 
 {% block contenido %}
-    <style>
-        table, th, td{
-            border: 2px solid black;
-            font-size: 36px;
-            color: black;
-        }
-        input, textarea{
-            font-size: 24px;
-        }
-        input.text{
-            width: 100%;
-        }
-        input.fechahora{
-            content: center;
-        }
-        input.check{
-            width: 25px;
-            height: 25px;
-        }
-        input.file{
-            height: 100px;
-        }
-        textarea{
-            width: 100%;
-            text-align: center;
-        }
-        table{
-            background-color: black;
-            width: 100%;
-        }
-        th{
-            background-color: gray;
-        }
-        td {
-            background-color: gainsboro;
-        }
-    </style>
     <table>
-        <th colspan="2">Perfil</th>
+        <th class="first" colspan="2">Perfil</th>
         <tr>
-            <td>Nombre de Usuario: </td>
-            <td>{{ user.nombre_usuario }}</td>
+            <th colspan="2">Nombre Completo</th>
         </tr>
         <tr>
-            <td>Contraseña: </td>
-            <td>{{ user.contraseña_usuario }}</td>
+            <td>Nombres: </td>
+            <td>{{ user.p_id_persona.nombres }}</td>
         </tr>
         <tr>
-            <td colspan="2">Nombre Completo: </td>
+            <td>Apellido Paterno: </td>
+            <td>{{ user.p_id_persona.apellido_paterno }}</td>
         </tr>
         <tr>
-            <td colspan="2">{{ user.p_id_persona.nombres }} {{ user.p_id_persona.apellido_paterno }} {{ user.p_id_persona.apellido_materno }}</td>
+            <td>Apellido Materno: </td>
+            <td>{{ user.p_id_persona.apellido_materno }}</td>
+        </tr>
+        <tr>
+            <th colspan="2">Contacto</th>
         </tr>
         <tr>
             <td>Correo: </td>
@@ -65,7 +32,7 @@
                 {% if user.p_id_persona.correo %}
                     {{ user.p_id_persona.correo }}
                 {% else %}
-                    No tiene almacenado correo
+                    No tiene almacenado correo.
                 {% endif %}
             </td>
         </tr>
@@ -75,9 +42,20 @@
                 {% if user.p_id_persona.celular %}
                     {{ user.p_id_persona.celular }}
                 {% else %}
-                    No tiene almacenado número de celular
+                    No tiene almacenado número de celular.
                 {% endif %}
             </td>
+        </tr>
+        <tr>
+            <th colspan="2">Usuario</th>
+        </tr>
+        <tr>
+            <td>Nombre de Usuario: </td>
+            <td>{{ user.nombre_usuario }}</td>
+        </tr>
+        <tr>
+            <td>Contraseña: </td>
+            <td>{{ user.contraseña_usuario }}</td>
         </tr>
     </table>
 {% endblock contenido %}

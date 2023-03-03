@@ -79,13 +79,13 @@
 
 .btn-movil{
     width: 50px;
-    border: 2px solid black;
+    border: 2px solid #004aa7;
     border-radius: 50px;
     filter: invert(100%);
     transition: .3s ease all;
 }
 
 .btn-movil:hover{
-    box-shadow: 0 0 10px 0 black inset, 0 0 20px 2px black;
+    box-shadow: 0 0 10px 0 #004aa7 inset, 0 0 20px 2px #004aa7;
     transform: scale( 1.3 );
 }

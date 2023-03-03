@@ -85,7 +85,7 @@ class Login():
     
 class ModificacionesTablas():
 
-    def crear_reporte(request, datos, idPersona):
+    def crear_reporte(request, datos, idPersona, imgMaquina, imgReport):
         idUsuario = Usuario(idPersona)
         reporteCreado = Reporte.objects.crear_reporte(
             datos['cliente'],
@@ -101,6 +101,8 @@ class ModificacionesTablas():
             idUsuario,
             datos['horometro_total'],
             datos['hora_minima'],
+            imgMaquina,
+            imgReport,
         )
         titulo = '<h1>Reporte N° '+ str(reporteCreado.id_reporte) +' creado exitosamente!</h1>'
         messages.success(request, titulo)

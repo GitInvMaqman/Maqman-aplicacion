@@ -55,6 +55,7 @@ class PerfilTemplateView(LoginRequiredMixin, TemplateView):
 
 class PrincipalTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "principal/vista-principal.html"
+    
 
     # Obtención de otros datos.
     def get_context_data(self, *args, **kwargs):
@@ -68,6 +69,14 @@ class GestionUsuarioFormView(LoginRequiredMixin, FormView):
     template_name = "usuarios/crudUsuario.html"
     context_object_name = "persona"
     success_url = reverse_lazy("reportesMaqman:gestionUsuario")
+
+    def get(self, request, *args, **kwargs):
+        permiso = request.user.r_id_rol.rol
+        rol     = 'Asistente'
+        if permiso == rol:
+            return super(GestionUsuarioFormView, self).get(request, *args, **kwargs)
+        else:
+            return Login.verificar_permisos_rol(permiso, request)
 
     # Validación del formulario y posterior creación de tarea.
     def form_valid(self, form):
@@ -99,6 +108,14 @@ class DetalleUsuarioFormView(LoginRequiredMixin, DetailView):
     template_name       = "usuarios/detalleUsuario.html"
     context_object_name = "usuario"
 
+    def get(self, request, *args, **kwargs):
+        permiso = request.user.r_id_rol.rol
+        rol     = 'Asistente'
+        if permiso == rol:
+            return super(DetalleUsuarioFormView, self).get(request, *args, **kwargs)
+        else:
+            return Login.verificar_permisos_rol(permiso, request)
+
     # Obtención de otros datos.
     def get_context_data(self, **kwargs):
         context               = super().get_context_data(**kwargs)
@@ -118,11 +135,13 @@ class GenerarReportFormView(LoginRequiredMixin, FormView):
 
     # Validación del formulario y posterior creación de tarea.
     def form_valid(self, form):
-        datos     = form.cleaned_data
-        idPersona = self.request.POST.get('p_id_persona')
-        lista     = self.request.POST.getlist('accesorios')
+        datos      = form.cleaned_data
+        idPersona  = self.request.POST.get('p_id_persona')
+        imgMaquina = self.request.FILES.get('img_maquinaria')
+        imgReport  = self.request.FILES.get('img_report')
+        lista      = self.request.POST.getlist('accesorios')
 
-        reporteCreado = ModificacionesTablas.crear_reporte(self.request, datos, idPersona)
+        reporteCreado = ModificacionesTablas.crear_reporte(self.request, datos, idPersona, imgMaquina, imgReport)
         if lista:
             ModificacionesTablas.crear_detalle(lista, reporteCreado)
 
@@ -144,9 +163,12 @@ class GenerarReportFormView(LoginRequiredMixin, FormView):
 
 class VerReportListView(LoginRequiredMixin, ListView):
     model               = Reporte
-    paginate_by         = 9
+    paginate_by         = 15
     template_name       = "reportes/verReport.html"
     context_object_name = "reportes"
+
+    def get_queryset(self):
+        return Reporte.objects.all().order_by('-fecha')
 
     # Obtención de otros datos.
     def get_context_data(self, *args, **kwargs):

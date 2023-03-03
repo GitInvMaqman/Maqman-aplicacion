@@ -5,7 +5,7 @@
   /* Style the counter cards */
   .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    padding: 45px;
+    padding: 10px 5px 40px;
     text-align: center;
     background-color: #93E3FF;
     cursor: pointer;
@@ -58,7 +58,7 @@
 }
 
 .carta-principal {
-    padding: 24px;
+    padding: 5px;
 }
 
 /* --------------------------------------------------- */
@@ -202,7 +202,15 @@ button.left {
     background-color: rgb(97, 15, 173);
     text-align: center;
 }
-
+.textarea-card{
+    border:0px;
+    background-color:rgba(0, 0, 0, 0);
+    resize: none;
+    font-size:4vw;
+    cursor:pointer;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
 /* --------------------------------------------- */
 /* Pantallas medianas, punto de quiebre: 1050px  */
 /* --------------------------------------------- */
@@ -215,5 +223,8 @@ button.left {
     /* Divide las cartas principales en 3 columnas */
     .cartas-principales {
         column-count: 5;
+    }
+    .textarea-card{
+        font-size: 1.5vw;
     }
 }

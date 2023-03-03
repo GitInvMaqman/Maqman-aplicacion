@@ -75,8 +75,8 @@
                     <th class="t2">Apellido Paterno</th>
                     <th class="t2">Apellido Materno</th>
                     <th class="t3">Rol</th>
-                    <th class="t4">botón</th>
-                    <th class="t4">botón</th>
+                    <th class="t4">Info</th>
+                    <th class="t4">Report</th>
                 </tr>
             </table>
             <div class="tu2">
@@ -96,11 +96,21 @@
                                 </a>
                             </td>
                             <td class="t4">
-                                <a href="{% url 'reportesMaqman:verReport' %}">
-                                    <svg preserveAspectRatio="none" width="80%" viewBox="0 0 24 24" height="80%" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M16.59 9H15V4c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v5H7.41c-.89 0-1.34 1.08-.71 1.71l4.59 4.59c.39.39 1.02.39 1.41 0l4.59-4.59c.63-.63.19-1.71-.7-1.71zM5 19c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H6c-.55 0-1 .45-1 1z"></path>
-                                    </svg>
-                                </a>
+                                
+                                {% if u.r_id_rol.rol == "Operador" %}
+                                    <a href="{% url 'reportesMaqman:verReport' %}">
+                                        <svg preserveAspectRatio="none" width="80%" viewBox="0 0 24 24" height="80%" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M16.59 9H15V4c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v5H7.41c-.89 0-1.34 1.08-.71 1.71l4.59 4.59c.39.39 1.02.39 1.41 0l4.59-4.59c.63-.63.19-1.71-.7-1.71zM5 19c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H6c-.55 0-1 .45-1 1z"></path>
+                                        </svg>
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'reportesMaqman:gestionUsuario' %}">
+                                        <svg preserveAspectRatio="none" width="80%" viewBox="0 0 24 24" height="80%" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"></path>
+                                        </svg>
+                                    </a>
+                                {% endif %}
+                                    
                             </td>
                         </tr>
                     {% endfor %}

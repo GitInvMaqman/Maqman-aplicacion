@@ -30,33 +30,37 @@
         
     <div class="row">
 
-        <div class="cartas-principales">
-            {% for r in reportes %}
-                {% if user.r_id_rol.id_rol == 2 %}
-                    <div class="carta-principal">
-                        <a href="{% url 'reportesMaqman:detalleReport' r.id_reporte %}" class="card">
-                            <div class="contenido-card">
-                                <textarea rows="3" cols="20" style="border:0px; background-color:rgba(0, 0, 0, 0);resize: none; cursor:pointer; font-size: 20px; text-align: center; font-family: monospace;" readonly>{{r.cliente}}
-                                    {{r.obra}}</textarea>
-                            </div>
-                            <p class="pie-card">{{ r.fecha|date:'F d' }}</p>
-                        </a>
-                    </div>
-                {% else %}
-                    {% if r.u_p_id_persona.p_id_persona == user.p_id_persona %}
+        {% if reportes %}
+            <div class="cartas-principales">
+                {% for r in reportes %}
+                    {% if user.r_id_rol.id_rol == 2 %}
                         <div class="carta-principal">
                             <a href="{% url 'reportesMaqman:detalleReport' r.id_reporte %}" class="card">
                                 <div class="contenido-card">
-                                    <textarea rows="3" cols="20" style="border:0px; background-color:rgba(0, 0, 0, 0);resize: none; cursor:pointer; font-size: 20px; text-align: center; font-family: monospace;" readonly>{{r.cliente}}
-                                        {{r.obra}}</textarea>
+                                    <textarea rows="4" cols="40" class="textarea-card" readonly>{{r.cliente}}
+                                    {{r.obra}}</textarea>
                                 </div>
                                 <p class="pie-card">{{ r.fecha|date:'F d' }}</p>
                             </a>
                         </div>
+                    {% else %}
+                        {% if r.u_p_id_persona.p_id_persona == user.p_id_persona %}
+                            <div class="carta-principal">
+                                <a href="{% url 'reportesMaqman:detalleReport' r.id_reporte %}" class="card">
+                                    <div class="contenido-card">
+                                        <textarea rows="4" cols="40" class="textarea-card" readonly>{{r.cliente}}
+                                        {{r.obra}}</textarea>
+                                    </div>
+                                    <p class="pie-card">{{ r.fecha|date:'F d' }}</p>
+                                </a>
+                            </div>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <h1>No existen reportes en este momento.</h1>
+        {% endif %}
     </div>
     {% include 'includes/pagination.html' %}
         

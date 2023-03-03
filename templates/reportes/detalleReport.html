@@ -13,44 +13,67 @@
             <th class="first" colspan="4">Control de Equipos</th>
             <tr>
                 <td>Cliente:</td>
-                <td colspan="3">{{ reporte.cliente }}</td>
+                <td colspan="3">
+                    <input class="text" type="text" name="cliente" id="cliente" value="{{ reporte.cliente }}" readonly>
+                </td>
             </tr>
             <tr>
                 <td>Obra:</td>
-                <td colspan="3">{{ reporte.obra }}</td>
+                <td colspan="3">
+                    <input class="text" type="text" name="obra" id="obra" value="{{ reporte.obra }}" readonly>
+                </td>
             </tr>
             <tr>
                 <td>Fecha:</td>
-                <td>{{ reporte.fecha | date:'Y-m-d' }}</td>
+                <td>
+                    <input type="date" name="fecha" id="fecha" value="{{ reporte.fecha | date:'Y-m-d' }}" readonly>
+                </td>
                 <td colspan="2">Operador: <br>
-                    {{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}</td>
+                    <input class="text" type="text" name="operador" id="operador" value="{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}"readonly>
+                </td>
                 <input type="hidden" name="p_id_persona"  value="{{ reporte.u_p_id_persona.p_id_persona.id_persona }}">
             </tr>
             <th colspan="4">Horómetro</th>
             <tr>
                 <td>Hora Ingreso:</td>
-                <td>{{ reporte.hora_ingreso|time:'H:i' }}</td>
+                <td>
+                    <input type="time" name="hora_ingreso" id="hora_ingreso" value="{{ reporte.hora_ingreso|time:'H:i' }}" readonly>
+                </td>
                 <td>Horómetro Inicial:</td>
-                <td>{{ reporte.horometro_inicial }}</td>
+                <td>
+                    <input type="" name="horometro_inicial" id="horometro_inicial" value={{ reporte.horometro_inicial }} step="0,1" readonly>
+                </td>
 
             </tr>
             <tr>
                 <td>Hora Término:</td>
-                <td>{{ reporte.hora_termino|time:'H:i' }}</td>
+                <td>
+                    <input type="time" name="hora_termino" id="hora_termino" value="{{ reporte.hora_termino|time:'H:i' }}" readonly>
+                </td>
                 <td>Horómetro Final:</td>
-                <td>{{ reporte.horometro_final }}</td>
+                <td>
+                    <input type="" name="horometro_final" id="horometro_final" value="{{ reporte.horometro_final }}" step="0.1" readonly>
+                </td>
             </tr>
             <tr>
                 <td>N° Horas Arriendo:</td>
-                <td>{{ reporte.horas_arriendo }}</td>
+                <td>
+                    <input type="" name="horas_arriendo" id="horas_arriendo" value="{{ reporte.horas_arriendo }}" step="0.1" readonly>
+                </td>
                 <td>Horómetro Total:</td>
-                <td>{{ reporte.horometro_total }}</td>
+                <td>
+                    <input type="" name="horometro_total" id="horometro_total" value="{{ reporte.horometro_total }}" step="0.1" readonly>
+                </td>
             </tr>
             <tr>
                 <td>Equipo N°:</td>
-                <td>{{ reporte.equipo_numero }}</td>
+                <td>
+                    <input type="text" name="equipo_numero" id="equipo_numero" value="{{ reporte.equipo_numero }}" readonly>
+                </td>
                 <td>Hora Mínima:</td>
-                <td>{{ reporte.hora_minima }}</td>
+                <td>
+                    <input type="" name="hora_minima" id="hora_minima" value="{{ reporte.hora_minima }}" readonly>
+                </td>
             </tr>
             <th colspan="4">Accesorios Minicargador</th>
             {% for a in accesorios %}
@@ -73,14 +96,39 @@
         </table>
         <table>
             <tr>
-                <td style="background-color: rgb(255, 99, 99); height: 90px;">
-                    <!-- <input type="file" name="" id=""> -->
+                <td class="td-img">
+                    <label for="id_img_report">
+                        <center>
+                            Reporte físico
+                            <br>
+                            <input oninput="mostrarImagen(this, 'imgReport');" class="file" required readonly type="file" name="img_report" id="id_img_report" accept="image/png, image/jpg, image/gif, image/jpeg">
+                            <br>
+                        </center>
+                    </label>
+                    <center>
+                        <a href="{{reporte.img_report.url}}">
+                            <img src="{{reporte.img_report.url}}" alt="" id="imgReport" height="150px" width="150px">
+                        </a>
+                    </center>
                 </td>
-                <td style="background-color: rgb(255, 99, 99);">
-                    <!-- <input type="file" name="" id=""> -->
+                <td class="td-img">
+                    <label for="id_img_maquinaria">
+                        <center>
+                            Maquinaria
+                            <br>
+                            <input oninput="mostrarImagen(this, 'imgMaquinaria');" class="file" required readonly type="file" name="img_maquinaria" id="id_img_maquinaria" accept="image/png, image/jpg, image/gif, image/jpeg">
+                            <br>
+                            <!-- <img src="{% static 'img/imageNotFound.png' %}" alt="" id="imgReport" height="150px" width="150px"> -->
+                        </center>
+                    </label>
+                    <center>
+                        <a href="{{reporte.img_maquinaria.url}}">
+                            <img src="{{reporte.img_maquinaria.url}}" alt="Imagen de la maquinaria" id="imgMaquinaria" height="150px" width="150px">
+                        </a>
+                    </center>
                 </td>
-                <td style="background-color: rgb(255, 99, 99);">
-                    <!-- <input type="submit" value="Editar Reporte"> -->
+                <td>
+                    <input disabled type="submit" value="Editar Reporte" style="height: 15vw; width:100%; background-color: rgb(255, 119, 119);">
                 </td>
             </tr>
         </table>

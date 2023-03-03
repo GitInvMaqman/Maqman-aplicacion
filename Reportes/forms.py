@@ -85,7 +85,7 @@ class ReporteForm(forms.ModelForm):
                 'placeholder' : 'Horómetro Inicial',
                 'value' : 0,
                 'id' : 'horometer1',
-                'onchange' : 'CalculoHorometroTotal();',
+                'oninput' : 'CalculoHorometroTotal();',
                 'required' : 'true',
             }),
             'horometro_final' : forms.NumberInput(attrs={
@@ -93,7 +93,7 @@ class ReporteForm(forms.ModelForm):
                 'placeholder' : 'Horómetro Final',
                 'value' : 0,
                 'id' : 'horometer2',
-                'onchange' : 'CalculoHorometroTotal();',
+                'oninput' : 'CalculoHorometroTotal();',
                 'required' : 'true',
             }),
             'horometro_total' : forms.NumberInput(attrs={

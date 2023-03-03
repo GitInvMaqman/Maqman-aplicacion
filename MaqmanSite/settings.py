@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Reportes',
+    # 'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -155,8 +156,6 @@ if 'RENDER' in os.environ:
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'Reportes.backends.UsuarioBackend', 
@@ -167,3 +166,7 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# LOGIN SETTINGS
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/Inicio-Sesión'

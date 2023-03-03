@@ -66,7 +66,7 @@ class RolManager(models.Manager):
     
 class ReporteManager(models.Manager):
     # Permite crear un nuevo reporte.
-    def crear_reporte(self, Cliente, Obra, Fecha, HoraIngreso, HoraTermino, HorometroInicial, HorometroFinal, EquipoNumero, HorasArriendo, Observaciones, IdPersona, horometroTotal, horaMinima, **extra_fields):
+    def crear_reporte(self, Cliente, Obra, Fecha, HoraIngreso, HoraTermino, HorometroInicial, HorometroFinal, EquipoNumero, HorasArriendo, Observaciones, IdPersona, horometroTotal, horaMinima, imgMaquina, imgReporte, **extra_fields):
         reporte = self.create(
             cliente           = Cliente,
             obra              = Obra,
@@ -81,6 +81,8 @@ class ReporteManager(models.Manager):
             u_p_id_persona    = IdPersona,
             horometro_total   = horometroTotal,
             hora_minima       = horaMinima,
+            img_maquinaria    = imgMaquina,
+            img_report        = imgReporte,
             **extra_fields
         )
         return reporte
