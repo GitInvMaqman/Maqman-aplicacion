@@ -28,7 +28,7 @@ class UsuarioManager(models.Manager):
             nombre_usuario      = nombreUsuario,
             contraseña_usuario  = contraseñaUsuario,
             r_id_rol            = idRol,
-            is_active = 1,
+            is_active = True,
             **extra_fields
         )
         return usuario
