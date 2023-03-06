@@ -39,7 +39,7 @@ class Usuario(models.Model):
     contraseña_usuario  = models.CharField(max_length=50)
     r_id_rol            = models.ForeignKey(Rol, models.DO_NOTHING, db_column='r_id_rol')
     last_login          = models.DateTimeField()
-    is_active           = models.BooleanField()
+    is_active           = models.IntegerField()
     is_authenticated    = True
 
     objects = UsuarioManager()
