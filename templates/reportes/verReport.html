@@ -41,6 +41,11 @@
                                     {{r.obra}}</textarea>
                                 </div>
                                 <p class="pie-card">{{ r.fecha|date:'F d' }}</p>
+
+                                <div>
+                                    <img src="{{ r.img_maquinaria.url }}" alt="no carga">
+                                </div>
+
                             </a>
                         </div>
                     {% else %}
@@ -52,6 +57,11 @@
                                         {{r.obra}}</textarea>
                                     </div>
                                     <p class="pie-card">{{ r.fecha|date:'F d' }}</p>
+
+                                    <div>
+                                        <img src="{{ r.img_maquinaria.url }}" alt="no carga">
+                                    </div>
+
                                 </a>
                             </div>
                         {% endif %}
