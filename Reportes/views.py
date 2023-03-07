@@ -95,13 +95,20 @@ class GestionUsuarioFormView(LoginRequiredMixin, FormView):
             ModificacionesTablas.crear_usuario(self.request, personaCreada, nUsuario, cUsuario, idRol)
             return super(GestionUsuarioFormView, self).form_valid(form)
 
-
     def get_context_data(self, **kwargs):
         context             = super().get_context_data(**kwargs)
         context['nombres']  = self.request.user.p_id_persona.nombres.split()
         context["usuarios"] = Usuario.objects.all().order_by('p_id_persona')
         context["roles"]    = Rol.objects.all()
         return context
+    
+    def reporte_excel(request, pk):
+        permiso = request.user.r_id_rol.rol
+        rol     = 'Asistente'
+        if permiso == rol:
+            return ReportesExcel.reporte_operador(request, pk)
+        else:
+            return Login.verificar_permisos_rol(permiso, request)
     
 class DetalleUsuarioFormView(LoginRequiredMixin, DetailView):
     model               = Usuario
@@ -163,11 +170,13 @@ class GenerarReportFormView(LoginRequiredMixin, FormView):
 
 class VerReportListView(LoginRequiredMixin, ListView):
     model               = Reporte
-    paginate_by         = 15
+    paginate_by         = 12
     template_name       = "reportes/verReport.html"
     context_object_name = "reportes"
 
     def get_queryset(self):
+        if self.request.user.r_id_rol.rol == "Operador":
+            return Reporte.objects.filter(u_p_id_persona = self.request.user).order_by('-fecha')
         return Reporte.objects.all().order_by('-fecha')
 
     # Obtención de otros datos.

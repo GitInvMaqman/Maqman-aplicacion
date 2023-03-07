@@ -17,6 +17,7 @@ urlpatterns = [
 
     path('Gestión-Usuarios/'         , views.GestionUsuarioFormView.as_view()      , name = 'gestionUsuario'),
     path('Detalle-Usuario/<int:pk>/' , views.DetalleUsuarioFormView.as_view()      , name = 'detalleUsuario'),
+    path('Reporte-Usuario/<int:pk>/' , views.GestionUsuarioFormView.reporte_excel  , name = 'descargarReporte'),
 
     path('Descargar-Reportes/' , views.DescargarExcelTemplateView.as_view()        , name = 'descargarReport'),
     path('reporteTotal'        , views.DescargarExcelTemplateView.reportes_totales , name = 'reporteTotal'),
