@@ -218,6 +218,7 @@ class DetalleReportDetailView(LoginRequiredMixin, DetailView):
     model               = Reporte
     template_name       = "reportes/detalleReport.html"
     context_object_name = "reporte"
+    
 
     # Obtención de otros datos.
     def get_context_data(self, **kwargs):
