@@ -24,7 +24,7 @@ class Login():
 
 # Mensaje de alerta por si existen problemas con el login.
     def problemas_login(self, problema):
-        titulo = '<h1>No se ha podido iniciar sesión</h1>'
+        titulo = '<h2>No se ha podido iniciar sesión</h2>'
         texto = '<p style="font-size:24px;">' + problema + '</p>'
         messages.error(self.request, titulo+texto)
         return HttpResponseRedirect(reverse('reportesMaqman:login'))
@@ -39,7 +39,7 @@ class Login():
         activo = Usuario.objects.traer_datos_usuario(nomUsuario, contraseña)[0][5]
 
         if not activo:
-            problema = 'Esta cuenta ya no está activa, contáctate con la empresa o intena iniciar sesión con otra cuenta.'
+            problema = 'Esta cuenta ya no está activa, contáctate con la empresa o intenta iniciar sesión con otra cuenta.'
             return Login.problemas_login(self, problema)
 
         
@@ -63,7 +63,7 @@ class Login():
         nombre    = self.request.user.p_id_persona.nombres.split()
         redirect_to = 'reportesMaqman:vistaPrincipal'
 
-        titulo = '<h1>Has iniciado sesión como '+ rol.upper() + ': '+ nombre[0] +'</h1>'
+        titulo = '<h2>Has iniciado sesión como '+ rol.upper() + ': '+ nombre[0] +'</h2>'
         texto = '<p style="font-size:24px;">¡Inicio de sesión exitoso!</p>'
         messages.success(self.request,titulo+texto)
 
@@ -71,7 +71,7 @@ class Login():
 
 # Verificación de los permisos según el rol para ingresar a ciertas páginas.
     def verificar_permisos_rol(rol, request):
-        titulo = '<h1>Eres ' + rol.upper() + '</h1>'
+        titulo = '<h2>Eres ' + rol.upper() + '</h2>'
         texto = '<p style="font-size:24px;">No posees los permisos necesarios para ingresar a esta página.</p>'
         messages.warning(request, titulo+texto)
         return HttpResponseRedirect(reverse('reportesMaqman:vistaPrincipal'))
@@ -79,7 +79,7 @@ class Login():
 # Cerrado de sesión con su respectivo mensaje de alerta y redirección.
     def cerrar_sesion(sel, request):
         logout(request)
-        titulo = '<h1>Se ha cerrado la sesión correctamente.</h1>'
+        titulo = '<h2>Se ha cerrado la sesión correctamente.</h2>'
         messages.success(request, titulo)
         return HttpResponseRedirect(reverse('reportesMaqman:login'))
     
@@ -104,7 +104,7 @@ class ModificacionesTablas():
             imgMaquina,
             imgReport,
         )
-        titulo = '<h1>Reporte N° '+ str(reporteCreado.id_reporte) +' creado exitosamente!</h1>'
+        titulo = '<h2>Reporte N° '+ str(reporteCreado.id_reporte) +' creado exitosamente!</h2>'
         messages.success(request, titulo)
         return reporteCreado
     
@@ -135,10 +135,71 @@ class ModificacionesTablas():
             rol,
         )
         persona = usuarioCreado.p_id_persona
-        titulo = '<h1>El usuario "'+ persona.nombres + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno +'"</h1>'
+        titulo = '<h2>El usuario "'+ persona.nombres + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno +'"</h2>'
         texto = '<p style="font-size:24px;">¡ha sido creado exitosamente!</p>'
         messages.success(request, titulo + texto)
         return usuarioCreado
+    
+    def editar_usuario(request):
+        idPersona    = request.POST.get('id_persona')
+        usuario      = Usuario.objects.get(p_id_persona = idPersona)
+        uNombre      = request.POST.get('nombre_usuario')
+        usuarioExist = Usuario.objects.filter(nombre_usuario = uNombre)
+
+        if usuarioExist:
+            if usuario != usuarioExist[0]:
+                titulo = '<h2>¡Usuario ya existe!</h2>'
+                texto  = '<p style="font-size:24;">El nombre de usuario ya está asignado a alguien más, intenta poner otro nombre de usuario.</p>'
+                messages.error(request, titulo+texto)
+                return HttpResponseRedirect('/Detalle-Usuario/'+idPersona)
+
+        persona = usuario.p_id_persona
+
+        pNombres  = request.POST.get('nombres')
+        pAPaterno = request.POST.get('apellido_paterno')
+        pAMaterno = request.POST.get('apellido_materno')
+        pCelular  = request.POST.get('celular')
+        pCorreo   = request.POST.get('correo')
+
+        persona.nombres          = pNombres
+        persona.apellido_paterno = pAPaterno
+        persona.apellido_materno = pAMaterno
+        persona.celular          = pCelular
+        persona.correo           = pCorreo
+        persona.save()
+
+        uContraseña = request.POST.get('contraseña_usuario')
+        idRol       = request.POST.get('rol')
+        rRol        = Rol.objects.get(id_rol = idRol)
+
+        usuario.nombre_usuario     = uNombre
+        usuario.contraseña_usuario = uContraseña
+        usuario.r_id_rol           = rRol
+        usuario.save()
+
+        titulo = '<h2>¡Usuario actualizado!</h2>'
+        texto  = '<p style="font-size:24;">Los datos del usuario se han editado con éxito.</p>'
+        messages.success(request, titulo+texto)
+        return HttpResponseRedirect('/Detalle-Usuario/'+idPersona)
+    
+    def cambiar_activo(request):
+        idPersona    = request.POST.get('id_persona')
+        usuario      = Usuario.objects.get(p_id_persona = idPersona)
+
+        if usuario.is_active == 0:
+            usuario.is_active = 1
+            activo = 'activado'
+        else:
+            usuario.is_active = 0
+            activo = 'desactivado'
+
+        usuario.save()
+
+        titulo = '<h2>¡Usuario ' + activo + '!</h2>'
+        texto  = '<p style="font-size:24;">El usuario se ha '+ activo + ' con éxito.</p>'
+        messages.success(request, titulo+texto)
+        # return HttpResponseRedirect('/Detalle-Usuario/'+idPersona)
+        return HttpResponseRedirect('/Gestión-Usuarios/')
 
     
 class operacionesFechas():

@@ -14,7 +14,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    max-width: 300px;
+    max-width: 350px;
 }
 .card:hover {
     background-color: orange;
@@ -70,7 +70,7 @@
 
     .cartas-principales {
         column-count: 2;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     }
 }
 

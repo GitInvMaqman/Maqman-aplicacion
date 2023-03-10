@@ -53,17 +53,15 @@ table.tu2{
     font-size: 3vw;
 }
 /* Dimensiones para la tabla de usuarios */
-.t1{
-    width: 3vw;
+.t1, .t3, .t4{
+    width: 7vw;
+    text-align: center;
 }
 .t2{
     width: 12vw;
 }
 .t3{
     width: 17vw;
-}
-.t4{
-    width: 7vw;
 }
 
 table.excel,
@@ -115,7 +113,7 @@ table.excel td {
     }
     /* Dimensiones para la tabla de usuarios */
     .t1{
-        width: 3vw;
+        width: 4.6vw;
     }
     .t2{
         width: 7vw;

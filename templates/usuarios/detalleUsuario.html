@@ -8,69 +8,108 @@
 {% block contenido %}
 <h1>{{ usuario.p_id_persona.nombres }} {{ usuario.p_id_persona.apellido_paterno }} {{ usuario.p_id_persona.apellido_materno }}</h1>
 <center>
-    <div class="caja">
-        <form action="" method="post" style="width:100%;">{% csrf_token %}
-            <table>
-                <th class="first" colspan="2">Nombre Completo:</th>
-                <tr>
-                    <td>Nombres:</td>
-                    <td>
-                        {{ usuario.p_id_persona.nombres }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>Apellido Paterno:</td>
-                    <td>
-                        {{ usuario.p_id_persona.apellido_paterno }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>Apellido Materno:</td>
-                    <td>
-                        {{ usuario.p_id_persona.apellido_materno }}
-                    </td>
-                </tr>
-                <th colspan="2">Contacto:</th>
-                <tr>
-                    <td>Celular:</td>
-                    <td>
-                        {{ usuario.p_id_persona.celular }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>Correo:</td>
-                    <td>
-                        {{ usuario.p_id_persona.correo }}
-                    </td>
-                </tr>
-                <th colspan="2">Usuario:</th>
-                <tr>
-                    <td>Nombre de Usuario:</td>
-                    <td><input type="text" name="nombre_usuario" id="id_nombre_usuario" class="text" placeholder="Nombre de Usuario" required value="{{ usuario.nombre_usuario }}"></td>
-                </tr>
-                <tr>
-                    <td>Contraseña de Usuario:</td>
-                    <td><input type="text" name="contraseña_usuario" id="id_contraseña_usuario" class="text" placeholder="Contraseña de Usuario" required value="{{ usuario.contraseña_usuario }}">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Rol:</td>
-                    <td>
-                        <select name="rol" id="id_rol" required>
-                            <option value="{{ usuario.r_id_rol.id_rol }}" selected> {{ usuario.r_id_rol.rol }}</option>
-                        
-                            {% for r in roles %}
-                                <option value="{{ r.id_rol }}">{{ r.rol }}</option>
-                            {% endfor %}
+    <form action="{% url 'reportesMaqman:editarUsuario' %}" method="POST" style="width:100%;" id="formulario-editar-usuario">{% csrf_token %}
+        <input type="hidden" name="id_persona" id="id_persona" value="{{usuario.p_id_persona.id_persona}}">
+        <table>
+            <th class="first" colspan="3">Nombre Completo:</th>
+            <tr>
+                <td>Nombres:</td>
+                <td>
+                    <input class="text" type="text" name='nombres' id='id_nombres' value="{{ usuario.p_id_persona.nombres }}">
+                </td>
+            </tr>
+            <tr>
+                <td>Apellido Paterno:</td>
+                <td>
+                    <input class="text" type="text" name="apellido_paterno" id="id_apellido_paterno" value="{{ usuario.p_id_persona.apellido_paterno }}" required>
+                </td>
+            </tr>
+            <tr>
+                <td>Apellido Materno:</td>
+                <td>
+                    <input class="text" type="text" name="apellido_materno" id="id_apellido_materno" value="{{ usuario.p_id_persona.apellido_materno }}" required>
+                </td>
+            </tr>
+            <th colspan="3">Contacto:</th>
+            <tr>
+                <td>Celular:</td>
+                <td>
+                    <input type="number" min="100000000" max="999999999" name="celular" id="id_celular" value="{{ usuario.p_id_persona.celular }}" 
+                    {% if not usuario.p_id_persona.celular %}
+                        placeholder="No registrado"
+                    {% endif %}
+                        >
+                </td>
+            </tr>
+            <tr>
+                <td>Correo:</td>
+                <td>
+                    <input class="text" type="email" name="correo" id="id_correo" value="{{ usuario.p_id_persona.correo }}"
+                    {% if not usuario.p_id_persona.correo %}
+                        placeholder="No registrado"
+                    {% endif %}>
+                </td>
+            </tr>
+            <th colspan="3">Usuario:</th>
+            <tr>
+                <td>Nombre de Usuario:</td>
+                <td><input type="text" name="nombre_usuario" id="id_nombre_usuario" class="text" placeholder="Nombre de Usuario" required value="{{ usuario.nombre_usuario }}"></td>
+            </tr>
+            <tr>
+                <td>Contraseña de Usuario:</td>
+                <td><input type="text" name="contraseña_usuario" id="id_contraseña_usuario" class="text" placeholder="Contraseña de Usuario" required value="{{ usuario.contraseña_usuario }}">
+                </td>
+            </tr>
+            <tr>
+                <td>Rol:</td>
+                <td>
+                    <select name="rol" id="id_rol" required>
+                        <option value="{{ usuario.r_id_rol.id_rol }}" selected> {{ usuario.r_id_rol.rol }}</option>
+                    
+                        {% for r in roles %}
                             
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <!-- <td colspan="2"><input class="btn-submit" type="submit" value="Ingresar Usuario"></td> -->
-                </tr>
-            </table>
-        </form>
-    </div>
+                            {% if usuario.r_id_rol != r %}
+                                <option value="{{ r.id_rol }}">{{ r.rol }}</option>
+                            {% endif %}
+                                
+                        {% endfor %}
+                        
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <table style="width: 100%; border-radius: 0;">
+            <tr>
+                <td>
+                    
+                    {% if usuario.r_id_rol.rol != "Asistente" %}
+                    <button type="button" class="btn-submit btn-1" onclick="DescargarReporte('{{usuario.p_id_persona.id_persona}}', '{{ usuario.p_id_persona.nombres }} {{ usuario.p_id_persona.apellido_paterno }} {{ usuario.p_id_persona.apellido_materno }}');">Descargar Report.</button>
+                    {% else %}
+                    <button type="button" class="btn-submit btn-1" onclick="NoDescargas();">Report. no descargables</button>
+                    {% endif %}
+                    
+                </td>
+                <td>
+                    <button type="button" class="btn-submit btn-1" onclick="EditarUsuario('{{ usuario.p_id_persona.nombres }} {{ usuario.p_id_persona.apellido_paterno }} {{ usuario.p_id_persona.apellido_materno }}');">Editar Usuario</button>
+                </td>
+                <td>
+                    
+                    <button type="button" class="btn-submit btn-2" onclick="DesactivarActivarUsuario('{{ usuario.is_active }}', '{{ usuario.p_id_persona.nombres }} {{ usuario.p_id_persona.apellido_paterno }} {{ usuario.p_id_persona.apellido_materno }}');">
+                        {% if usuario.is_active %}
+                        Desactivar Usuario
+                        {% else %}
+                        Activar Usuario
+                        {% endif %}
+                    </button>
+                    
+                </td>
+            </tr>
+        </table>
+    </form>
+    <form action="{% url 'reportesMaqman:cambiarActivo' %}" method="POST" id="formulario-cambiar-activo">{% csrf_token %}
+        <input type="hidden" name="id_persona" id="id_persona" value="{{usuario.p_id_persona.id_persona}}">
+    </form>
+
 </center>
+<script src="{% static 'js/mensajes.js'%} "></script>
 {% endblock contenido %}

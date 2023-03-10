@@ -18,13 +18,20 @@ from .excel     import *
 # ------------------------- #
 # Home                      #
 # ------------------------- #
+
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 class HomeTemplateView(TemplateView):
     template_name = "principal/home.html"
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 
 # ------------------------- #
 # Inicio y cierre de Sesión #
 # ------------------------- #
 
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 class LoginFormView(FormView):
     template_name = "principal/login.html"
     form_class    = LoginForm
@@ -35,15 +42,20 @@ class LoginFormView(FormView):
         contraseña = form.cleaned_data['contraseña_usuario']
         usuario    = Usuario.objects.usuario_exists(nomUsuario, contraseña)
         return Login.login_autenticacion(self, usuario, nomUsuario, contraseña)
-    
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 class LogoutView(View):
     def get(self, request):
         return Login.cerrar_sesion(self, request)
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 
 # ------------------------- #
 # Usuario                   #
 # ------------------------- #
 
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 class PerfilTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "principal/perfil.html"
 
@@ -52,7 +64,8 @@ class PerfilTemplateView(LoginRequiredMixin, TemplateView):
         context            = super().get_context_data(**kwargs)
         context['nombres'] = self.request.user.p_id_persona.nombres.split()
         return context
-
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 class PrincipalTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "principal/vista-principal.html"
     
@@ -62,13 +75,14 @@ class PrincipalTemplateView(LoginRequiredMixin, TemplateView):
         context               = super().get_context_data(**kwargs)
         context['nombres']    = self.request.user.p_id_persona.nombres.split()
         return context
-    
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 class GestionUsuarioFormView(LoginRequiredMixin, FormView):
-    model         = Persona
-    form_class    = PersonaForm
-    template_name = "usuarios/crudUsuario.html"
+    model               = Persona
+    form_class          = PersonaForm
+    template_name       = "usuarios/crudUsuario.html"
     context_object_name = "persona"
-    success_url = reverse_lazy("reportesMaqman:gestionUsuario")
+    success_url         = reverse_lazy("reportesMaqman:gestionUsuario")
 
     def get(self, request, *args, **kwargs):
         permiso = request.user.r_id_rol.rol
@@ -78,7 +92,7 @@ class GestionUsuarioFormView(LoginRequiredMixin, FormView):
         else:
             return Login.verificar_permisos_rol(permiso, request)
 
-    # Validación del formulario y posterior creación de tarea.
+    # Validación del formulario y posterior creación del usuario.
     def form_valid(self, form):
         datos    = form.cleaned_data
         nUsuario = self.request.POST.get('nombre_usuario')
@@ -86,7 +100,7 @@ class GestionUsuarioFormView(LoginRequiredMixin, FormView):
         idRol    = self.request.POST.get('rol')
         usuarioExist = Usuario.objects.filter(nombre_usuario = nUsuario)
         if usuarioExist:
-            titulo = '<h1>¡Usuario ya existe!</h1>'
+            titulo = '<h2>¡Usuario ya existe!</h2>'
             texto = '<p style="font-size:24;">El nombre de usuario ya está asignado a alguien más, intenta poner otro nombre de usuario.</p>'
             messages.error(self.request, titulo+texto)
             return super().form_invalid(form)
@@ -98,7 +112,7 @@ class GestionUsuarioFormView(LoginRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         context             = super().get_context_data(**kwargs)
         context['nombres']  = self.request.user.p_id_persona.nombres.split()
-        context["usuarios"] = Usuario.objects.all().order_by('p_id_persona')
+        context["usuarios"] = Usuario.objects.order_by('-is_active', 'r_id_rol')
         context["roles"]    = Rol.objects.all()
         return context
     
@@ -109,11 +123,14 @@ class GestionUsuarioFormView(LoginRequiredMixin, FormView):
             return ReportesExcel.reporte_operador(request, pk)
         else:
             return Login.verificar_permisos_rol(permiso, request)
-    
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 class DetalleUsuarioFormView(LoginRequiredMixin, DetailView):
     model               = Usuario
     template_name       = "usuarios/detalleUsuario.html"
     context_object_name = "usuario"
+    form_class = PersonaForm
+    success_url = reverse_lazy("reportesMaqman:gestionUsuario")
 
     def get(self, request, *args, **kwargs):
         permiso = request.user.r_id_rol.rol
@@ -130,10 +147,20 @@ class DetalleUsuarioFormView(LoginRequiredMixin, DetailView):
         context['nombres']    = self.request.user.p_id_persona.nombres.split()
         return context
 
+    def editar_usuario(request):
+        return ModificacionesTablas.editar_usuario(request)
+    
+    def cambiar_activo(request):
+        return ModificacionesTablas.cambiar_activo(request)
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
+
 # ------------------------- #
 # Reportes                  #
 # ------------------------- #
 
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 class GenerarReportFormView(LoginRequiredMixin, FormView):
     model         = Reporte
     form_class    = ReporteForm
@@ -167,7 +194,8 @@ class GenerarReportFormView(LoginRequiredMixin, FormView):
         context["accesorios"] = Accesorio.objects.all()
         context["operadores"] = Usuario.objects.filter(r_id_rol = 1)
         return context
-
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 class VerReportListView(LoginRequiredMixin, ListView):
     model               = Reporte
     paginate_by         = 12
@@ -184,7 +212,8 @@ class VerReportListView(LoginRequiredMixin, ListView):
         context            = super().get_context_data(**kwargs)
         context['nombres'] = self.request.user.p_id_persona.nombres.split()
         return context
-
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 class DetalleReportDetailView(LoginRequiredMixin, DetailView):
     model               = Reporte
     template_name       = "reportes/detalleReport.html"
@@ -201,13 +230,19 @@ class DetalleReportDetailView(LoginRequiredMixin, DetailView):
         context['detalles']   = []
         for d in detalle:
             context['detalles'].append(Accesorio.objects.get(id_accesorio = d[1]))
-        
         return context
     
+    # def editar_report(request):
+    #     pass
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
+
 # ------------------------- #
 # Excel                     #
 # ------------------------- #
 
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 class DescargarExcelTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "reportes/descargarExcel.html"
 
