@@ -11,6 +11,8 @@ from django.db.models import Q
 #----------------------------------------------------------------------------------------------------------------#
 class PersonaManager(models.Manager):
     def crear_persona(self, Nombres, apellidoPaterno, apellidoMaterno, Celular, Correo, **extra_fields):
+        if Correo == None:
+            Correo = ''
         persona = self.create(
             nombres          = Nombres,
             apellido_paterno = apellidoPaterno,
