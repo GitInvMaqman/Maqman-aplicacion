@@ -164,7 +164,7 @@ class ModificacionesTablas():
         persona.nombres          = pNombres
         persona.apellido_paterno = pAPaterno
         persona.apellido_materno = pAMaterno
-        persona.celular          = pCelular
+        persona.celular          = int(pCelular)
         persona.correo           = pCorreo
         persona.save()
 
