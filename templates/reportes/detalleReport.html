@@ -41,7 +41,7 @@
                 </td>
                 <td>Horómetro Inicial:</td>
                 <td>
-                    <input type="number" name="horometro_inicial" id="horometer1" value="{{ reporte.horometro_inicial }}" step="0.1" oninput="CalculoHorometroTotal();">
+                    <input type="number" name="horometro_inicial" id="horometer1" value='{{ reporte.horometro_inicial|floatformat:"u" }}' step="0.1" oninput="CalculoHorometroTotal();">
                 </td>
 
             </tr>
@@ -52,17 +52,17 @@
                 </td>
                 <td>Horómetro Final:</td>
                 <td>
-                    <input type="number" name="horometro_final" id="horometer2" value="{{ reporte.horometro_final }}" step="0.1" oninput="CalculoHorometroTotal();">
+                    <input type="number" name="horometro_final" id="horometer2" value='{{ reporte.horometro_final|floatformat:"u" }}' step="0.1" oninput="CalculoHorometroTotal();">
                 </td>
             </tr>
             <tr>
                 <td>N° Horas Arriendo:</td>
                 <td id="horasArriendo">
-                    <input type="" name="horas_arriendo" id="horas_arriendo" value="{{ reporte.horas_arriendo }}" step="0.1" >
+                    <input type="number" name="horas_arriendo" id="horas_arriendo" value="{{ reporte.horas_arriendo|floatformat:'u' }}" step="0.1" >
                 </td>
                 <td>Horómetro Total:</td>
                 <td id="horometroTotal">
-                    <input type="" name="horometro_total" id="horometro_total" value="{{ reporte.horometro_total }}" step="0.1" >
+                    <input type="number" name="horometro_total" id="horometro_total" value="{{ reporte.horometro_total|floatformat:'u' }}" step="0.1" >
                 </td>
             </tr>
             <tr>
