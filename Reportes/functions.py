@@ -162,7 +162,7 @@ class ModificacionesTablas():
         pCorreo   = request.POST.get('correo')
 
         if pCelular == '':
-            pCelular == None
+            pCelular = None
 
         persona.nombres          = pNombres
         persona.apellido_paterno = pAPaterno
