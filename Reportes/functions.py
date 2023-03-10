@@ -161,10 +161,13 @@ class ModificacionesTablas():
         pCelular  = request.POST.get('celular')
         pCorreo   = request.POST.get('correo')
 
+        if pCelular == '':
+            pCelular == None
+
         persona.nombres          = pNombres
         persona.apellido_paterno = pAPaterno
         persona.apellido_materno = pAMaterno
-        persona.celular          = int(pCelular)
+        persona.celular          = pCelular
         persona.correo           = pCorreo
         persona.save()
 
