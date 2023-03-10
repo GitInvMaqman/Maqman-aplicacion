@@ -163,7 +163,7 @@ class ModificacionesTablas():
 
         if pCelular == '':
             pCelular = None
-        if pCorreo == None:
+        if pCorreo == 'None':
             pCorreo = ''
 
         persona.nombres          = pNombres
