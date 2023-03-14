@@ -172,7 +172,7 @@ class ModificacionesTablas():
         reporte.save()
 
         titulo = '<h2>¡Reporte actualizado!</h2>'
-        texto  = '<p style="font-size:24;">Los datos del usuario se han editado con éxito.</p>'
+        texto  = '<p style="font-size:24;">Los datos del reporte se han editado exitosamente con los siguientes datos.</p>'
         texto += '<p>Fecha: ' + reporte.fecha + '</p>'
         texto += '<p>Cliente: ' + reporte.cliente + ' Obra: ' + reporte.obra + '</p>'
         texto += '<p>Operador: ' + persona.nombres + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno + '</p>'
