@@ -101,7 +101,7 @@
     <form action="{% url 'reportesMaqman:editarReport' %}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
         <input type="hidden" name="id_report" value="{{ reporte.id_reporte }}">
         <table>
-            <h1>Reporte de {{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}</h1>
+            <h1>{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}</h1>
             <h1>{{ reporte.fecha }}</h1>
             <th class="first" colspan="4">Control de Equipos</th>
             <tr>
@@ -121,10 +121,21 @@
                 <td>
                     <input type="date" name="fecha" id="id_fecha" value="{{ reporte.fecha | date:'Y-m-d' }}" >
                 </td>
-                <td colspan="2">Operador: <br>
-                    <input class="text" type="text" name="operador" id="id_operador" value="{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}">
-                </td>
-                <input type="hidden" name="p_id_persona"  value="{{ reporte.u_p_id_persona.p_id_persona.id_persona }}">
+                {% if user.r_id_rol.id_rol == 1 %}
+                    <td colspan="2">Operador:<input style="background-color: palegreen;"class="text" type="text" name="nombre_usuario"  id="id_nombre_usuario" value="{{ user.p_id_persona.nombres }} {{ user.p_id_persona.apellido_paterno }} {{ user.p_id_persona.apellido_materno }}" readonly></td>
+                    <input type="hidden" name="p_id_persona"  value="{{ user.p_id_persona.id_persona }}">
+                {% else %}
+                    <td colspan="2">Operador: 
+                        <select class="text" name="idUsuarioSelect" class="form-control" required name="nombre_usuario" id="id_nombre_usuario" onchange="changeFunc();">
+                            <option value="{{ reporte.u_p_id_persona.p_id_persona.id_persona }}" selected>{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}</option>
+                            {% for o in operadores %}
+                                {% if o != reporte.u_p_id_persona %}
+                                    <option value="{{ o.p_id_persona.id_persona }}">{{ o.p_id_persona.nombres }} {{ o.p_id_persona.apellido_paterno }} {{ o.p_id_persona.apellido_materno }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    <div id="idUsuarioInput"><input type="hidden" name="p_id_persona" id="id_p_id_persona" value="{{ reporte.u_p_id_persona.p_id_persona.id_persona }}"></div>
+                {% endif %}
             </tr>
             <th colspan="4">Horómetro</th>
             <tr>

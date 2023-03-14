@@ -129,12 +129,18 @@ class ModificacionesTablas():
         p_id_persona      = request.POST.get('p_id_persona')
 
         lista             = request.POST.getlist('accesorios')
+        accesorios = Accesorio.objects.all()
+        for a in accesorios:
+            detalle = AccesorioReporte.objects.filter(r_id_reporte = id_report, a_id_accesorio = a)
+            if detalle:
+                detalle.delete()
+            
 
         img_maquinaria    = request.FILES.get('img_maquinaria')
         img_report        = request.FILES.get('img_report')
 
         reporte = Reporte.objects.get(id_reporte = id_report)
-        usuario = Usuario.objects.get(p_id_persona = reporte.u_p_id_persona)
+        usuario = Usuario.objects.get(p_id_persona = p_id_persona)
         persona = Persona.objects.get(id_persona = usuario.p_id_persona.id_persona)
 
         reporte.cliente           = cliente
@@ -151,7 +157,8 @@ class ModificacionesTablas():
         reporte.observaciones     = observaciones
         reporte.u_p_id_persona    = usuario
 
-
+        if lista:
+            ModificacionesTablas.crear_detalle(lista, reporte)
 
         if img_maquinaria == None:
             img_maquinaria = reporte.img_maquinaria

@@ -226,6 +226,7 @@ class DetalleReportDetailView(LoginRequiredMixin, DetailView):
         context               = super().get_context_data(**kwargs)
         context["accesorios"] = Accesorio.objects.all()
         context['nombres']    = self.request.user.p_id_persona.nombres.split()
+        context["operadores"] = Usuario.objects.filter(r_id_rol = 1)
         # Se obtienen los accesorios seleccionados en el reporte.
         detalle               = AccesorioReporte.objects.filter(r_id_reporte = idReporte).values_list()
         context['detalles']   = []

@@ -24,5 +24,5 @@ function ChangeColColor(chkCol,col) {
 function changeFunc() {
     var selectBox = document.getElementById("id_nombre_usuario");
     let selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    document.getElementById("idUsuarioInput").innerHTML = '<input type="hidden" name="p_id_persona"   id="id_p_id_persona" value="'+selectedValue+'">'
+    document.getElementById("idUsuarioInput").innerHTML = '<input type="hidden" name="p_id_persona" id="id_p_id_persona" value="'+selectedValue+'">'
 }
