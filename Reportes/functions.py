@@ -130,6 +130,10 @@ class ModificacionesTablas():
 
         lista             = request.POST.getlist('accesorios')
 
+        reporte = Reporte.objects.get(id_reporte = id_report)
+        usuario = Usuario.objects.get(p_id_persona = p_id_persona)
+        # persona = Persona.objects.get(id_persona = usuario.p_id_persona.id_persona)
+
         accesorios = Accesorio.objects.all()
         if accesorios:
             for a in accesorios:
@@ -142,9 +146,6 @@ class ModificacionesTablas():
         img_maquinaria    = request.FILES.get('img_maquinaria')
         img_report        = request.FILES.get('img_report')
 
-        reporte = Reporte.objects.get(id_reporte = id_report)
-        usuario = Usuario.objects.get(p_id_persona = p_id_persona)
-        # persona = Persona.objects.get(id_persona = usuario.p_id_persona.id_persona)
 
         reporte.cliente           = cliente
         reporte.obra              = obra
