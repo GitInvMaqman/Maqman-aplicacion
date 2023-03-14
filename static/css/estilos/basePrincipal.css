@@ -12,7 +12,7 @@ body{
 }
 .LogoMaqman{
     font-size: 4vw;
-    font-family: monospace;
+    font-family: Arial, Helvetica, sans-serif;
     align-content: center;
     margin-bottom: 50vw;
 }
@@ -55,7 +55,6 @@ a{
     }
     .LogoMaqman{
         font-size: 2vw;
-        font-family: monospace;
         padding: 30px;
         margin-bottom: 400px;
     }

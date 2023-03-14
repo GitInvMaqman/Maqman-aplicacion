@@ -14,7 +14,7 @@ urlpatterns = [
     path('Generar-Report/'           , views.GenerarReportFormView.as_view()       , name = 'generarReport'),
     path('Ver-Reportes/'             , views.VerReportListView.as_view()           , name = 'verReport'),
     path('Detalle-Reporte/<int:pk>/' , views.DetalleReportDetailView.as_view()     , name = 'detalleReport'),
-    # path('Editar-Reporte/'           , views.DetalleReportDetailView.editar_report , name = 'editarReport'),
+    path('Editar-Reporte/'           , views.DetalleReportDetailView.editar_report , name = 'editarReport'),
 
     path('Gestión-Usuarios/'         , views.GestionUsuarioFormView.as_view()      , name = 'gestionUsuario'),
     path('Detalle-Usuario/<int:pk>/' , views.DetalleUsuarioFormView.as_view()      , name = 'detalleUsuario'),

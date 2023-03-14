@@ -8,13 +8,8 @@ from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 
-# from django.core.mail import EmailMultiAlternatives
-# from django.conf import settings
-
-# from xhtml2pdf import pisa
-# from django.template.loader import get_template
-# from io import BytesIO
-# import datetime
+import os
+from django.conf import settings
 
 #----------------------------------------------------------------------------------------------------------------#
 # Funciones
@@ -116,6 +111,82 @@ class ModificacionesTablas():
             detalleCreado = AccesorioReporte.objects.crear_detalle(accesorio, reporte)
             lista_detalles.append(detalleCreado)
         return lista_detalles
+    
+    def editar_report(request):
+        id_report         = request.POST.get('id_report')
+        cliente           = request.POST.get('cliente')
+        obra              = request.POST.get('obra')
+        fecha             = request.POST.get('fecha')
+        hora_ingreso      = request.POST.get('hora_ingreso')
+        hora_termino      = request.POST.get('hora_termino')
+        horas_arriendo    = request.POST.get('horas_arriendo')
+        horometro_inicial = request.POST.get('horometro_inicial')
+        horometro_final   = request.POST.get('horometro_final')
+        horometro_total   = request.POST.get('horometro_total')
+        equipo_numero     = request.POST.get('equipo_numero')
+        hora_minima       = request.POST.get('hora_minima')
+        observaciones     = request.POST.get('observaciones')
+        p_id_persona      = request.POST.get('p_id_persona')
+
+        lista             = request.POST.getlist('accesorios')
+
+        img_maquinaria    = request.FILES.get('img_maquinaria')
+        img_report        = request.FILES.get('img_report')
+
+        reporte = Reporte.objects.get(id_reporte = id_report)
+        usuario = Usuario.objects.get(p_id_persona = reporte.u_p_id_persona)
+        persona = Persona.objects.get(id_persona = usuario.p_id_persona.id_persona)
+
+        reporte.cliente           = cliente
+        reporte.obra              = obra
+        reporte.fecha             = fecha
+        reporte.hora_ingreso      = hora_ingreso
+        reporte.hora_termino      = hora_termino
+        reporte.horas_arriendo    = horas_arriendo
+        reporte.horometro_inicial = horometro_inicial
+        reporte.horometro_final   = horometro_final
+        reporte.horometro_total   = horometro_total
+        reporte.equipo_numero     = equipo_numero
+        reporte.hora_minima       = hora_minima
+        reporte.observaciones     = observaciones
+        reporte.u_p_id_persona    = usuario
+
+
+
+        if img_maquinaria == None:
+            img_maquinaria = reporte.img_maquinaria
+        elif reporte.img_maquinaria == '':
+            print('hola')
+        else:
+            os.remove(os.path.join(settings.MEDIA_ROOT+'/'+reporte.img_maquinaria.name))
+        if img_report == None:
+            img_report = reporte.img_report
+        elif reporte.img_report == '':
+            print('hola')
+        else:
+            os.remove(os.path.join(settings.MEDIA_ROOT+'/'+reporte.img_report.name))
+
+        reporte.img_maquinaria    = img_maquinaria
+        reporte.img_report        = img_report
+
+        reporte.save()
+
+        titulo = '<h2>¡Reporte actualizado!</h2>'
+        texto  = '<p style="font-size:24;">Los datos del usuario se han editado con éxito.</p>'
+        texto += '<p>Fecha: ' + reporte.fecha + '</p>'
+        texto += '<p>Cliente: ' + reporte.cliente + ' Obra: ' + reporte.obra + '</p>'
+        texto += '<p>Operador: ' + persona.nombres + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno + '</p>'
+        texto += '<p>Hora Ingreso: ' + reporte.hora_ingreso + ' Hora Término: ' + reporte.hora_termino + '</p>'
+        texto += '<p>Horas Arriendo: ' + reporte.horas_arriendo + '</p>'
+        texto += '<p>Horóm. Inicial: ' + reporte.horometro_inicial + ' Horóm. Final: ' + reporte.horometro_final + '</p>'
+        texto += '<p>Horómetro Total: ' + reporte.horometro_total + '</p>'
+        texto += '<p>Equipo Número: ' + reporte.equipo_numero + ' Hora Mínima: ' + reporte.hora_minima + '</p>'
+        texto += '<p>Observaciones: ' + reporte.observaciones + '</p>'
+        if reporte.img_maquinaria and reporte.img_report:
+            texto += '<img src="'+ reporte.img_report.url +'" alt="Reporte físico" id="imgReport" height="150px" width="150px">'
+            texto += '<img src="'+reporte.img_maquinaria.url+'" alt="Maquinaria" id="imgMaquinaria" height="150px" width="150px">'
+        messages.success(request, titulo+texto)
+        return HttpResponseRedirect('/Detalle-Reporte/' + id_report)
     
     def crear_persona(request, datos):
         personaCreada = Persona.objects.crear_persona(

@@ -17,7 +17,13 @@
                 <div class="carta-principal">
                     <a href="{% url 'reportesMaqman:detalleReport' r.id_reporte %}" class="card">
                         <div class="img-card">
-                            <img src="{{ r.img_report.url }}" alt="no carga">
+                            
+                            {% if r.img_report %}
+                                <img src="{{ r.img_report.url }}" alt="imagen del reporte físico">
+                            {% else %}
+                                <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen no encontrada">
+                            {% endif %}
+                                
                         </div>
                         <div class="contenido-card">
                             <textarea cols="50" rows="5" class="textarea-card" readonly>{{ r.cliente }}

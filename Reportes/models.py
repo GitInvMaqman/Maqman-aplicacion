@@ -21,7 +21,7 @@ class Persona(models.Model):
     nombres             = models.CharField(max_length=50)
     apellido_paterno    = models.CharField(max_length=30)
     apellido_materno    = models.CharField(max_length=30)
-    celular             = models.IntegerField(max_length=9, blank=True, null=True)
+    celular             = models.IntegerField(blank=True, null=True)
     correo              = models.CharField(max_length=50, blank=True, null=True)
 
     objects = PersonaManager()

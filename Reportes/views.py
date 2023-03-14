@@ -233,8 +233,8 @@ class DetalleReportDetailView(LoginRequiredMixin, DetailView):
             context['detalles'].append(Accesorio.objects.get(id_accesorio = d[1]))
         return context
     
-    # def editar_report(request):
-    #     pass
+    def editar_report(request):
+        return ModificacionesTablas.editar_report(request)
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------------
 

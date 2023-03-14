@@ -6,30 +6,123 @@
 {% endblock titulo %}
 
 {% block contenido %}
+<style>
+    #myImg {
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    
+    #myImg:hover {opacity: 0.7;}
+    
+    /* The Modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+    }
+    
+    /* Modal Content (image) */
+    .modal-content {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 700px;
+    }
+    
+    /* Caption of Modal Image */
+    #caption {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 700px;
+      text-align: center;
+      color: #ccc;
+      padding: 10px 0;
+      height: 150px;
+    }
+    
+    /* Add Animation */
+    .modal-content, #caption {  
+      -webkit-animation-name: zoom;
+      -webkit-animation-duration: 0.6s;
+      animation-name: zoom;
+      animation-duration: 0.6s;
+    }
+    
+    @-webkit-keyframes zoom {
+      from {-webkit-transform:scale(0)} 
+      to {-webkit-transform:scale(1)}
+    }
+    
+    @keyframes zoom {
+      from {transform:scale(0)} 
+      to {transform:scale(1)}
+    }
+    
+    /* The Close Button */
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: #bbb;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    
+    /* 100% Image Width on Smaller Screens */
+    @media only screen and (max-width: 700px){
+      .modal-content {
+        width: 100%;
+      }
+    }
 
-    <!-- <form action="" method="post"> -->
+    h1{
+        color: white;
+    }
+    </style>
+
+    <form action="{% url 'reportesMaqman:editarReport' %}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        <input type="hidden" name="id_report" value="{{ reporte.id_reporte }}">
         <table>
-            <h1>Reporte N° {{ reporte.id_reporte }}</h1>
+            <h1>Reporte de {{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}</h1>
+            <h1>{{ reporte.fecha }}</h1>
             <th class="first" colspan="4">Control de Equipos</th>
             <tr>
                 <td>Cliente:</td>
                 <td colspan="3">
-                    <input class="text" type="text" name="cliente" id="cliente" value="{{ reporte.cliente }}">
+                    <input class="text" type="text" name="cliente" id="id_cliente" value="{{ reporte.cliente }}">
                 </td>
             </tr>
             <tr>
                 <td>Obra:</td>
                 <td colspan="3">
-                    <input class="text" type="text" name="obra" id="obra" value="{{ reporte.obra }}" >
+                    <input class="text" type="text" name="obra" id="id_obra" value="{{ reporte.obra }}" >
                 </td>
             </tr>
             <tr>
                 <td>Fecha:</td>
                 <td>
-                    <input type="date" name="fecha" id="fecha" value="{{ reporte.fecha | date:'Y-m-d' }}" >
+                    <input type="date" name="fecha" id="id_fecha" value="{{ reporte.fecha | date:'Y-m-d' }}" >
                 </td>
                 <td colspan="2">Operador: <br>
-                    <input class="text" type="text" name="operador" id="operador" value="{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}">
+                    <input class="text" type="text" name="operador" id="id_operador" value="{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}">
                 </td>
                 <input type="hidden" name="p_id_persona"  value="{{ reporte.u_p_id_persona.p_id_persona.id_persona }}">
             </tr>
@@ -58,21 +151,21 @@
             <tr>
                 <td>N° Horas Arriendo:</td>
                 <td id="horasArriendo">
-                    <input type="number" name="horas_arriendo" id="horas_arriendo" value="{{ reporte.horas_arriendo|floatformat:'u' }}" step="0.1" >
+                    <input type="number" name="horas_arriendo" id="id_horas_arriendo" value="{{ reporte.horas_arriendo|floatformat:'u' }}" step="0.1" >
                 </td>
                 <td>Horómetro Total:</td>
                 <td id="horometroTotal">
-                    <input type="number" name="horometro_total" id="horometro_total" value="{{ reporte.horometro_total|floatformat:'u' }}" step="0.1" >
+                    <input type="number" name="horometro_total" id="id_horometro_total" value="{{ reporte.horometro_total|floatformat:'u' }}" step="0.1" >
                 </td>
             </tr>
             <tr>
                 <td>Equipo N°:</td>
                 <td>
-                    <input type="text" name="equipo_numero" id="equipo_numero" value="{{ reporte.equipo_numero }}" >
+                    <input type="text" name="equipo_numero" id="id_equipo_numero" value="{{ reporte.equipo_numero }}" >
                 </td>
                 <td>Hora Mínima:</td>
                 <td>
-                    <input type="" name="hora_minima" id="hora_minima" value="{{ reporte.hora_minima }}" >
+                    <input type="number" name="hora_minima" id="id_hora_minima" value="{{ reporte.hora_minima|floatformat:'u' }}" >
                 </td>
             </tr>
             <th colspan="4">Accesorios Minicargador</th>
@@ -91,10 +184,12 @@
             {% endfor %}
             <th colspan="4">Observaciones</th>
             <tr>
-                <td colspan="4"><textarea name="" id="" cols="70" rows="10" >{{ reporte.observaciones }}</textarea></td>
+                <td colspan="4">
+                    <textarea name="observaciones" id="id_observaciones" cols="70" rows="10" >{{ reporte.observaciones }}</textarea>
+                </td>
             </tr>
         </table>
-        <table>
+        <table style="border-radius: 0;">
             <tr>
                 <td class="td-img">
                     <label for="id_img_report">
@@ -106,9 +201,18 @@
                         </center>
                     </label>
                     <center>
-                        <a href="{{reporte.img_report.url}}">
-                            <img src="{{reporte.img_report.url}}" alt="Imagen del Reporte" id="imgReport" height="150px" width="150px">
-                        </a>
+                        {% if reporte.img_report %}
+                            <!-- <img src="{{reporte.img_report.url}}" alt="Imagen del Reporte" id="imgReport" > -->
+                            <img id="myImg" src="{{reporte.img_report.url}}" alt="Reporte físico" height="150px" width="150px">
+                            <!-- The Modal -->
+                            <div id="myModal" class="modal">
+                                <span class="close">&times;</span>
+                                <img class="modal-content" id="img01">
+                                <div id="caption"></div>
+                            </div>
+                        {% else %}
+                            <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen del reporte físico" id="imgReport" height="150px" width="150px">
+                        {% endif %}
                     </center>
                 </td>
                 <td class="td-img">
@@ -118,31 +222,60 @@
                             <br>
                             <input oninput="mostrarImagen(this, 'imgMaquinaria');" class="file" required readonly type="file" name="img_maquinaria" id="id_img_maquinaria" accept="image/png, image/jpg, image/gif, image/jpeg">
                             <br>
-                            <!-- <img src="{% static 'img/imageNotFound.png' %}" alt="" id="imgReport" height="150px" width="150px"> -->
                         </center>
                     </label>
                     <center>
-                        <a href="{{reporte.img_maquinaria.url}}">
-                            <img src="{{reporte.img_maquinaria.url}}" alt="Imagen de la maquinaria" id="imgMaquinaria" height="150px" width="150px">
-                        </a>
+                        
+                        {% if reporte.img_maquinaria %}
+                            <img src="{{reporte.img_maquinaria.url}}" alt="Maquinaria" id="imgMaquinaria" height="150px" width="150px">
+                        {% else %}
+                            <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen no encontrada" id="imgMaquinaria" height="150px" width="150px">
+                        {% endif %}
+                            
                     </center>
                 </td>
+            </tr>
+            <tr>
+                {% if user.r_id_rol.rol == "Asistente" %}
                 <td>
-                    <input disabled type="submit" value="Editar Reporte" style="height: 15vw; width:100%; background-color: rgb(255, 119, 119);">
+                    <input class="btn-submit btn-1" type="submit" value="Validar Reporte"disabled>
+                </td>
+                {% endif %}
+                
+                {% if user.r_id_rol.rol == "Operador" %}
+                <td colspan="2">
+                {% else %}
+                <td>
+                {% endif %}
+                    <input class="btn-submit btn-2" type="submit" value="Editar Reporte">
                 </td>
             </tr>
         </table>
-    <!-- </form> -->
+    </form>
+    
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+    
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
+    var img = document.getElementById("myImg");
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    img.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = this.src;
+      captionText.innerHTML = this.alt;
+    }
+    
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() { 
+      modal.style.display = "none";
+    }
+</script>
     
     <script src="{% static 'js/calculos.js'%} "></script>
-    <script>
-    function ChangeColColor(chkCol,col) {
-        var varCol = document.getElementById(col);
-        var varColor = "gainsboro";
-        if (chkCol.checked == true) {
-            varColor = "palegreen";
-        }
-        varCol.style.backgroundColor = varColor;
-    }
-    </script>
+    <script src="{% static 'js/general.js'%} "></script>
 {% endblock contenido %}
