@@ -7,90 +7,95 @@
 
 {% block contenido %}
 <style>
-    #myImg {
+    #imgReport {
       border-radius: 5px;
       cursor: pointer;
       transition: 0.3s;
     }
     
-    #myImg:hover {opacity: 0.7;}
+    #imgReport:hover {opacity: 0.7;}
     
     /* The Modal (background) */
     .modal {
-      display: none; /* Hidden by default */
-      position: fixed; /* Stay in place */
-      z-index: 1; /* Sit on top */
-      padding-top: 100px; /* Location of the box */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgb(0,0,0); /* Fallback color */
-      background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 2; /* Sit on top */
+        /* padding-top: 30px; Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.75); /* Black w/ opacity */
+        flex-direction: row-reverse;
+        flex-wrap: nowrap;
+        justify-content: space-around;
+        align-items: center;
     }
     
     /* Modal Content (image) */
     .modal-content {
-      margin: auto;
-      display: block;
-      width: 80%;
-      max-width: 700px;
+        margin: 10px;
+        display: block;
+        width: 80%;
+        max-width: 700px;
     }
     
     /* Caption of Modal Image */
     #caption {
-      margin: auto;
-      display: block;
-      width: 80%;
-      max-width: 700px;
-      text-align: center;
-      color: #ccc;
-      padding: 10px 0;
-      height: 150px;
+        margin: 10px;
+        display: block;
+        width: 80%;
+        max-width: 900px;
+        text-align: center;
+        color: #ccc;
+        padding: 10px 0;
+        /* height: 150px; */
     }
     
     /* Add Animation */
     .modal-content, #caption {  
-      -webkit-animation-name: zoom;
-      -webkit-animation-duration: 0.6s;
-      animation-name: zoom;
-      animation-duration: 0.6s;
+        -webkit-animation-name: zoom;
+        -webkit-animation-duration: 0.6s;
+        animation-name: zoom;
+        animation-duration: 0.6s;
     }
     
     @-webkit-keyframes zoom {
-      from {-webkit-transform:scale(0)} 
-      to {-webkit-transform:scale(1)}
+        from {-webkit-transform:scale(0)} 
+        to {-webkit-transform:scale(1)}
     }
     
     @keyframes zoom {
-      from {transform:scale(0)} 
-      to {transform:scale(1)}
+        from {transform:scale(0)} 
+        to {transform:scale(1)}
     }
     
     /* The Close Button */
     .close {
-      position: absolute;
-      top: 15px;
-      right: 35px;
-      color: #f1f1f1;
-      font-size: 40px;
-      font-weight: bold;
-      transition: 0.3s;
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #eeeb21;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
     }
     
     .close:hover,
     .close:focus {
-      color: #bbb;
-      text-decoration: none;
-      cursor: pointer;
+        color: #ff0000;
+        text-decoration: none;
+        cursor: pointer;
     }
     
     /* 100% Image Width on Smaller Screens */
-    @media only screen and (max-width: 700px){
-      .modal-content {
-        width: 100%;
-      }
+    @media only screen and (max-width: 64em){
+        .modal{
+            flex-direction: column;
+            justify-content: flex-start;
+        }
     }
 
     h1{
@@ -214,12 +219,68 @@
                     <center>
                         {% if reporte.img_report %}
                             <!-- <img src="{{reporte.img_report.url}}" alt="Imagen del Reporte" id="imgReport" > -->
-                            <img id="myImg" src="{{reporte.img_report.url}}" alt="Reporte físico" height="150px" width="150px">
+                            <img id="imgReport" src="{{reporte.img_report.url}}" alt="Reporte físico" height="150px" width="150px">
                             <!-- The Modal -->
                             <div id="myModal" class="modal">
-                                <span class="close">&times;</span>
+                                <span class="close">&otimes;</span>
                                 <img class="modal-content" id="img01">
-                                <div id="caption"></div>
+                                <div id="caption">
+                                    <table>
+                                        <th class="first" colspan="4">Control de Equipos</th>
+                                        <tr>
+                                            <td colspan="1">Cliente: </td>
+                                            <td colspan="3"><input class="text" type="text" id="modalCliente" value="{{ reporte.cliente }}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1">Obra: </td>
+                                            <td colspan="3"><input class="text" type="text" id="modalObra" value="{{ reporte.obra }}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Fecha: </td>
+                                            <td><input type="date" id="modalFecha" value="{{ reporte.fecha | date:'Y-m-d' }}"></td>
+                                            <td colspan="2">Operador: <input type="text" id="modalOperador" value="{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="4">Horómetro</th>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">Hora Ingreso: <input type="time" id="modalHoraIngreso" value="{{ reporte.hora_ingreso|time:'H:i' }}"></td>
+                                            <td colspan="2">Hora Término: <input type="time" id="modalHoraTermino" value="{{ reporte.hora_termino|time:'H:i' }}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">Horómetro Inicial: <input type="number" id="modalHoromInicial" value="{{ reporte.horometro_inicial|floatformat:'u' }}"></td>
+                                            <td colspan="2">Horómetro Final: <input type="number" id="modalHoromFinal" value="{{ reporte.horometro_final|floatformat:'u' }}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">Equipo Número: <input type="text" id="modalEquipoNum" value="{{ reporte.equipo_numero }}"></td>
+                                            <td colspan="2">Horas Arriendo: <input type="number" id="modalHorasArriendo" value="{{ reporte.horas_arriendo|floatformat:'u' }}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">Horómetro Total: <input type="number" id="modalHoromTotal" value="{{ reporte.horometro_total|floatformat:'u' }}"></td>
+                                            <td colspan="2">Hora Mínima: <input type="number" id="modal" value="{{ reporte.hora_minima|floatformat:'u' }}"></td>
+                                        </tr>
+                                        <th colspan="4">Accesorios Minicargador</th>
+                                        {% for a in accesorios %}
+                                            {% if a.id_accesorio == 1 or a.id_accesorio == 3 %}
+                                                <tr>
+                                                    <td id="modalAccesorio{{a.id_accesorio}}" colspan="2" {% for d in detalles %}{% if d == a %}style="background-color: palegreen;"{% endif %}{% endfor %}>
+                                                        <input {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="ChangeColColor(this,'am{{a.id_accesorio}}')">{{ a.accesorio_minicargador }}
+                                                    </td>
+                                            {% else %}
+                                                    <td id="modalAccesorio{{a.id_accesorio}}" colspan="2" {% for d in detalles %}{% if d == a %}style="background-color: palegreen;"{% endif %}{% endfor %}>
+                                                        <input {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="ChangeColColor(this,'am{{a.id_accesorio}}')">{{ a.accesorio_minicargador }}
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <th colspan="4">Observaciones</th>
+                                        <tr>
+                                            <td colspan="4">
+                                                <textarea id="modalObservaciones" cols="20" rows="3" >{{ reporte.observaciones }}</textarea>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         {% else %}
                             <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen del reporte físico" id="imgReport" height="150px" width="150px">
@@ -269,13 +330,13 @@
     var modal = document.getElementById("myModal");
     
     // Get the image and insert it inside the modal - use its "alt" text as a caption
-    var img = document.getElementById("myImg");
+    var img = document.getElementById("imgReport");
     var modalImg = document.getElementById("img01");
-    var captionText = document.getElementById("caption");
+    // var captionT ext = document.getElementById("caption");
     img.onclick = function(){
-      modal.style.display = "block";
-      modalImg.src = this.src;
-      captionText.innerHTML = this.alt;
+        modal.style.display = "flex";
+        modalImg.src = this.src;
+        // captionText.innerHTML = this.alt;
     }
     
     // Get the <span> element that closes the modal
@@ -283,8 +344,20 @@
     
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() { 
-      modal.style.display = "none";
+        modal.style.display = "none";
     }
+    document.onkeydown = function(evt) {
+    evt = evt || window.event;
+    var isEscape = false;
+    if ("key" in evt) {
+        isEscape = (evt.key === "Escape" || evt.key === "Esc");
+    } else {
+        isEscape = (evt.keyCode === 27);
+    }
+    if (isEscape) {
+        modal.style.display = "none";
+    }
+};
 </script>
     
     <script src="{% static 'js/calculos.js'%} "></script>
