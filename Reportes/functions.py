@@ -179,19 +179,19 @@ class ModificacionesTablas():
         reporte.save()
 
         titulo = '<h2>¡Reporte actualizado!</h2>'
-        texto  = '<p style="font-size:24;">Los datos del reporte se han editado exitosamente con los siguientes datos.</p>'
-        texto += '<p>Fecha: ' + reporte.fecha + '</p>'
-        texto += '<p>Cliente: ' + reporte.cliente + ' Obra: ' + reporte.obra + '</p>'
-        texto += '<p>Operador: ' + persona.nombres + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno + '</p>'
-        texto += '<p>Hora Ingreso: ' + reporte.hora_ingreso + ' Hora Término: ' + reporte.hora_termino + '</p>'
-        texto += '<p>Horas Arriendo: ' + reporte.horas_arriendo + '</p>'
-        texto += '<p>Horóm. Inicial: ' + reporte.horometro_inicial + ' Horóm. Final: ' + reporte.horometro_final + '</p>'
-        texto += '<p>Horómetro Total: ' + reporte.horometro_total + '</p>'
-        texto += '<p>Equipo Número: ' + reporte.equipo_numero + ' Hora Mínima: ' + reporte.hora_minima + '</p>'
-        texto += '<p>Observaciones: ' + reporte.observaciones + '</p>'
-        if reporte.img_maquinaria and reporte.img_report:
-            texto += '<img src="'+ reporte.img_report.url +'" alt="Reporte físico" id="imgReport" height="150px" width="150px">'
-            texto += '<img src="'+reporte.img_maquinaria.url+'" alt="Maquinaria" id="imgMaquinaria" height="150px" width="150px">'
+        texto  = '<p style="font-size:24;">Los datos del reporte se han editado exitosamente.</p>'
+        # texto += '<p>Fecha: ' + reporte.fecha + '</p>'
+        # texto += '<p>Cliente: ' + reporte.cliente + ' Obra: ' + reporte.obra + '</p>'
+        # texto += '<p>Operador: ' + persona.nombres + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno + '</p>'
+        # texto += '<p>Hora Ingreso: ' + reporte.hora_ingreso + ' Hora Término: ' + reporte.hora_termino + '</p>'
+        # texto += '<p>Horas Arriendo: ' + reporte.horas_arriendo + '</p>'
+        # texto += '<p>Horóm. Inicial: ' + reporte.horometro_inicial + ' Horóm. Final: ' + reporte.horometro_final + '</p>'
+        # texto += '<p>Horómetro Total: ' + reporte.horometro_total + '</p>'
+        # texto += '<p>Equipo Número: ' + reporte.equipo_numero + ' Hora Mínima: ' + reporte.hora_minima + '</p>'
+        # texto += '<p>Observaciones: ' + reporte.observaciones + '</p>'
+        # if reporte.img_maquinaria and reporte.img_report:
+        #     texto += '<img src="'+ reporte.img_report.url +'" alt="Reporte físico" id="imgReport" height="150px" width="150px">'
+        #     texto += '<img src="'+reporte.img_maquinaria.url+'" alt="Maquinaria" id="imgMaquinaria" height="150px" width="150px">'
         messages.success(request, titulo+texto)
         return HttpResponseRedirect('/Detalle-Reporte/' + id_report)
     
