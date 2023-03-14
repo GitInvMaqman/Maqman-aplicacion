@@ -264,11 +264,11 @@
                                             {% if a.id_accesorio == 1 or a.id_accesorio == 3 %}
                                                 <tr>
                                                     <td id="modalAccesorio{{a.id_accesorio}}" colspan="2" {% for d in detalles %}{% if d == a %}style="background-color: palegreen;"{% endif %}{% endfor %}>
-                                                        <input {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="ChangeColColor(this,'am{{a.id_accesorio}}')">{{ a.accesorio_minicargador }}
+                                                        <input {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="ChangeColColor(this,'am{{a.id_accesorio}}')">{{ a.accesorio_minicargador }}
                                                     </td>
                                             {% else %}
                                                     <td id="modalAccesorio{{a.id_accesorio}}" colspan="2" {% for d in detalles %}{% if d == a %}style="background-color: palegreen;"{% endif %}{% endfor %}>
-                                                        <input {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="ChangeColColor(this,'am{{a.id_accesorio}}')">{{ a.accesorio_minicargador }}
+                                                        <input {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="ChangeColColor(this,'am{{a.id_accesorio}}')">{{ a.accesorio_minicargador }}
                                                     </td>
                                                 </tr>
                                             {% endif %}
