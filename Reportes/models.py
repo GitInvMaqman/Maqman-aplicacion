@@ -69,6 +69,7 @@ class Reporte(models.Model):
     img_maquinaria      = models.ImageField(upload_to="maquinas", null=True)
     img_report          = models.ImageField(upload_to="reportes", null=True)
     u_p_id_persona      = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='u_p_id_persona')
+    valido              = models.IntegerField()
 
     objects = ReporteManager()
 

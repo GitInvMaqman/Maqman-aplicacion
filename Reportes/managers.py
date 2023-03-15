@@ -86,6 +86,7 @@ class ReporteManager(models.Manager):
             hora_minima       = horaMinima,
             img_maquinaria    = imgMaquina,
             img_report        = imgReporte,
+            valido = 0,
             **extra_fields
         )
         return reporte
