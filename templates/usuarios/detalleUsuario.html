@@ -85,7 +85,7 @@
                     {% if usuario.r_id_rol.rol != "Asistente" %}
                     <button type="button" class="btn-submit btn-1" onclick="DescargarReporte('{{usuario.p_id_persona.id_persona}}', '{{ usuario.p_id_persona.nombres }} {{ usuario.p_id_persona.apellido_paterno }} {{ usuario.p_id_persona.apellido_materno }}');">Descargar Report.</button>
                     {% else %}
-                    <button type="button" class="btn-submit btn-1" onclick="NoDescargas();">Report. no descargables</button>
+                    <button type="button" class="btn-submit btn-1" onclick="NoDescargar();">Report. no descargables</button>
                     {% endif %}
                     
                 </td>
