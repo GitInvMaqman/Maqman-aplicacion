@@ -157,6 +157,9 @@ class ModificacionesTablas():
         reporte.observaciones     = observaciones
         reporte.u_p_id_persona    = usuario
 
+        dirImgMaquinaria = os.path.join(settings.MEDIA_ROOT+'/'+reporte.img_maquinaria.name)
+        dirImgReport = os.path.join(settings.MEDIA_ROOT+'/'+reporte.img_report.name)
+
         if lista:
             ModificacionesTablas.crear_detalle(lista, reporte)
 
@@ -165,13 +168,14 @@ class ModificacionesTablas():
         elif reporte.img_maquinaria == '':
             print('hola')
         else:
-            os.remove(os.path.join(settings.MEDIA_ROOT+'/'+reporte.img_maquinaria.name))
+            os.remove(dirImgMaquinaria)
+
         if img_report == None:
             img_report = reporte.img_report
         elif reporte.img_report == '':
             print('hola')
         else:
-            os.remove(os.path.join(settings.MEDIA_ROOT+'/'+reporte.img_report.name))
+            os.remove(dirImgReport)
 
         reporte.img_maquinaria    = img_maquinaria
         reporte.img_report        = img_report
@@ -202,6 +206,12 @@ class ModificacionesTablas():
         if reporte.valido == 0:
             reporte.valido = 1
             validez        = 'validado'
+            if reporte.img_maquinaria != '':
+                os.remove(os.path.join(settings.MEDIA_ROOT+'/'+reporte.img_maquinaria.name))
+                reporte.img_maquinaria = ''
+            if reporte.img_report != '':
+                os.remove(os.path.join(settings.MEDIA_ROOT+'/'+reporte.img_report.name))
+                reporte.img_report = ''
         else:
             reporte.valido = 0
             validez        = 'invalidado'
@@ -305,7 +315,7 @@ class ModificacionesTablas():
     
 class operacionesFechas():
     def reporte_mes(mes):
-        reportes = Reporte.objects.all().order_by('fecha')
+        reportes = Reporte.objects.filter(valido = 1).order_by('fecha')
         listaReportes = []
         for r in reportes:
             fechaReporte = r.fecha.month

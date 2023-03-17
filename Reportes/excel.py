@@ -149,7 +149,7 @@ class ReportesExcel():
         lista_hojas    = ''
         titulo         = 'Reportes'
         valor_b2       = 'Reportes'
-        reportes       = Reporte.objects.all().order_by('id_reporte')
+        reportes       = Reporte.objects.filter(valido = 1).order_by('id_reporte')
         nombre_archivo = 'Reportes_Totales'
         return ReportesExcel.base_excel(varias_hojas, lista_hojas, titulo, valor_b2, reportes, nombre_archivo)
 
@@ -166,7 +166,7 @@ class ReportesExcel():
         lista_hojas    = ''
         titulo         = nombreCompleto
         valor_b2       = 'Reportes de ' + nombreCompleto
-        reportes       = Reporte.objects.filter(u_p_id_persona = usuario).order_by('-fecha')
+        reportes       = Reporte.objects.filter(u_p_id_persona = usuario, valido = 1).order_by('-fecha')
         nombre_archivo = 'Reportes_'+ nombre_completo
         return ReportesExcel.base_excel(varias_hojas, lista_hojas, titulo, valor_b2, reportes, nombre_archivo)
 # ----------------------------------------------------------------------------------------------------------------------------------------
@@ -216,7 +216,7 @@ class ReportesExcel():
         # Crea una hoja para cada operador y llena con los respectivos datos.
         for o in operadores:
             persona = o.p_id_persona
-            reportes = Reporte.objects.filter(u_p_id_persona = o).order_by('fecha')
+            reportes = Reporte.objects.filter(u_p_id_persona = o, valido = 1).order_by('fecha')
             nombre_completo = persona.nombres + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno
             contador = 5
             # Trabaja con la primera hora y le pone nombre, en el siguiente recorrido crea una nueva hoja con otro nombre
