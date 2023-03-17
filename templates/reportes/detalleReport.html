@@ -6,214 +6,164 @@
 {% endblock titulo %}
 
 {% block contenido %}
-    <form action="{% url 'reportesMaqman:editarReport' %}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
-        <input type="hidden" name="id_report" value="{{ reporte.id_reporte }}">
-        <table>
-            <h1>{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}</h1>
-            <h1>{{ reporte.fecha }}</h1>
-            <th class="first" colspan="4">Control de Equipos</th>
-            <tr>
-                <td>Cliente:</td>
-                <td colspan="3">
-                    <input class="text" type="text" name="cliente" id="id_cliente" value="{{ reporte.cliente }}">
-                </td>
-            </tr>
-            <tr>
-                <td>Obra:</td>
-                <td colspan="3">
-                    <input class="text" type="text" name="obra" id="id_obra" value="{{ reporte.obra }}" >
-                </td>
-            </tr>
-            <tr>
-                <td>Fecha:</td>
-                <td>
-                    <input type="date" name="fecha" id="id_fecha" value="{{ reporte.fecha | date:'Y-m-d' }}" >
-                </td>
-                {% if user.r_id_rol.id_rol == 1 %}
-                    <td colspan="2">Operador:<input style="background-color: palegreen;"class="text" type="text" name="nombre_usuario"  id="id_nombre_usuario" value="{{ user.p_id_persona.nombres }} {{ user.p_id_persona.apellido_paterno }} {{ user.p_id_persona.apellido_materno }}" readonly></td>
-                    <input type="hidden" name="p_id_persona"  value="{{ user.p_id_persona.id_persona }}">
-                {% else %}
-                    <td colspan="2">Operador: 
-                        <select class="text" name="idUsuarioSelect" class="form-control" required name="nombre_usuario" id="id_nombre_usuario" onchange="changeFunc();">
-                            <option value="{{ reporte.u_p_id_persona.p_id_persona.id_persona }}" selected>{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}</option>
-                            {% for o in operadores %}
-                                {% if o != reporte.u_p_id_persona %}
-                                    <option value="{{ o.p_id_persona.id_persona }}">{{ o.p_id_persona.nombres }} {{ o.p_id_persona.apellido_paterno }} {{ o.p_id_persona.apellido_materno }}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                    <div id="idUsuarioInput"><input type="hidden" name="p_id_persona" id="id_p_id_persona" value="{{ reporte.u_p_id_persona.p_id_persona.id_persona }}"></div>
-                {% endif %}
-            </tr>
-            <th colspan="4">Horómetro</th>
-            <tr>
-                <td>Hora Ingreso:</td>
-                <td>
-                    <input type="time" name="hora_ingreso" id="time1" value="{{ reporte.hora_ingreso|time:'H:i' }}" oninput="CalculoHorasArriendo();">
-                </td>
-                <td>Horómetro Inicial:</td>
-                <td>
-                    <input type="number" name="horometro_inicial" id="horometer1" value='{{ reporte.horometro_inicial|floatformat:"u" }}' step="0.1" oninput="CalculoHorometroTotal();">
-                </td>
+    {% if user.r_id_rol.rol == 'Operador' and reporte.u_p_id_persona == user or user.r_id_rol.rol == 'Asistente' %}
+        <form action="{% url 'reportesMaqman:editarReport' %}" method="POST" enctype="multipart/form-data" id="formulario-editar-reporte"> {% csrf_token %}
+            <input type="hidden" name="id_report" value="{{ reporte.id_reporte }}">
+            <table>
+                <tr>
+                    <th class="first" colspan="4">{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }} - {{ reporte.fecha }}</th>
+                </tr>
+                <tr>
+                    <th colspan="4">Control de Equipos</th>
+                </tr>
+                <tr>
+                    <td>Cliente:</td>
+                    <td colspan="3">
+                        <input class="text" type="text" name="cliente" id="id_cliente" value="{{ reporte.cliente }}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Obra:</td>
+                    <td colspan="3">
+                        <input class="text" type="text" name="obra" id="id_obra" value="{{ reporte.obra }}" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>Fecha:</td>
+                    <td>
+                        <input type="date" name="fecha" id="id_fecha" value="{{ reporte.fecha | date:'Y-m-d' }}" >
+                    </td>
+                    {% if user.r_id_rol.id_rol == 1 %}
+                        <td colspan="2">Operador:<input style="background-color: palegreen;"class="text" type="text" name="nombre_usuario"  id="id_nombre_usuario" value="{{ user.p_id_persona.nombres }} {{ user.p_id_persona.apellido_paterno }} {{ user.p_id_persona.apellido_materno }}" readonly></td>
+                        <input type="hidden" name="p_id_persona"  value="{{ user.p_id_persona.id_persona }}">
+                    {% else %}
+                        <td colspan="2">Operador: 
+                            <select class="text" name="idUsuarioSelect" class="form-control" required name="nombre_usuario" id="id_nombre_usuario" onchange="changeFunc();">
+                                <option value="{{ reporte.u_p_id_persona.p_id_persona.id_persona }}" selected>{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}</option>
+                                {% for o in operadores %}
+                                    {% if o != reporte.u_p_id_persona %}
+                                        <option value="{{ o.p_id_persona.id_persona }}">{{ o.p_id_persona.nombres }} {{ o.p_id_persona.apellido_paterno }} {{ o.p_id_persona.apellido_materno }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        <div id="idUsuarioInput"><input type="hidden" name="p_id_persona" id="id_p_id_persona" value="{{ reporte.u_p_id_persona.p_id_persona.id_persona }}"></div>
+                    {% endif %}
+                </tr>
+                <th colspan="4">Horómetro</th>
+                <tr>
+                    <td>Hora Ingreso:</td>
+                    <td>
+                        <input type="time" name="hora_ingreso" id="time1" value="{{ reporte.hora_ingreso|time:'H:i' }}" oninput="CalculoHorasArriendo();">
+                    </td>
+                    <td>Horómetro Inicial:</td>
+                    <td>
+                        <input type="number" name="horometro_inicial" id="horometer1" value='{{ reporte.horometro_inicial|floatformat:"u" }}' step="0.1" oninput="CalculoHorometroTotal();">
+                    </td>
 
-            </tr>
-            <tr>
-                <td>Hora Término:</td>
-                <td>
-                    <input type="time" name="hora_termino" id="time2" value="{{ reporte.hora_termino|time:'H:i' }}" oninput="CalculoHorasArriendo();">
-                </td>
-                <td>Horómetro Final:</td>
-                <td>
-                    <input type="number" name="horometro_final" id="horometer2" value='{{ reporte.horometro_final|floatformat:"u" }}' step="0.1" oninput="CalculoHorometroTotal();">
-                </td>
-            </tr>
-            <tr>
-                <td>N° Horas Arriendo:</td>
-                <td id="horasArriendo">
-                    <input type="number" name="horas_arriendo" id="id_horas_arriendo" value="{{ reporte.horas_arriendo|floatformat:'u' }}" step="0.1" >
-                </td>
-                <td>Horómetro Total:</td>
-                <td id="horometroTotal">
-                    <input type="number" name="horometro_total" id="id_horometro_total" value="{{ reporte.horometro_total|floatformat:'u' }}" step="0.1" >
-                </td>
-            </tr>
-            <tr>
-                <td>Equipo N°:</td>
-                <td>
-                    <input type="text" name="equipo_numero" id="id_equipo_numero" value="{{ reporte.equipo_numero }}" >
-                </td>
-                <td>Hora Mínima:</td>
-                <td>
-                    <input type="number" name="hora_minima" id="id_hora_minima" value="{{ reporte.hora_minima|floatformat:'u' }}" >
-                </td>
-            </tr>
-            <th colspan="4">Accesorios Minicargador</th>
-            {% for a in accesorios %}
-                {% if a.id_accesorio == 1 or a.id_accesorio == 3 %}
-                    <tr>
-                        <td id="am{{a.id_accesorio}}" colspan="2" {% for d in detalles %}{% if d == a %}style="background-color: palegreen;"{% endif %}{% endfor %}>
-                            <input {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="ChangeColColor(this,'am{{a.id_accesorio}}')">{{ a.accesorio_minicargador }}
-                        </td>
-                {% else %}
-                        <td id="am{{a.id_accesorio}}" colspan="2" {% for d in detalles %}{% if d == a %}style="background-color: palegreen;"{% endif %}{% endfor %}>
-                            <input {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="ChangeColColor(this,'am{{a.id_accesorio}}')">{{ a.accesorio_minicargador }}
-                        </td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-            <th colspan="4">Observaciones</th>
-            <tr>
-                <td colspan="4">
-                    <textarea name="observaciones" id="id_observaciones" cols="70" rows="10" >{{ reporte.observaciones }}</textarea>
-                </td>
-            </tr>
-        </table>
-        <table style="border-radius: 0;">
-            <tr>
-                <td class="td-img">
-                    <label for="id_img_report">
+                </tr>
+                <tr>
+                    <td>Hora Término:</td>
+                    <td>
+                        <input type="time" name="hora_termino" id="time2" value="{{ reporte.hora_termino|time:'H:i' }}" oninput="CalculoHorasArriendo();">
+                    </td>
+                    <td>Horómetro Final:</td>
+                    <td>
+                        <input type="number" name="horometro_final" id="horometer2" value='{{ reporte.horometro_final|floatformat:"u" }}' step="0.1" oninput="CalculoHorometroTotal();">
+                    </td>
+                </tr>
+                <tr>
+                    <td>N° Horas Arriendo:</td>
+                    <td id="horasArriendo">
+                        <input type="number" name="horas_arriendo" id="id_horas_arriendo" value="{{ reporte.horas_arriendo|floatformat:'u' }}" step="0.1" >
+                    </td>
+                    <td>Horómetro Total:</td>
+                    <td id="horometroTotal">
+                        <input type="number" name="horometro_total" id="id_horometro_total" value="{{ reporte.horometro_total|floatformat:'u' }}" step="0.1" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>Equipo N°:</td>
+                    <td>
+                        <input type="text" name="equipo_numero" id="id_equipo_numero" value="{{ reporte.equipo_numero }}" >
+                    </td>
+                    <td>Hora Mínima:</td>
+                    <td>
+                        <input type="number" name="hora_minima" id="id_hora_minima" value="{{ reporte.hora_minima|floatformat:'u' }}" >
+                    </td>
+                </tr>
+                <th colspan="4">Accesorios Minicargador</th>
+                {% for a in accesorios %}
+                    {% if a.id_accesorio == 1 or a.id_accesorio == 3 %}
+                        <tr>
+                            <td id="am{{a.id_accesorio}}" colspan="2" {% for d in detalles %}{% if d == a %}style="background-color: palegreen;"{% endif %}{% endfor %}>
+                                <input {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="ChangeColColor(this,'am{{a.id_accesorio}}')">{{ a.accesorio_minicargador }}
+                            </td>
+                    {% else %}
+                            <td id="am{{a.id_accesorio}}" colspan="2" {% for d in detalles %}{% if d == a %}style="background-color: palegreen;"{% endif %}{% endfor %}>
+                                <input {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="ChangeColColor(this,'am{{a.id_accesorio}}')">{{ a.accesorio_minicargador }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                <th colspan="4">Observaciones</th>
+                <tr>
+                    <td colspan="4">
+                        <textarea name="observaciones" id="id_observaciones" cols="70" rows="10" >{{ reporte.observaciones }}</textarea>
+                    </td>
+                </tr>
+            </table>
+            <table style="border-radius: 0;">
+                <tr>
+                    <td class="td-img">
+                        <label for="id_img_report">
+                            <center>
+                                Reporte físico
+                                <br>
+                                <input oninput="mostrarImagen(this, 'imgReport');" class="file" required readonly type="file" name="img_report" id="id_img_report" accept="image/png, image/jpg, image/gif, image/jpeg">
+                                <br>
+                            </center>
+                        </label>
                         <center>
-                            Reporte físico
-                            <br>
-                            <input oninput="mostrarImagen(this, 'imgReport');" class="file" required readonly type="file" name="img_report" id="id_img_report" accept="image/png, image/jpg, image/gif, image/jpeg">
-                            <br>
+                            {% if reporte.img_report %}
+                                <img class="img-reporte" id="imgReport" src="{{reporte.img_report.url}}" alt="Reporte físico" height="150px" width="150px">
+                            {% else %}
+                                <img class="img-reporte" id="imgReport" src="{% static 'img/imageNotFound.png' %}" alt="Imagen del reporte físico" height="150px" width="150px">
+                            {% endif %}
                         </center>
-                    </label>
-                    <center>
-                        {% if reporte.img_report %}
-                            <!-- <img src="{{reporte.img_report.url}}" alt="Imagen del Reporte" id="imgReport" > -->
-                            <img id="imgReport" src="{{reporte.img_report.url}}" alt="Reporte físico" height="150px" width="150px">
-                            <!-- The Modal -->
-                            <div id="myModal" class="modal">
-                                <span class="close">&otimes;</span>
-                                <img class="modal-content" id="img01">
-                                <div id="caption">
-                                    <table>
-                                        <th class="first" colspan="4">Control de Equipos</th>
-                                        <tr>
-                                            <td colspan="1">Cliente: </td>
-                                            <td colspan="3"><input style="background-color: skyblue;" class="text" type="text" id="modalCliente" value="{{ reporte.cliente }}" readonly></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="1">Obra: </td>
-                                            <td colspan="3"><input style="background-color: skyblue;" class="text" type="text" id="modalObra" value="{{ reporte.obra }}" readonly></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Fecha: </td>
-                                            <td><input style="background-color: skyblue;" type="date" id="modalFecha" value="{{ reporte.fecha | date:'Y-m-d' }}" readonly></td>
-                                            <td colspan="2">Operador: <input style="background-color: skyblue;" class="text" type="text" id="modalOperador" value="{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}" readonly></td>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="4">Horómetro</th>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">Hora Ingreso: <input style="background-color: skyblue;" type="time" id="modalHoraIngreso" value="{{ reporte.hora_ingreso|time:'H:i' }}" readonly></td>
-                                            <td colspan="2">Hora Término: <input style="background-color: skyblue;" type="time" id="modalHoraTermino" value="{{ reporte.hora_termino|time:'H:i' }}" readonly></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">Horómetro Inicial: <input style="background-color: skyblue; width: 50%;" type="number" id="modalHoromInicial" value="{{ reporte.horometro_inicial|floatformat:'u' }}" readonly></td>
-                                            <td colspan="2">Horómetro Final: <input style="background-color: skyblue; width: 50%;" type="number" id="modalHoromFinal" value="{{ reporte.horometro_final|floatformat:'u' }}" readonly></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">Equipo Número: <input style="background-color: skyblue; width: 50%;" type="text" id="modalEquipoNum" value="{{ reporte.equipo_numero }}" readonly></td>
-                                            <td colspan="2">Horas Arriendo: <input style="background-color: skyblue; width: 50%;" type="number" id="modalHorasArriendo" value="{{ reporte.horas_arriendo|floatformat:'u' }}" readonly></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">Horómetro Total: <input style="background-color: skyblue; width: 50%;" type="number" id="modalHoromTotal" value="{{ reporte.horometro_total|floatformat:'u' }}" readonly></td>
-                                            <td colspan="2">Hora Mínima: <input style="background-color: skyblue; width: 50%;" type="number" id="modal" value="{{ reporte.hora_minima|floatformat:'u' }}" readonly></td>
-                                        </tr>
-                                        <th colspan="4">Accesorios Minicargador</th>
-                                        {% for a in accesorios %}
-                                            {% if a.id_accesorio == 1 or a.id_accesorio == 3 %}
-                                                <tr>
-                                                    <td id="modalAccesorio{{a.id_accesorio}}" colspan="2" {% for d in detalles %}{% if d == a %}style="background-color: skyblue;"{% endif %}{% endfor %}>
-                                                        <input disabled {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="ChangeColColor(this,'am{{a.id_accesorio}}')">{{ a.accesorio_minicargador }}
-                                                    </td>
-                                            {% else %}
-                                                    <td id="modalAccesorio{{a.id_accesorio}}" colspan="2" {% for d in detalles %}{% if d == a %}style="background-color: skyblue;"{% endif %}{% endfor %}>
-                                                        <input disabled {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="ChangeColColor(this,'am{{a.id_accesorio}}')">{{ a.accesorio_minicargador }}
-                                                    </td>
-                                                </tr>
-                                            {% endif %}
-                                        {% endfor %}
-                                        <th colspan="4">Observaciones</th>
-                                        <tr>
-                                            <td colspan="4">
-                                                <textarea style="background-color: skyblue;" id="modalObservaciones" cols="20" rows="3" readonly>{{ reporte.observaciones }}</textarea>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        {% else %}
-                            <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen del reporte físico" id="imgReport" height="150px" width="150px">
-                        {% endif %}
-                    </center>
-                </td>
-                <td class="td-img">
-                    <label for="id_img_maquinaria">
+                    </td>
+                    <td class="td-img">
+                        <label for="id_img_maquinaria">
+                            <center>
+                                Maquinaria
+                                <br>
+                                <input oninput="mostrarImagen(this, 'imgMaquinaria');" class="file" required readonly type="file" name="img_maquinaria" id="id_img_maquinaria" accept="image/png, image/jpg, image/gif, image/jpeg">
+                                <br>
+                            </center>
+                        </label>
                         <center>
-                            Maquinaria
-                            <br>
-                            <input oninput="mostrarImagen(this, 'imgMaquinaria');" class="file" required readonly type="file" name="img_maquinaria" id="id_img_maquinaria" accept="image/png, image/jpg, image/gif, image/jpeg">
-                            <br>
-                        </center>
-                    </label>
-                    <center>
-                        
-                        {% if reporte.img_maquinaria %}
-                            <img src="{{reporte.img_maquinaria.url}}" alt="Maquinaria" id="imgMaquinaria" height="150px" width="150px">
-                        {% else %}
-                            <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen no encontrada" id="imgMaquinaria" height="150px" width="150px">
-                        {% endif %}
                             
-                    </center>
-                </td>
-            </tr>
+                            {% if reporte.img_maquinaria %}
+                                <img class="img-reporte" id="imgMaquinaria" src="{{reporte.img_maquinaria.url}}" alt="Maquinaria" height="150px" width="150px">
+                            {% else %}
+                                <img class="img-reporte" id="imgMaquinaria" src="{% static 'img/imageNotFound.png' %}" alt="Imagen no encontrada" height="150px" width="150px">
+                            {% endif %}
+                                
+                        </center>
+                    </td>
+                </tr>
+        </form>
             <tr>
                 {% if user.r_id_rol.rol == "Asistente" %}
                 <td>
-                    <input class="btn-submit btn-1" type="submit" value="Validar Reporte"disabled>
+                    <input  class="btn-submit btn-1" 
+                            type="button" 
+                            {% if reporte.valido == 0 %}
+                                value="Validar Reporte"
+                                onclick="modalValidarReporte();"
+                            {% else %}
+                                value="Invalidar Reporte"
+                                onclick="validarReporte('{{ reporte.valido }}', '{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}', '{{ reporte.fecha }}');"
+                            {% endif %}>
                 </td>
                 {% endif %}
                 
@@ -226,9 +176,89 @@
                 </td>
             </tr>
         </table>
-    </form>
-
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <span class="close">&otimes;</span>
+            <img class="modal-content" id="img01">
+            <div id="caption">
+                <table>
+                    <th class="first" colspan="4">Control de Equipos</th>
+                    <tr>
+                        <td colspan="1">Cliente: </td>
+                        <td colspan="3"><input class="sbg-skyblue" class="text" type="text" id="modalCliente" value="{{ reporte.cliente }}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1">Obra: </td>
+                        <td colspan="3"><input class="sbg-skyblue" class="text" type="text" id="modalObra" value="{{ reporte.obra }}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Fecha: </td>
+                        <td><input class="sbg-skyblue" type="date" id="modalFecha" value="{{ reporte.fecha | date:'Y-m-d' }}" readonly></td>
+                        <td colspan="2">Operador: <input class="sbg-skyblue" class="text" type="text" id="modalOperador" value="{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}" readonly></td>
+                    </tr>
+                    <tr>
+                        <th colspan="4">Horómetro</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Hora Ingreso: <input class="sbg-skyblue" type="time" id="modalHoraIngreso" value="{{ reporte.hora_ingreso|time:'H:i' }}" readonly></td>
+                        <td colspan="2">Hora Término: <input class="sbg-skyblue" type="time" id="modalHoraTermino" value="{{ reporte.hora_termino|time:'H:i' }}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Horómetro Inicial: <input class="sbg-skyblue" type="number" id="modalHoromInicial" value="{{ reporte.horometro_inicial|floatformat:'u' }}" readonly></td>
+                        <td colspan="2">Horómetro Final: <input class="sbg-skyblue" type="number" id="modalHoromFinal" value="{{ reporte.horometro_final|floatformat:'u' }}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Equipo Número: <input class="sbg-skyblue" type="text" id="modalEquipoNum" value="{{ reporte.equipo_numero }}" readonly></td>
+                        <td colspan="2">Horas Arriendo: <input class="sbg-skyblue" type="number" id="modalHorasArriendo" value="{{ reporte.horas_arriendo|floatformat:'u' }}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Horómetro Total: <input class="sbg-skyblue" type="number" id="modalHoromTotal" value="{{ reporte.horometro_total|floatformat:'u' }}" readonly></td>
+                        <td colspan="2">Hora Mínima: <input class="sbg-skyblue" type="number" id="modal" value="{{ reporte.hora_minima|floatformat:'u' }}" readonly></td>
+                    </tr>
+                    <th colspan="4">Accesorios Minicargador</th>
+                    {% for a in accesorios %}
+                        {% if a.id_accesorio == 1 or a.id_accesorio == 3 %}
+                            <tr>
+                                <td id="modalAccesorio{{a.id_accesorio}}" colspan="2" {% for d in detalles %}{% if d == a %}class="sbg-skyblue"{% endif %}{% endfor %}>
+                                    <input disabled {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="ChangeColColor(this,'am{{a.id_accesorio}}')">{{ a.accesorio_minicargador }}
+                                </td>
+                        {% else %}
+                                <td id="modalAccesorio{{a.id_accesorio}}" colspan="2" {% for d in detalles %}{% if d == a %}class="sbg-skyblue"{% endif %}{% endfor %}>
+                                    <input disabled {% for d in detalles %}{% if d == a %}checked{% endif %}{% endfor %} class="check" type="checkbox" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}" onclick="ChangeColColor(this,'am{{a.id_accesorio}}')">{{ a.accesorio_minicargador }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    <th colspan="4">Observaciones</th>
+                    <tr>
+                        <td colspan="4">
+                            <textarea class="sbg-skyblue" id="modalObservaciones" cols="20" rows="3" readonly>{{ reporte.observaciones }}</textarea>
+                        </td>
+                    </tr>
+                    <form action="{% url 'reportesMaqman:validarReport' %}" method="POST" id="formulario-validar-reporte">{% csrf_token %}
+                        <input type="hidden" name="id_report" value="{{ reporte.id_reporte }}">
+                        <tr>
+                            <td colspan="4">
+                                <input  class="btn-submit btn-2"
+                                        type="button"
+                                        value="Validar Reporte"
+                                        onclick="validarReporte('{{ reporte.valido }}', '{{ reporte.u_p_id_persona.p_id_persona.nombres }} {{ reporte.u_p_id_persona.p_id_persona.apellido_paterno }} {{ reporte.u_p_id_persona.p_id_persona.apellido_materno }}', '{{ reporte.fecha }}');">
+                            </td>
+                        </tr>
+                    </form>
+                </table>
+            </div>
+        </div>
+    {% else %}
+    <h1>EL reporte que estás buscando no te pertenece</h1>
+    {% endif %}
+    <a href="{% url 'reportesMaqman:verReport' %}" style="margin-top: 100px;">
+        <svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="btn-movil">
+            <path d="M10 9V7.41c0-.89-1.08-1.34-1.71-.71L3.7 11.29c-.39.39-.39 1.02 0 1.41l4.59 4.59c.63.63 1.71.19 1.71-.7V14.9c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"></path>
+        </svg>
+    </a>
     <script src="{% static 'js/calculos.js'%} "></script>
     <script src="{% static 'js/modal.js'%} "></script>
+    <script src="{% static 'js/mensajes.js'%} "></script>
     <script src="{% static 'js/general.js'%} "></script>
 {% endblock contenido %}

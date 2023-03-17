@@ -15,7 +15,13 @@
         <div class="cartas-principales">
             {% for r in reportes %}
                 <div class="carta-principal">
-                    <a href="{% url 'reportesMaqman:detalleReport' r.id_reporte %}" class="card">
+                    <a  href="{% url 'reportesMaqman:detalleReport' r.id_reporte %}" 
+                        class="card"
+                        {% if r.valido == 1 %}
+                            style = "background-color: palegreen;"
+                            onmouseover="this.style.backgroundColor='orange'" 
+                            onmouseout="this.style.backgroundColor='palegreen'"
+                        {% endif %}>
                         <div class="img-card">
                             
                             {% if r.img_report %}
@@ -26,11 +32,7 @@
                                 
                         </div>
                         <div class="contenido-card">
-                            <textarea cols="50" rows="5" class="textarea-card" readonly>{{ r.cliente }}
-                                {{ r.obra }}
-                                {{ r.u_p_id_persona.p_id_persona.nombres }}
-                            </textarea>
-                            <!-- <textarea rows="4" cols="40" class="textarea-card" readonly>{{r.cliente}}{{r.obra}}</textarea> -->
+                            <textarea cols="50" rows="2" class="textarea-card" readonly>{{ r.u_p_id_persona.p_id_persona.nombres }}</textarea>
                         </div>
                         <p class="pie-card">{{ r.fecha|date:'F d' }}</p>
                     </a>

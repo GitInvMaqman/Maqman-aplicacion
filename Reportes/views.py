@@ -68,7 +68,6 @@ class PerfilTemplateView(LoginRequiredMixin, TemplateView):
 # ---------------------------------------------------------------------------------------------------------------------
 class PrincipalTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "principal/vista-principal.html"
-    
 
     # Obtención de otros datos.
     def get_context_data(self, *args, **kwargs):
@@ -149,7 +148,7 @@ class DetalleUsuarioFormView(LoginRequiredMixin, DetailView):
 
     def editar_usuario(request):
         return ModificacionesTablas.editar_usuario(request)
-    
+
     def cambiar_activo(request):
         return ModificacionesTablas.cambiar_activo(request)
 # ---------------------------------------------------------------------------------------------------------------------
@@ -184,7 +183,6 @@ class GenerarReportFormView(LoginRequiredMixin, FormView):
     # Formulario inválido.
     def form_invalid(self, form):
         print(form.errors)
-        self.request.session['acusete'] = 'form inválido'
         return super(GenerarReportFormView, self).form_invalid(form)
 
     # Obtención de otros datos.
@@ -198,14 +196,14 @@ class GenerarReportFormView(LoginRequiredMixin, FormView):
 # ---------------------------------------------------------------------------------------------------------------------
 class VerReportListView(LoginRequiredMixin, ListView):
     model               = Reporte
-    paginate_by         = 12
+    paginate_by         = 20
     template_name       = "reportes/verReport.html"
     context_object_name = "reportes"
 
     def get_queryset(self):
         if self.request.user.r_id_rol.rol == "Operador":
-            return Reporte.objects.filter(u_p_id_persona = self.request.user).order_by('-fecha')
-        return Reporte.objects.all().order_by('-fecha')
+            return Reporte.objects.filter(u_p_id_persona = self.request.user, valido = 0).order_by('-fecha')
+        return Reporte.objects.all().order_by('valido', '-fecha')
 
     # Obtención de otros datos.
     def get_context_data(self, *args, **kwargs):
@@ -218,7 +216,6 @@ class DetalleReportDetailView(LoginRequiredMixin, DetailView):
     model               = Reporte
     template_name       = "reportes/detalleReport.html"
     context_object_name = "reporte"
-    
 
     # Obtención de otros datos.
     def get_context_data(self, **kwargs):
@@ -233,9 +230,12 @@ class DetalleReportDetailView(LoginRequiredMixin, DetailView):
         for d in detalle:
             context['detalles'].append(Accesorio.objects.get(id_accesorio = d[1]))
         return context
-    
+
     def editar_report(request):
         return ModificacionesTablas.editar_report(request)
+
+    def validar_report(request):
+        return ModificacionesTablas.validar_report(request)
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------------
 

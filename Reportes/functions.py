@@ -195,6 +195,24 @@ class ModificacionesTablas():
         messages.success(request, titulo+texto)
         return HttpResponseRedirect('/Detalle-Reporte/' + id_report)
     
+    def validar_report(request):
+        idReport = request.POST.get('id_report')
+        reporte  = Reporte.objects.get(id_reporte = idReport)
+
+        if reporte.valido == 0:
+            reporte.valido = 1
+            validez        = 'validado'
+        else:
+            reporte.valido = 0
+            validez        = 'invalidado'
+
+        reporte.save()
+
+        titulo = '<h2>¡Reporte ' + validez + '!</h2>'
+        texto  = '<p style="font-size:24;">El reporte se ha '+ validez + ' con éxito.</p>'
+        messages.success(request, titulo+texto)
+        return HttpResponseRedirect('/Ver-Reportes/')
+
     def crear_persona(request, datos):
         personaCreada = Persona.objects.crear_persona(
             datos['nombres'],
@@ -217,7 +235,7 @@ class ModificacionesTablas():
         texto = '<p style="font-size:24px;">¡ha sido creado exitosamente!</p>'
         messages.success(request, titulo + texto)
         return usuarioCreado
-    
+
     def editar_usuario(request):
         idPersona    = request.POST.get('id_persona')
         usuario      = Usuario.objects.get(p_id_persona = idPersona)
