@@ -17,20 +17,7 @@
         <link rel="stylesheet" href="{% static 'css/estilos/basePrincipal.css' %}">
         <link rel="stylesheet" href="{% static 'css/estilos/botones.css' %}">
 
-        <div class="caja LogoMaqman">
-            <a href="{% url 'reportesMaqman:home' %}">
-                <div class="texto-maqman">
-                    <h1>Inversiones Maqman S.P.A.</h1>
-                    <center><img src="/static/img/Logo inv maqman.png" alt="Logo de Inversiones Maqman S.P.A."></center>
-                </div>
-            </a>
-        </div>
-
-        <div class="caja inicio-sesion">
-            <center>
-                {% block contenido %}{% endblock contenido %}
-            </center>
-        </div>
+        {% block contenido %}{% endblock contenido %}
     </body>
 
 </html>

@@ -1,17 +1,18 @@
 input:valid,
 select:valid,
 textarea:valid{
-    /* border: 6px solid green; */
-    background-color: palegreen;
+    border: 6px solid green;
+    /* background-color: palegreen; */
     transition: all .2s ease-in-out;
 }
 input:invalid,
-input:invalid::placeholder,
+/* input:invalid::placeholder, */
 select:invalid,
-textarea:invalid,
-textarea:invalid::placeholder{
-    /* border: 2px solid red; */
-    background-color: rgb(255, 78, 78);
+textarea:invalid
+/* textarea:invalid::placeholder */
+{
+    border: 2px solid red;
+    /* background-color: rgb(255, 78, 78); */
     color: black;
     opacity: 1;
     transition: all .2s ease-in-out;

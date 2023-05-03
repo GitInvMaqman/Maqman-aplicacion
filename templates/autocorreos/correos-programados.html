@@ -1,0 +1,36 @@
+{% extends 'baseCuenta.html' %}
+{% load static %}
+
+{% block titulo %}
+    Correos programados
+{% endblock titulo %}
+
+{% block contenido %}
+    <h1>Correos programados</h1>
+    {% if correos %}
+        <div class="cartas-principales">
+            {% for c in correos %}
+                <div class="carta-principal">
+                    <a  href="{% url 'reportesMaqman:detalleCorreo' c.id_correo %}" class="card">
+                        <div class="img-card">
+                            {% if c.imagen %}
+                                <img src="{{ c.imagen }}" alt="imagen adjunta del correo">
+                            {% else %}
+                                <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen no encontrada">
+                            {% endif %}
+                                
+                        </div>
+                        <div class="contenido-card">
+                            <textarea cols="50" rows="2" class="textarea-card" readonly>Asunto: {{ c.asunto }}</textarea>
+                        </div>
+                        <p class="pie-card">{{ c.fecha|date:'F d' }}</p>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h1>No existen correos programados en este momento.</h1>
+    {% endif %}
+    {% include 'includes/pagination.html' %}
+        
+{% endblock contenido %}

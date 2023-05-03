@@ -22,7 +22,8 @@ from .excel     import *
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------------
 class HomeTemplateView(TemplateView):
-    template_name = "principal/home.html"
+    template_name = "principal/sitio-maqman.html"
+    # template_name = "principal/home.html"
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -282,4 +283,160 @@ class DescargarExcelTemplateView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         context            = super().get_context_data(**kwargs)
         context['nombres'] = self.request.user.p_id_persona.nombres.split()
+        return context
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
+
+# ------------------------- #
+# Correos automatizados     #
+# ------------------------- #
+
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
+class CorreosTemplateView(LoginRequiredMixin, TemplateView):
+    template_name = "autocorreos/vista-correos.html"
+
+    # Obtención de otros datos.
+    def get_context_data(self, **kwargs):
+        context               = super().get_context_data(**kwargs)
+        context['nombres']    = self.request.user.p_id_persona.nombres.split()
+        return context
+    
+class ContactosFormView(LoginRequiredMixin, FormView):
+    model               = Contacto
+    form_class          = PersonaForm
+    template_name       = "autocorreos/gestion-contacto.html"
+    success_url         = reverse_lazy("reportesMaqman:gestionContactos")
+
+    def get(self, request, *args, **kwargs):
+        permiso = request.user.r_id_rol.rol
+        rol     = 'Asistente'  #Cambiar por jefe y/o admin
+        if permiso == rol:
+            return super(ContactosFormView, self).get(request, *args, **kwargs)
+        else:
+            return Login.verificar_permisos_rol(permiso, request)
+
+    # Validación del formulario y posterior creación del usuario.
+    # def form_valid(self, form):
+    #     datos    = form.cleaned_data
+    #     nUsuario = self.request.POST.get('nombre_usuario')
+    #     cUsuario = self.request.POST.get('contraseña_usuario')
+    #     idRol    = self.request.POST.get('rol')
+    #     usuarioExist = Usuario.objects.filter(nombre_usuario = nUsuario)
+    #     if usuarioExist:
+    #         titulo = '<h2>¡Usuario ya existe!</h2>'
+    #         texto = '<p style="font-size:24;">El nombre de usuario ya está asignado a alguien más, intenta poner otro nombre de usuario.</p>'
+    #         messages.error(self.request, titulo+texto)
+    #         return super().form_invalid(form)
+    #     else:
+    #         personaCreada = ModificacionesTablas.crear_persona(self.request, datos)
+    #         ModificacionesTablas.crear_usuario(self.request, personaCreada, nUsuario, cUsuario, idRol)
+    #         return super(GestionUsuarioFormView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context             = super().get_context_data(**kwargs)
+        context['nombres']  = self.request.user.p_id_persona.nombres.split()
+        context["contacto"] = Contacto.objects.all()
+        return context
+    
+class CorreoFormView(LoginRequiredMixin, FormView):
+    model               = Correo
+    form_class          = PersonaForm
+    template_name       = "autocorreos/programar-correo.html"
+    success_url         = reverse_lazy("reportesMaqman:programarCorreo")
+
+    def get(self, request, *args, **kwargs):
+        permiso = request.user.r_id_rol.rol
+        rol     = 'Asistente'  #Cambiar por jefe y/o admin
+        if permiso == rol:
+            return super(CorreoFormView, self).get(request, *args, **kwargs)
+        else:
+            return Login.verificar_permisos_rol(permiso, request)
+
+    # Validación del formulario y posterior creación del usuario.
+    # def form_valid(self, form):
+    #     datos    = form.cleaned_data
+    #     nUsuario = self.request.POST.get('nombre_usuario')
+    #     cUsuario = self.request.POST.get('contraseña_usuario')
+    #     idRol    = self.request.POST.get('rol')
+    #     usuarioExist = Usuario.objects.filter(nombre_usuario = nUsuario)
+    #     if usuarioExist:
+    #         titulo = '<h2>¡Usuario ya existe!</h2>'
+    #         texto = '<p style="font-size:24;">El nombre de usuario ya está asignado a alguien más, intenta poner otro nombre de usuario.</p>'
+    #         messages.error(self.request, titulo+texto)
+    #         return super().form_invalid(form)
+    #     else:
+    #         personaCreada = ModificacionesTablas.crear_persona(self.request, datos)
+    #         ModificacionesTablas.crear_usuario(self.request, personaCreada, nUsuario, cUsuario, idRol)
+    #         return super(GestionUsuarioFormView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context             = super().get_context_data(**kwargs)
+        context['nombres']  = self.request.user.p_id_persona.nombres.split()
+        context["contacto"] = Contacto.objects.all()
+        context["envios"]   = TipoEnvio.objects.all()
+        context["dias"]     = range(1,32)
+        context["semana"]   = {1:"Lunes", 2:"Martes", 3:"Miércoles", 4:"Jueves", 5:"Viernes", 6:"Sábado", 7:"Domingo", }
+        context['meses']    = {1:"Enero", 2:"Febrero", 3:"Marzo", 4:"Abril", 5:"Mayo", 6:"Junio", 7:"Julio", 8:"Agosto", 9:"Septiembre", 10:"Octubre", 11:"Noviembre", 12:"Diciembre"}
+        return context
+
+class CorreosListView(LoginRequiredMixin, ListView):
+    model               = Correo
+    paginate_by         = 20
+    template_name       = "autocorreos/correos-programados.html"
+    context_object_name = "correos"
+
+    def get(self, request, *args, **kwargs):
+        permiso = request.user.r_id_rol.rol
+        rol     = 'Asistente'  #Cambiar por jefe y/o admin
+        if permiso == rol:
+            return super(CorreosListView, self).get(request, *args, **kwargs)
+        else:
+            return Login.verificar_permisos_rol(permiso, request)
+    # def get_queryset(self):
+    #     return Reporte.objects.all().order_by('valido', '-fecha')
+
+    # Obtención de otros datos.
+    def get_context_data(self, *args, **kwargs):
+        context            = super().get_context_data(**kwargs)
+        context['nombres'] = self.request.user.p_id_persona.nombres.split()
+        return context
+class CorreoDetailView(LoginRequiredMixin, DetailView):
+    model               = Correo
+    template_name       = "autocorreos/detalle-correo.html"
+    context_object_name = "correo"
+
+    # Obtención de otros datos.
+    def get_context_data(self, **kwargs):
+        context             = super().get_context_data(**kwargs)
+        context['nombres']  = self.request.user.p_id_persona.nombres.split()
+        context["contacto"] = Contacto.objects.all()
+        context["envios"]   = TipoEnvio.objects.all()
+        context["dias"]     = range(1,32)
+        context["semana"]   = {1:"Lunes", 2:"Martes", 3:"Miércoles", 4:"Jueves", 5:"Viernes", 6:"Sábado", 7:"Domingo", }
+        context['meses']    = {1:"Enero", 2:"Febrero", 3:"Marzo", 4:"Abril", 5:"Mayo", 6:"Junio", 7:"Julio", 8:"Agosto", 9:"Septiembre", 10:"Octubre", 11:"Noviembre", 12:"Diciembre"}
+        return context
+
+    # def editar_report(request):
+    #     return ModificacionesTablas.editar_report(request)
+
+    # def validar_report(request):
+    #     return ModificacionesTablas.validar_report(request)
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
+
+# ------------------------- #
+# Pruebas                   #
+# ------------------------- #
+
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
+class PruebasView(LoginRequiredMixin, TemplateView):
+    template_name = "prueba.html"
+
+    def get_context_data(self, **kwargs):
+        context             = super().get_context_data(**kwargs)
+        context['nombres']  = self.request.user.p_id_persona.nombres.split()
+        context["contacto"] = Contacto.objects.all()
+        context["envios"]   = TipoEnvio.objects.all()
         return context

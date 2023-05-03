@@ -6,9 +6,501 @@
 {% endblock titulo %}
 
 {% block contenido %}
+<style>
+/* body{
+  text-align:center;
+  box-sizing:border-box;
+}
+header{
+  background-color:rgb(0, 0, 0);
+  min-height:200px;
+  padding: 10vh 2em;
+}
+nav.menu{
+  width: 600px;
+  margin: auto;
+  border-radius: 20px;
+  background-color:black;
+  color:white;
+  padding:1em;
+/* smooth animation when it "sticks"   
+  transition:all .4s ease-out;
+}
+.menu ul{
+  list-style-type:none;
+  margin:0;
+  padding:0;
+}
+.menu li{
+  display:inline-block;
+  padding:.5em 1em;
+}
 
-    <a href="{% url 'reportesMaqman:login' %}">
-        <input class="btn-iniciar-sesion" type="button" value="Iniciar Sesión">
-    </a>
+p{
+  text-align:left;
+  margin:1em;
+  font-size: 24px;
+}
+p:first-child{
+  margin-top:100px;
+  background-color:red;
+}
+nav.sticky{
+  position:fixed;
+  top:20px;
+  left: 50%;
+  width:600px;
+  margin-left: -320px;
+  background-color:goldenrod;
+} */
 
+@charset "utf-8";
+/* CSS Document */
+
+* {
+	box-sizing: border-box;
+	font-family: 'Montserrat', sans-serif;
+}
+
+body {
+	margin: 0;
+	background-color: black;
+	color: white;
+}
+
+.header {
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	padding: 60px;
+	font-size: 22px;
+	font-weight: 400;
+	position: relative;
+}
+
+.menu {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: black;
+}
+
+.box-width {
+	width: 0%;
+	background-color: white;
+	transition: 0.1s;
+	position: fixed;
+}
+
+.main {
+	width: 100%;
+	height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 36px;
+  font-weight: 200;
+}
+
+.redbg {
+	background-color: salmon;
+}
+
+.greenbg {
+	background-color: lightgreen;
+}
+
+.bluebg {
+	background-color: deepskyblue;
+}
+
+.yellowbg {
+	background-color: orange;
+}
+
+.boton {
+	width: 140px;
+	padding: 10px 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: 100;
+	position: relative;
+	cursor: pointer;
+}
+
+.boton:hover {
+  background-color: rgb(20,20,20);
+}
+
+.selectedboton {
+	background-color: rgb(40,40,40);
+}
+
+
+/*  SLIDERS FOR JQUERY  */ 
+
+
+.slider-left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background-color: white;
+    width: 0%;
+}
+
+.slider-bottom {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: white;
+    width: 2px;
+	height: 0%;
+}
+
+.slider-bottom-left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: white;
+    width: 2px;
+	height: 0%;
+}
+
+.slider-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background-color: white;
+    width: 0%;
+}
+
+.header-border-left {
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	background-color: white;
+	width: 0%;
+	transition: 0.5s;
+}
+
+.header-border-right {
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	background-color: white;
+	width: 0%;
+	transition: 0.5s;
+}
+
+</style>
+<center style="width: 100%;">
+
+    
+    <!-- <header>
+        <a href="{% url 'reportesMaqman:login' %}">
+            <input class="btn-iniciar-sesion" type="boton" value="Iniciar Sesión">
+        </a>
+        <div>Este es un div de prueba</div>
+        <h1>Sticky Element Demo</h1>
+        <div>Este es un div de prueba</div>
+        <h1>Sticky Element Demo</h1>
+        <div>Este es un div de prueba</div>
+        <h1>Sticky Element Demo</h1>
+        <div>Este es un div de prueba</div>
+        <h1>Sticky Element Demo</h1>
+        <div>Este es un div de prueba</div>
+        <h1>Sticky Element Demo</h1>
+        <div>Este es un div de prueba</div>
+        <h1>Sticky Element Demo</h1>
+        </header>
+        
+        
+        <nav class="menu">
+            <ul>
+                <li>Home</li>
+                <li>About</li>
+                <li>Contact</li>
+                <li>Hola</li>
+            </ul>
+            </nav>
+        
+        <main>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus eos in quisquam, tempora odit nisi nihil delectus, fuga aliquam illo a quis voluptate labore cumque sed iusto officiis minus distinctio.</p>
+        
+    
+        </main> -->
+        
+<div class="header">
+    <header>Logo Contacto</header>
+    Inversiones Maqman S.P.A.
+</div>
+
+<div class="menu">
+	<div class="boton"> Featured
+    </div>
+	<div class="boton"> About </div>
+	<div class="boton"> Media </div>
+	<div class="boton"> Contact </div>	
+</div>
+
+<div class="box-width"> </div>
+
+<div class="main redbg topbox"> Featured
+<h1>gfsdf</h1></div>
+<div class="main greenbg">About</div>
+<div class="main bluebg">Media</div>
+<div class="main yellowbg">Contact</div>
+        
+</center>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+<script>
+//     //if we scrol past the initial offset of the menu, make it stick to the window
+// var menuDistance = $(".menu").offset().top;
+// console.log(menuDistance);
+
+
+
+// $(window).scroll(function(){
+//   //how far have we scrolled?
+//   var amountScrolled = $(window).scrollTop();
+  
+//   //if we have scrolled past the original offset of the menu
+//   if( amountScrolled + 20 >= menuDistance ){
+//      //make the menu stick
+//      $(".menu").addClass("sticky");
+     
+//      }else{
+//        //make it unstick if we have not scrolled far enough
+//        $(".menu").removeClass("sticky");
+//      }
+  
+// });
+
+// Global variables
+var border_height_num = 1;
+var border_height = border_height_num + "px";
+var ease = 'cubic-bezier(1,0,0,1)'
+var bottom_padding = 30 + "px";
+var border_width = 40;   // MAX 50% MIN 0%
+	
+	
+	
+	
+// ANIMATED SCROLL POSITION
+	
+var scrollboxheight = 50;
+var menuheight = 40;
+	
+$(".menu").css({
+	height: menuheight + "px"
+});
+	
+var documentheight= $(document).height() - $(window).height();
+var menuposition = $(".menu").offset().top;
+var maintoppos = $(".main").offset().top;
+var menuheight = $(".menu").height();
+
+$(window).scroll(function(){
+	
+	windowpos = $(window).scrollTop(); 
+	
+	// THIS IS A COMPLICATED CALCULATION!
+	if (windowpos >= menuposition) {
+		var currentpos = (
+			((windowpos-maintoppos+menuheight)/
+			 (documentheight-maintoppos+menuheight)
+			)*100
+		);
+
+		// Test if it is almost at the end
+		var boxwidth = currentpos + "%";
+		
+		console.log("docheight" + documentheight);
+		console.log("winheight" + $(window).height());
+		console.log("winpos" + windowpos);
+		
+		$(".box-width").css({
+			width: boxwidth,
+			height: scrollboxheight + "px",
+		});
+		
+	}
+	else {
+		$(".box-width").css({
+			height: 0 + "px",
+			width: 0 + "%"
+		});
+	}
+});
+	
+
+
+	
+// SCROLL THEN STICK
+
+var menuposition = $(".menu").offset().top;
+var windowpos = $(window).scrollTop();
+var menuheight = $(".menu").height();
+
+	
+$(window).scroll(function(){
+	windowpos = $(window).scrollTop();
+
+	if (windowpos  >= menuposition ) {
+		
+		$(".menu").css({
+			position: "fixed",
+			left: "0",
+			top: "0"
+		});
+		
+		$(".box-width").css({
+			top: menuheight + "px",
+			position: "fixed"
+		});
+		
+		$(".topbox").css({
+			"margin-top": menuheight + "px"
+		});
+	}
+	
+	else {
+		$(".menu").css({
+			position: "relative",
+			left: "0",
+			top: "0"
+		});
+		
+		$(".box-width").css({
+			position: "relative",
+			top: "auto"
+		});
+		
+		$(".topbox").css({
+			"margin-top": 0 + "px"
+		});
+	}
+	
+	
+});	
+	
+// ANIMATE SCROLL POSITION - SMOOTH SCROLL
+
+	
+var amountofbotons = $(".boton").length;
+	
+for (i=0; i<amountofbotons; i++){
+	$(".boton").eq(i).attr('data-id', i);
+}
+	
+$(".boton").on("click", function(){
+	
+	$(".boton").each (function(){
+		$(this).removeClass("selectedboton");
+	});
+	
+	$(this).addClass("selectedboton");
+	
+	var botonnum = $(this).attr('data-id');
+	var scrolltopositions = 0;
+	
+	if (botonnum==0) {
+		scrolltopositions = 0;
+	}
+	
+	else {
+		scrolltopositions = $(".main").eq(botonnum).offset().top  - menuheight ;
+	}
+		$('html, body').animate({
+		  scrollTop: scrolltopositions
+		}, 1000, 'easeInOutQuint');
+	
+});	
+	
+	
+// DETECT CURRENT SCROLL AREA
+
+var divs = [];
+var botons = [];
+	
+for (i=0; i<amountofbotons; i++) {
+	divs.push($(".main").eq(i).offset().top);
+}
+	
+
+$(window).scroll(function(){
+	if (windowpos < divs[0]) {
+		$(".boton").each(function(){
+			$(this).removeClass("selectedboton");
+		});
+	}
+	if (windowpos > divs[0] && windowpos < divs[1]) {
+		$(".boton").each(function(){
+			$(this).removeClass("selectedboton");
+		});
+
+		$(".boton").eq(1).addClass("selectedboton");
+	}
+	if (windowpos > divs[1] && windowpos < divs[2]) {
+		$(".boton").each(function(){
+			$(this).removeClass("selectedboton");
+		});
+
+		$(".boton").eq(2).addClass("selectedboton");
+	}
+	if (windowpos > divs[2] && windowpos < divs[3]) {
+		$(".boton").each(function(){
+			$(this).removeClass("selectedboton");
+		});
+
+		$(".boton").eq(3).addClass("selectedboton");
+	}
+});
+
+	
+console.log(divs);
+</script>
 {% endblock contenido %}

@@ -1,0 +1,544 @@
+<html lang="en" id="inicio">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invermaq</title>
+</head>
+<body>
+    <div class="header">
+        <header>
+            <img id="logo-invermaq-header" src="static/img/imageNotFound.png" alt="Logo de Inversiones Maqman SPA">
+            <!-- <svg id="logo-invermaq-header">
+                <path d="M 0 0 H 110V 56H 0 V 0 Z M 0 0 L 110 56Z M 0 56 L 110 0 Z" stroke-width="2" stroke="rgb(0, 0, 0)" stroke-dasharray="none" stroke-dashoffset="none" fill="rgb(214, 214, 214)" fill-rule="evenOdd"></path>
+            </svg> -->
+            <ul class="label-1">
+                <li>
+                    <a href="#inicio">Inicio</a>
+                </li>
+                <li>
+                    <a href="#nosotros">Nosotros</a>
+                </li>
+                <li>
+                    <a href="#porque-elegirnos">Por qué elegirnos</a>
+                </li>
+                <li>
+                    <a href="#maquinarias">Maquinarias</a>
+                </li>
+                <li>
+                    <a href="#clientes">Clientes</a>
+                </li>
+                <li>
+                    <a href="#contacto">Contacto</a>
+                </li>
+                <li>
+                    <a  class="btn btn-iniciar-sesion"
+                        href="{% url 'reportesMaqman:login' %}">
+                        Iniciar sesión
+                    </a>
+                </li>
+                <li>
+                    <svg fill="white">
+                        <path d="M15.5 14h-.79l-.28-.27c1.2-1.4 1.82-3.31 1.48-5.34-.47-2.78-2.79-5-5.59-5.34-4.23-.52-7.79 3.04-7.27 7.27.34 2.8 2.56 5.12 5.34 5.59 2.03.34 3.94-.28 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                    </svg>
+                </li>
+            </ul>
+        </header>
+    </div>
+    <div class="main">
+        <main>
+            <div class="caja">
+                <h1>Inversiones Maqman S.P.A.</h1>
+                <p>Empresa dedicada a proveer un servicio de excelencia en el arriendo de maquinarias para  movimiento  de  tierra  en  la  industria  de  la construcción y la minería.</p>
+                <center>
+                    <input class="btn btn-contratar" type="button" value="¡Contrátanos!" id="btn-contratar-1">
+                </center>
+                <br>
+                <center>
+                    <label for="btn-contratar-1">Se acepta pago por Webpay</label>
+                </center>
+            </div>
+            <div class="caja">
+                <img src="static/img/imageNotFound.png" alt="Maquinaria Invermaq">
+            </div>
+            <div class="maquinas-1">
+                Revisa en detalle nuestras máquinas
+
+                <ul>
+
+                    <li>
+                        <img src="static/img/imageNotFound.png" alt="Maquina 1">
+                    </li>
+                    <li>
+                        <img src="static/img/imageNotFound.png" alt="Maquina 1">
+                    </li>
+                    <li>
+                        <img src="static/img/imageNotFound.png" alt="Maquina 1">
+                    </li>
+                    <li>
+                        <img src="static/img/imageNotFound.png" alt="Maquina 1">
+                    </li>
+                </ul>
+
+            </div>
+        </main>
+        <div class="menu">
+            <a href="#inicio">
+                <div class="button primero"> Inicio </div>
+            </a>
+            <a href="#nosotros">
+                <div class="button"> Nosotros </div>
+            </a>
+            <a href="#maquinaria">
+                <div class="button"> Maquinarias </div>
+            </a>
+            <a href="#clientes">
+                <div class="button"> Clientes </div>
+            </a>
+            <a href="#contacto">
+                <div class="button ultimo"> Contacto </div>	
+            </a>
+        </div>
+        
+        <div class="box-width"> </div>
+
+        <style>
+            .menu {
+                font-size: 24px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 20px;
+                border: 3px solid rgb(60, 60, 60);
+                background-color: gainsboro;
+                transition: all 1s ease-in-out;
+                width: 1000px;
+            }
+            
+            .box-width {
+                width: 0%;
+                background-color: white;
+                transition: 0.1s;
+                position: fixed;
+            }
+            a{
+                text-decoration: none;
+            }
+            .button {
+                width: 140px;
+                border-left: solid 2px rgb(60, 60, 60);
+                padding: 10px 20px;
+                color: rgb(60, 60, 60);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-weight: 700;
+                position: relative;
+                cursor: pointer;
+                transition: all .15s ease-in-out;
+            }
+            .ultimo{
+                border-right: solid 2px rgb(60, 60, 60);
+            }
+
+            .button:hover {
+                background-color: var(--color-principal);
+                color: var(--color-claro);
+            }
+
+            .selectedbutton {
+                background-color: var(--color-principal);
+                color: var(--color-claro);
+                border: 2px solid var(--color-claro);
+                /* !important; */
+            }
+        </style>
+        <center>
+            <h1 id="nosotros">Nosotros</h1>
+        </center>
+        <main>
+            <div class="caja">
+                <img src="static/img/imageNotFound.png" alt="Maquinaria Invermaq">
+            </div>
+            <div class="caja">
+                <h2>¿Quiénes somos?</h2>
+                <p>
+                    MAQMAN es  una  empresa  creada  el  año  2008,  con  el  objetivo  de proveer  un  servicio  de excelencia  en  el  arriendo  de  maquinarias para  movimiento  de  tierra  en  la  industria  de  la construcción y la minería.
+                </p>
+                <p>
+                    MAQMAN apoya el desarrollo de sus clientes con equipos de marcas reconocidas a nivel mundial, los que son renovados periódicamente para mantener una flota en excelente estado, que permita proveer un servicio confiable y seguro.
+                </p>
+                <p>
+                    Gracias a la preferencia y calidad del servicio que ofrecemos, hemos crecido notablemente en el corto trayecto de vida de la empresa, esto gracias a un joven equipo de ingenieros a cargo de su gestión, dedicados cien por ciento a satisfacer sus necesidades de manera responsable, seria y efectiva, lo que ha permitido ganar la confianza para que ponga en nuestras manos los problemas.
+                </p>
+            </div>
+        </main>
+        <div class="caja">
+            <h2>¿Quiénes somos?</h2>
+            <p>
+                MAQMAN es  una  empresa  creada  el  año  2008,  con  el  objetivo  de proveer  un  servicio  de excelencia  en  el  arriendo  de  maquinarias para  movimiento  de  tierra  en  la  industria  de  la construcción y la minería.
+            </p>
+            <p>
+                MAQMAN apoya el desarrollo de sus clientes con equipos de marcas reconocidas a nivel mundial, los que son renovados periódicamente para mantener una flota en excelente estado, que permita proveer un servicio confiable y seguro.
+            </p>
+            <p>
+                Gracias a la preferencia y calidad del servicio que ofrecemos, hemos crecido notablemente en el corto trayecto de vida de la empresa, esto gracias a un joven equipo de ingenieros a cargo de su gestión, dedicados cien por ciento a satisfacer sus necesidades de manera responsable, seria y efectiva, lo que ha permitido ganar la confianza para que ponga en nuestras manos los problemas.
+            </p>
+        </div>        <div class="caja">
+            <h2>¿Quiénes somos?</h2>
+            <p>
+                MAQMAN es  una  empresa  creada  el  año  2008,  con  el  objetivo  de proveer  un  servicio  de excelencia  en  el  arriendo  de  maquinarias para  movimiento  de  tierra  en  la  industria  de  la construcción y la minería.
+            </p>
+            <p>
+                MAQMAN apoya el desarrollo de sus clientes con equipos de marcas reconocidas a nivel mundial, los que son renovados periódicamente para mantener una flota en excelente estado, que permita proveer un servicio confiable y seguro.
+            </p>
+            <p>
+                Gracias a la preferencia y calidad del servicio que ofrecemos, hemos crecido notablemente en el corto trayecto de vida de la empresa, esto gracias a un joven equipo de ingenieros a cargo de su gestión, dedicados cien por ciento a satisfacer sus necesidades de manera responsable, seria y efectiva, lo que ha permitido ganar la confianza para que ponga en nuestras manos los problemas.
+            </p>
+        </div>        <div class="caja">
+            <h2>¿Quiénes somos?</h2>
+            <p>
+                MAQMAN es  una  empresa  creada  el  año  2008,  con  el  objetivo  de proveer  un  servicio  de excelencia  en  el  arriendo  de  maquinarias para  movimiento  de  tierra  en  la  industria  de  la construcción y la minería.
+            </p>
+            <p>
+                MAQMAN apoya el desarrollo de sus clientes con equipos de marcas reconocidas a nivel mundial, los que son renovados periódicamente para mantener una flota en excelente estado, que permita proveer un servicio confiable y seguro.
+            </p>
+            <p>
+                Gracias a la preferencia y calidad del servicio que ofrecemos, hemos crecido notablemente en el corto trayecto de vida de la empresa, esto gracias a un joven equipo de ingenieros a cargo de su gestión, dedicados cien por ciento a satisfacer sus necesidades de manera responsable, seria y efectiva, lo que ha permitido ganar la confianza para que ponga en nuestras manos los problemas.
+            </p>
+        </div>        <div class="caja">
+            <h2>¿Quiénes somos?</h2>
+            <p>
+                MAQMAN es  una  empresa  creada  el  año  2008,  con  el  objetivo  de proveer  un  servicio  de excelencia  en  el  arriendo  de  maquinarias para  movimiento  de  tierra  en  la  industria  de  la construcción y la minería.
+            </p>
+            <p>
+                MAQMAN apoya el desarrollo de sus clientes con equipos de marcas reconocidas a nivel mundial, los que son renovados periódicamente para mantener una flota en excelente estado, que permita proveer un servicio confiable y seguro.
+            </p>
+            <p>
+                Gracias a la preferencia y calidad del servicio que ofrecemos, hemos crecido notablemente en el corto trayecto de vida de la empresa, esto gracias a un joven equipo de ingenieros a cargo de su gestión, dedicados cien por ciento a satisfacer sus necesidades de manera responsable, seria y efectiva, lo que ha permitido ganar la confianza para que ponga en nuestras manos los problemas.
+            </p>
+        </div>
+        <style>
+            :root{
+                --color-principal: #F2AA1F;
+                --color-complementario: #114358;
+                --segundo-complementario: #F1ECE7;
+                --color-oscuro: #090909;
+                --color-claro: #FFFFFF;
+            }
+            .maquinas-1{
+                height: 200px; width: 100%;
+            }
+            .maquinas-1, .maquinas-1 >ul{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                text-align: left;
+                list-style: none;
+            }
+            .maquinas-1>ul>li>img{
+                margin-left: 20px;
+            }
+
+            html {
+                scroll-behavior: smooth;
+            }
+            body{
+                /* background-color: var(--segundo-complementario); */
+                /* background: radial-gradient(circle at center, black 0, #383838, #858585 100%); */
+                background-image: url("static/img/background-tile.png");
+                color: var(--color-claro);
+                margin: 0;
+            }
+            *{
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            /* Cabecera del sitio web */
+            header{
+                display: flex;
+                /* position: fixed; */
+                align-items: center;
+                justify-content: space-between;
+            }
+            #logo-invermaq-header, .maquinas-1>ul>li>img{
+                width: 200px; height: 80px;
+                background: var(--color-complementario);
+                border: solid 2px var(--color-oscuro);
+            }
+            ul.label-1 {
+                display: flex;
+                align-items: center;
+                font-weight: 700;
+                font-size: 18px;
+                text-align: left;
+                list-style: none;
+            }
+            ul.label-1 li{
+                margin-left: 30px;
+                max-width: 200px; max-height: 30px;
+            }
+            ul.label-1 li svg{
+                width: 50px; height: 30px;
+            }
+            ul.label-1 li a{
+                color: var(--color-claro);
+                text-decoration: none;
+            }
+            ul.label-1 li a:hover{
+                color: var(--color-principal);
+            }
+
+            /* Inicio */
+            main{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 135px 0;
+                flex-wrap: wrap;
+            }
+            .header{
+                background-color: var(--color-complementario);
+                color: var(--color-claro);
+            }
+            .main{
+                border-left: 2px solid #090909;
+                border-right: 2px solid #090909;
+                background-color: var(--segundo-complementario);
+                color: var(--color-oscuro);
+                padding: 0 20px;
+                margin: 0 300px;
+
+            }
+            .caja{
+                height: 100%; width: 45%;
+            }
+            h1{
+                font-size: 48px;
+            }
+            .caja p{
+                font-size: 20px;
+                text-align: justify;
+            }
+            .caja img{
+                width: 100%; height: 500px;
+            }
+            .contratar{
+                display: flex;
+            }
+            label{
+                color: var(--color-oscuro);
+            }
+
+            /* Botones */
+            .btn{
+                border: 2px solid black;
+                border-radius: 30px;
+                padding: 10px 30px;
+                background-color: var(--color-principal);
+                color: white;
+                transition: all .15s ease-in-out;
+            }
+            .btn:hover{
+                background-color: white;
+                color: var(--color-principal);
+            }
+            .btn-iniciar-sesion {
+                color: white;
+            }
+            .btn-contratar{
+                font-size: 18px;
+                font-weight: 500;
+            }
+
+        </style>
+    
+    </div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+<script>
+    // Global variables
+    var border_height_num = 1;
+    var border_height = border_height_num + "px";
+    var ease = 'cubic-bezier(1,0,0,1)'
+    var bottom_padding = 30 + "px";
+    var border_width = 40;   // MAX 50% MIN 0%
+
+
+    // ANIMATED SCROLL POSITION
+        
+    var scrollboxheight = 15;
+    var menuheight = 42;
+        
+    $(".menu").css({
+        height: menuheight + "px"
+    });
+        
+    var documentheight= $(document).height() - $(window).height();
+    var menuposition = $(".menu").offset().top;
+    var maintoppos = $(".main").offset().top;
+    var menuheight = $(".menu").height();
+    
+    $(window).scroll(function(){
+        
+        windowpos = $(window).scrollTop(); 
+        
+        // THIS IS A COMPLICATED CALCULATION!
+        if (windowpos >= menuposition) {
+            var currentpos = (
+                ((windowpos-maintoppos+menuheight)/
+                 (documentheight-maintoppos+menuheight)
+                )*100
+            );
+    
+            // Test if it is almost at the end
+            var boxwidth = currentpos + "%";
+            
+            console.log("docheight" + documentheight);
+            console.log("winheight" + $(window).height());
+            console.log("winpos" + windowpos);
+            
+            $(".box-width").css({
+                width: boxwidth,
+                height: scrollboxheight + "px",
+            });
+            
+        }
+        else {
+            $(".box-width").css({
+                height: 0 + "px",
+                width: 0 + "%"
+            });
+        }
+    });
+        
+    
+    
+        
+    // SCROLL THEN STICK
+    
+    var menuposition = $(".menu").offset().top;
+    var windowpos = $(window).scrollTop();
+    var menuheight = $(".menu").height();
+    
+        
+    $(window).scroll(function(){
+        windowpos = $(window).scrollTop();
+    
+        if (windowpos  >= menuposition ) {
+            
+            $(".menu").css({
+                position: "fixed",
+                left: "-25%",
+                margin: "0 50%",
+                top: "0"
+            });
+            
+            $(".box-width").css({
+                top: menuheight + "px",
+                position: "fixed"
+            });
+            
+            $(".topbox").css({
+                "margin-top": menuheight + "px"
+            });
+        }
+        
+        else {
+            $(".menu").css({
+                position: "relative",
+                left: "0",
+                margin: "0",
+                top: "0"
+            });
+            
+            $(".box-width").css({
+                position: "relative",
+                top: "auto"
+            });
+            
+            $(".topbox").css({
+                "margin-top": 0 + "px"
+            });
+        }
+        
+        
+    });	
+        
+    // ANIMATE SCROLL POSITION - SMOOTH SCROLL
+    
+        
+    var amountofbuttons = $(".button").length;
+        
+    for (i=0; i<amountofbuttons; i++){
+        $(".button").eq(i).attr('data-id', i);
+    }
+        
+    $(".button").on("click", function(){
+        
+        $(".button").each (function(){
+            $(this).removeClass("selectedbutton");
+        });
+        
+        $(this).addClass("selectedbutton");
+        
+        var buttonnum = $(this).attr('data-id');
+        var scrolltopositions = 0;
+        
+        if (buttonnum==0) {
+            scrolltopositions = 0;
+        }
+        
+        else {
+            scrolltopositions = $(".main").eq(buttonnum).offset().top  - menuheight ;
+        }
+            $('html, body').animate({
+              scrollTop: scrolltopositions
+            }, 1000, 'easeInOutQuint');
+        
+    });	
+        
+        
+    // DETECT CURRENT SCROLL AREA
+    
+    var divs = [];
+    var buttons = [];
+        
+    for (i=0; i<amountofbuttons; i++) {
+        divs.push($(".main").eq(i).offset().top);
+    }
+        
+    
+    $(window).scroll(function(){
+        if (windowpos < divs[0]) {
+            $(".button").each(function(){
+                $(this).removeClass("selectedbutton");
+            });
+        }
+        if (windowpos > divs[0] && windowpos < divs[1]) {
+            $(".button").each(function(){
+                $(this).removeClass("selectedbutton");
+            });
+    
+            $(".button").eq(1).addClass("selectedbutton");
+        }
+        if (windowpos > divs[1] && windowpos < divs[2]) {
+            $(".button").each(function(){
+                $(this).removeClass("selectedbutton");
+            });
+    
+            $(".button").eq(2).addClass("selectedbutton");
+        }
+        if (windowpos > divs[2] && windowpos < divs[3]) {
+            $(".button").each(function(){
+                $(this).removeClass("selectedbutton");
+            });
+    
+            $(".button").eq(3).addClass("selectedbutton");
+        }
+    });
+    
+        
+    console.log(divs);</script>
+</body>
+</html>

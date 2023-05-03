@@ -1,0 +1,53 @@
+{% extends 'baseCuenta.html' %}
+{% load static %}
+
+{% block titulo %}
+    Gestión de Contactos
+{% endblock titulo %}
+
+{% block contenido %}
+<h1>Gestión de Contactos</h1>
+<table>
+    <thead>
+        <tr>
+            <th colspan="4" class="first">Gestión de contactos</th>
+        </tr>
+    <form action="">
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Editar</th>
+            <th>Borrar</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if contacto %}
+            {% for c in contacto %}
+                <tr>
+                    <td><input class="text" type="text" name="nombreContacto" id="idNombreContacto" value="{{ c.nombre }}"></td>
+                    <td><input class="text" type="text" name="correoContacto" id="idCorreoContacto" value="{{ c.correo }}"></td>
+                    <td><button class="btn-submit btn-3">editar</button></td>
+                    <td><button class="btn-submit btn-2">borrar</button></td>
+                </tr>
+            {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="4"><center>No existen contactos aún.</center></td>
+        </tr>
+        {% endif %}
+    </tbody>
+    </form>
+    <form action="">
+        <tfoot>
+            <tr>
+                <td colspan="4" style="height: 100px; background-color: black;"></td>
+            </tr>
+            <tr>
+                <td><input class="text" type="text" name="nombreContacto" id="idNombreContacto" placeholder="Nombre del contacto"></td>
+                <td><input class="text" type="text" name="correoContacto" id="idCorreoContacto" placeholder="Correo del contacto"></td>
+                <td colspan="2"><button  class="btn-submit btn-1">Agregar Contacto</button></td>
+            </tr>
+        </tfoot>
+    </form>
+</table>
+{% endblock contenido %}

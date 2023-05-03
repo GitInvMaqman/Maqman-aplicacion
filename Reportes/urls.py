@@ -27,4 +27,13 @@ urlpatterns = [
     path('reporteTotal'        , views.DescargarExcelTemplateView.reportes_totales  , name = 'reporteTotal'),
     path('reportePersona'      , views.DescargarExcelTemplateView.reportes_persona  , name = 'reportePersona'),
     path('reporteMes'          , views.DescargarExcelTemplateView.reportes_mes      , name = 'reporteMes'),
+
+    # Correos automáticos
+    path('Vista-Correos/'            , views.CorreosTemplateView.as_view()          , name = 'vistaCorreos'),
+    path('Gestion-Contactos/'        , views.ContactosFormView.as_view()            , name = 'gestionContactos'),
+    path('Programar-Correo/'         , views.CorreoFormView.as_view()               , name = 'programarCorreo'),
+    path('Correos-Programados/'      , views.CorreosListView.as_view()              , name = 'correosProgramados'),
+    path('Detalle-Correo/<int:pk>/'  , views.CorreoDetailView.as_view()             , name = 'detalleCorreo'),
+    
+    path('Pruebas/', views.PruebasView.as_view(), name = 'pruebas'),
 ]
