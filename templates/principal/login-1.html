@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+    Iniciar Sesión
+{% endblock titulo %}
+
+{% block contenido %}
+<style>
+    table, th, td{
+        font-size: 36px;
+        color: black;
+        align-content: center;
+        justify-content: center;
+        border-radius: 5px;
+        border: 0px;
+    }
+    input{
+        text-align: center;
+        font-size: 24px;
+        border-radius: 15px;
+        margin: 5px;
+    }
+    input.text{
+        width: 80%;
+    }
+    input.fechahora{
+        content: center;
+    }
+    input.check{
+        width: 25px;
+        height: 25px;
+    }
+    table{
+        background-color: black;
+        width: 300px;
+        border: 2px solid black;
+    }
+    th{
+        background-color: gray;
+    }
+    td {
+        background-color: rgba(255, 255, 255, 0.7);
+    }
+    .btn-iniciarSesión{
+        height: 50px;
+        width: 70%;
+    }
+</style>
+<div class="caja LogoMaqman">
+    <a href="{% url 'reportesMaqman:home' %}">
+        <div class="texto-maqman">
+            <h1>Inversiones Maqman S.P.A.</h1>
+            <center><img src="/static/img/Logo inv maqman.png" alt="Logo de Inversiones Maqman S.P.A."></center>
+        </div>
+    </a>
+</div>
+
+<div class="caja inicio-sesion">
+    <center>
+        <form method="POST"> {% csrf_token %}
+            <table>
+                <th>Inicio de Sesión</th>
+                <tr>
+                    <td style="font-size: 20px; font-family: arial;">
+                        <center><svg preserveAspectRatio="none" width="200px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"></path></svg></center>
+                        <center>{{ form.rut_usuario }}</center>
+                        <center><input class="check" type="checkbox" name="" id="">Mantener conectado</center>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <center><input class="btn-iniciar-sesion btnis2" type="submit" value="Iniciar Sesión"></center>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </center>
+</div>
+
+{% endblock contenido %}
+    

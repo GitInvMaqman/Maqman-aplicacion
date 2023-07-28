@@ -10,44 +10,74 @@
 <table>
     <thead>
         <tr>
-            <th colspan="4" class="first">Gestión de contactos</th>
+            <th colspan="7" class="first">Gestión de contactos</th>
         </tr>
-    <form action="">
         <tr>
             <th>Nombre</th>
+            <th>Empresa</th>
+            <th>Cargo</th>
             <th>Correo</th>
-            <th>Editar</th>
-            <th>Borrar</th>
+            <th>Celular</th>
+            <!-- <th>Editar</th> -->
+            <th colspan="2">Borrar</th>
         </tr>
     </thead>
     <tbody>
         {% if contacto %}
             {% for c in contacto %}
                 <tr>
-                    <td><input class="text" type="text" name="nombreContacto" id="idNombreContacto" value="{{ c.nombre }}"></td>
-                    <td><input class="text" type="text" name="correoContacto" id="idCorreoContacto" value="{{ c.correo }}"></td>
-                    <td><button class="btn-submit btn-3">editar</button></td>
-                    <td><button class="btn-submit btn-2">borrar</button></td>
+                    <td>{{ c.nombre }}</td>
+                    <td>{{ c.empresa }}</td>
+                    <td>{{ c.cargo }}</td>
+                    <td>{{ c.correo }}</td>
+                    <td>{{ c.celular }}</td>
+                    <td colspan="2"><button class="btn-submit btn-2" onclick="borrarContacto('{{c.id_contacto}}', '{{c.nombre}}')">borrar</button></td>
                 </tr>
             {% endfor %}
         {% else %}
         <tr>
-            <td colspan="4"><center>No existen contactos aún.</center></td>
+            <td colspan="7"><center>No existen contactos aún.</center></td>
         </tr>
         {% endif %}
     </tbody>
-    </form>
-    <form action="">
-        <tfoot>
-            <tr>
-                <td colspan="4" style="height: 100px; background-color: black;"></td>
-            </tr>
-            <tr>
-                <td><input class="text" type="text" name="nombreContacto" id="idNombreContacto" placeholder="Nombre del contacto"></td>
-                <td><input class="text" type="text" name="correoContacto" id="idCorreoContacto" placeholder="Correo del contacto"></td>
+    <tfoot>
+        <tr>
+            <td colspan="7" style="height: 50px; background-color: black;"></td>
+        </tr>
+        <tr>
+            <form action="{% url 'reportesMaqman:gestionContactos' %}" method="POST"> {% csrf_token %}
+                <td>{{ form.nombre }}</td>
+                <td>{{ form.empresa }}</td>
+                <td>{{ form.cargo }}</td>
+                <td>{{ form.correo }}</td>
+                <td>{{ form.celular }}</td>
                 <td colspan="2"><button  class="btn-submit btn-1">Agregar Contacto</button></td>
-            </tr>
-        </tfoot>
-    </form>
+            </form>
+        </tr>
+    </tfoot>
 </table>
+<script>
+    function borrarContacto(i, nombre) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Borrar el contacto "'+nombre+'" será permanente.',
+            icon: 'warning',
+            showDenyButton: true,
+            denyButtonText: 'Si, borrar',
+            confirmButtonText: 'No, cancelar',
+        }).then((result) => {
+            if (result.isDenied) {
+
+                window.location.href = "/Borrar-Contacto/"+i;
+
+            } else if (result.isConfirmed) {
+                Swal.fire(
+                    'Cancelado',
+                    'El contacto "'+nombre+'" está a salvo :)',
+                    'error'
+                )
+            }
+        })
+    }
+</script>
 {% endblock contenido %}

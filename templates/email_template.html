@@ -1,0 +1,26 @@
+<h1 style="color: purple;">Pruebas de envío de correos</h1>
+<p style="font-size: 36px; color: green;">
+    {{cuerpo}}
+</p>
+
+{% if archivos %}
+ARCHIVOS
+    <ul>
+        {% for archivo in archivos %}
+        <li>
+            {{archivo}}
+        </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% if imagenes %}
+IMAGENES
+    <ul>
+        {% for imagen in imagenes %}
+        <li>
+            {{imagen}}
+        </li>
+        {% endfor %}
+    </ul>
+{% endif %}

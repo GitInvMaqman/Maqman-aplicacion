@@ -35,13 +35,23 @@ class UsuarioManager(models.Manager):
         )
         return usuario
     # Usuario
-    def traer_datos_usuario(self, username, password):
+    def datos_por_rut(self, rutUsuario):
         return self.filter(
-            nombre_usuario      = username,
-            contraseña_usuario  = password
+                rut_usuario = rutUsuario
         ).values_list()
 
-    def usuario_exists(self, nombreUsuario, contraseñaUsuario):
+    def traer_datos_usuario(self, nomUsuario, contraseña):
+        return self.filter(
+            nombre_usuario      = nomUsuario,
+            contraseña_usuario  = contraseña
+        ).values_list()
+
+    def usuario_exists_1(self, rutUsuario):
+        return self.filter(
+            rut_usuario = rutUsuario
+        ).exists()
+
+    def usuario_exists_2(self, nombreUsuario, contraseñaUsuario):
         return self.filter(
             nombre_usuario      = nombreUsuario,
             contraseña_usuario  = contraseñaUsuario
@@ -99,3 +109,56 @@ class DetalleManager(models.Manager):
             **extra_fields
         )
         return detalle
+    
+class ContactoManager(models.Manager):
+    def crear_contacto(self, Nombre, Correo, Empresa, Cargo, Celular, **extra_fields):
+
+        contacto = self.create(
+            nombre  = Nombre,
+            correo  = Correo,
+            empresa = Empresa,
+            cargo   = Cargo,
+            celular = Celular,
+            **extra_fields
+        )
+        return contacto
+
+class CorreoManager(models.Manager):
+    def crear_correo(self, Asunto, Cuerpo, tipoEnvio, Fecha, Hora, **extra_fields):
+
+        correo = self.create(
+            asunto             = Asunto,
+            cuerpo             = Cuerpo,
+            tipo_envio_id_tipo = tipoEnvio,
+            fecha              = Fecha,
+            hora               = Hora,
+            **extra_fields
+        )
+        return correo
+    
+class CorreoContactoManager(models.Manager):
+    def crear_detalle(self, contacto, correo, **extra_fields):
+        correoContacto = self.create(
+            contacto_id_contacto = contacto,
+            correo_id_correo     = correo,
+            **extra_fields
+        )
+        return correoContacto
+
+class CorreoImagenManager(models.Manager):
+    def agregar_imagen(self, imagen, correo, **extra_fields):
+        correoImagen = self.create(
+            imagen           = imagen,
+            correo_id_correo = correo,
+            **extra_fields
+        )
+        return correoImagen
+
+class CorreoArchivoManager(models.Manager):
+    def agregar_archivo(self, archivo, correo, **extra_fields):
+        correoArchivo = self.create(
+            archivo          = archivo,
+            correo_id_correo = correo,
+            **extra_fields
+        )
+        return correoArchivo

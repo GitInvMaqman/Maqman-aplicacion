@@ -39,12 +39,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY', default=get_secret('SECRET_KEY'))
 # SECRET_KEY = get_secret('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = 'RENDER' not in os.environ
+DEBUG = 'RENDER' not in os.environ
 # DEBUG = False
-DEBUG = True
+# DEBUG = True
 
-# ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = []
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -171,3 +171,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # LOGIN SETTINGS
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/Inicio-Sesión'
+
+# EMAIL SETTINGS
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = get_secret('EMAIL_USER')
+EMAIL_HOST_PASSWORD = get_secret('EMAIL_PASSWORD')
+EMAIL_PORT = 587

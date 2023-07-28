@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block titulo %}
-    Programar Correo
+    Correo N°{{ correo.id_correo }}
 {% endblock titulo %}
 
 {% block contenido %}
-<h1>Programar Correo</h1>
+<h1>Correo N°{{ correo.id_correo }}</h1>
 <div class="caja">
     <table>
         <thead>
@@ -15,38 +15,43 @@
             </tr>
             <tr>
                 <td>Asunto:</td>
-                <td><input class="text" type="text" name="asuntoCorreo" id="idAsuntoCorreo" placeholder="Asunto del correo."></td>
+                <td><input class="text" type="text" name="asuntoCorreo" id="idAsuntoCorreo" placeholder="Asunto del correo." value="{{ correo.asunto }}"></td>
             </tr>
             <tr>
                 <td colspan="2">Cuerpo</td>
             </tr>
             <tr>
-                <td colspan="2"><textarea name="cuerpoCorreo" id="idCuerpoCorreo" cols="30" rows="10" placeholder="Cuerpo del correo."></textarea></td>
+                <td colspan="2"><textarea name="cuerpoCorreo" id="idCuerpoCorreo" cols="30" rows="10" placeholder="Cuerpo del correo.">{{ correo.cuerpo }}</textarea></td>
             </tr>
             <tr>
-                <td>Imagen Adjunta:</td>
                 <td class="td-img">
-                    <label for="id_img_maquinaria">
+                    <label for="id_archivo">
                         <center>
-                            Maquinaria
+                            Archivo
                             <br>
-                            <input oninput="mostrarImagen(this, 'imgMaquinaria');" class="file" required type="file" name="img_maquinaria" id="id_img_maquinaria" accept="image/png, image/jpg, image/gif, image/jpeg"/>
+                            <input oninput="mostrarImagen(this, 'imgArchivo');" class="file" type="file" name="archivo" id="id_archivo" accept=".pdf, .docx, .xlsx" multiple/>
                             <br>
+                        <!-- </center>
+                        <center> -->
+                            <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen del archivo subido" id="imgArchivo" height="150px" width="150px">
                         </center>
                     </label>
-                    <center>
-                        <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen de la Maquinaria" id="imgMaquinaria" height="150px" width="150px">
-                    </center>
+                </td>
+                <td class="td-img">
+                    <label for="id_img">
+                        <center>
+                            Imagen
+                            <br>
+                            <input oninput="mostrarImagen(this, 'img');" class="file" type="file" name="img" id="id_img" accept="image/png, image/jpg, image/gif, image/jpeg" multiple/>
+                            <br>
+                        <!-- </center>
+                        <center> -->
+                            <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen" id="img" height="150px" width="150px">
+                        </center>
+                    </label>
                 </td>
             </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <td colspan="2" style="background-color: rgba(0, 0, 0, 0);">
-                    <button class="btn-submit btn-1" style="width: 150%; position: relative;">Programar Correo</button>
-                </td>
-            </tr>
-        </tfoot>
+        </tbody>
     </table>
     <div class="cajita">
         <table>
@@ -54,45 +59,47 @@
                 <tr>
                     <th colspan="3" class="first">Contactos</th>
                 </tr>
-                <tr>
-                    <td colspan="3"><input class="text" type="text" name="Buscador" id="idBuscador"></td>
-                </tr>
-                <tr>
+                <td class="first" colspan="2">
+                    <input onkeyup="filtrarUsuario();"class="text" type="text" name="buscador-contacto" id="id_buscador_contacto" placeholder="Buscar contactos" style="background-color: lightcyan;">
+                </td>
+                <!-- <tr>
                     <th>Check</th>
                     <th>Nombre</th>
                     <th>Correo</th>
-                </tr>
+                    <td>
+                        <center>
+                            Contacto
+                        </center>
+                    </td>
+                </tr> -->
             </thead>
-            <tbody>
+        </table>
+        <div class="tabla-contactos">
+            <table id="tableContactos" >
                 {% if contacto %}
                     {% for c in contacto %}
                         <tr>
-                            <td><input class="check" type="checkbox" name="checkbox" id="idCheckbox" value="{{ c.id_contacto }}"></td>
-                            <td><input class="text" type="text" name="" id=""value="{{ c.nombre }}"></td>
-                            <td><input class="text" type="text" name="" id="" value="{{ c.correo }}"></td>
+                            <td>
+                                <input class="check desaparece" type="checkbox" name="checkbox" id="id{{ c.id_contacto }}" value="{{ c.id_contacto }}">
+                                <label style="width:100%;" for="id{{ c.id_contacto }}">
+                                    <center>
+                                        {{ c.nombre }}
+                                        {{ c.correo }}
+                                    </center>
+                                </label>
+                            </td>
+                            <td class="desaparece">{{ c.empresa }}</td>
+                            <td class="desaparece">{{ c.cargo }}</td>
+                            <td class="desaparece">{{ c.celular }}</td>
                         </tr>
                     {% endfor %}
                 {% else %}
                 <tr>
-                    <td colspan="3"><center>No existen contactos aún.</center></td>
+                    <td colspan="2"><center>No existen contactos aún.</center></td>
                 </tr>
                 {% endif %}
-            </tbody>
-        </table>
-        <style>
-            /* .radio-btn + label>center{
-                background-color: red;
-                color: white;
-            } */
-            .radio-btn:checked + label>center{
-                width: 100%;
-                background-color: palegreen;
-                color: black;
-            }
-            .fecha-hora{
-                transition: all 3s ease-in-out;
-            }
-        </style>
+            </table>
+        </div>
         <table style="border-top-left-radius: 0;border-top-right-radius: 0;">
             <tr>
                 <th colspan="2">Tipo de envío</th>
@@ -123,18 +130,18 @@
                 </tr>
                 <tr>
                     <td>
-                        <select style="width: 45%;" id="dia" name="dia">
+                        <select style="width: 45%;" id="diaAnual" name="diaAnual">
                             {% for d in dias %}
                                 <option value="{{ d }}">{{ d }}</option>
                             {% endfor %}
                         </select>
-                        <select style="width: 45%;" id="mes" name="mes">
+                        <select style="width: 45%;" id="mesAnual" name="mesAnual">
                             {% for key, value in meses.items %}
                                 <option value="{{ key }}">{{ value }}</option>
                             {% endfor %}
                         </select>
                     </td>
-                    <td><input type="time" name="" id=""></td>
+                    <td><input type="time" name="horaAnual" id="horaAnual"></td>
                 </tr>
             </tfoot>
             
@@ -145,30 +152,30 @@
                 </tr>
                 <tr>
                     <td>
-                        <select style="width: 45%;" id="dia" name="dia">
+                        <select style="width: 45%;" id="diaMensual" name="diaMensual">
                             {% for d in dias %}
                                 <option value="{{ d }}">{{ d }}</option>
                             {% endfor %}
                         </select>
                     </td>
-                    <td><input type="time" name="" id=""></td>
+                    <td><input type="time" name="horaMensual" id="horaMensual"></td>
                 </tr>
             </tfoot>
             
             <!-- Tipo de envío semanal -->
             <tfoot class="fecha-hora" id="Semanal" style="display: none;">
                 <tr>
-                    <th colspan="2">Seleccionar Día de la Semana y Hora</th>
+                    <th colspan="2">Seleccionar Día y Hora</th>
                 </tr>
                 <tr>
                     <td>
-                        <select style="width: 45%;" id="dia" name="dia">
+                        <select style="width: 45%;" id="diaSemanal" name="diaSemanal">
                             {% for key, value in semana.items %}
                                 <option value="{{ key }}">{{ value }}</option>
                             {% endfor %}
                         </select>
                     </td>
-                    <td><input type="time" name="" id=""></td>
+                    <td><input type="time" name="horaSemanal" id="horaSemanal"></td>
                 </tr>
             </tfoot>
             
@@ -178,15 +185,47 @@
                     <th colspan="2">Seleccionar Fecha y Hora</th>
                 </tr>
                 <tr>
-                    <td><input type="date" name="" id=""></td>
-                    <td><input type="time" name="" id=""></td>
+                    <td><input type="date" name="fechaUnica" id="fechaUnica"></td>
+                    <td><input type="time" name="horaUnica" id="horaUnica"></td>
                 </tr>
             </tfoot>
 
         </table>
     </div>
-    
 </div>
+<button class="btn-submit btn-1" style="width: 100%; height: 70px;">Editar Correo</button>
+<button class="btn-submit btn-2" style="width: 100%; height: 70px;">Borrar Correo</button>
+
+<style>
+    .tabla-contactos{
+        height: 450px;
+        width: 600px;
+        overflow-y: scroll;
+    }
+    .check + label>center{
+        width: 100%;
+        /* background-color: red; */
+    }
+    .check:checked +label>center{
+        background-color: palegreen;
+    }
+    .radio-btn + label>center{
+        width: 100%;
+        /* background-color: red; */
+        /* color: white; */
+    }
+    .radio-btn:checked + label>center{
+        width: 100%;
+        background-color: palegreen;
+        color: black;
+    }
+    .fecha-hora{
+        transition: all 3s ease-in-out;
+    }
+    label>center:hover{
+        background-color: orange;
+    }
+</style>
 <script>
     // Seleccionar todos los elementos input
     var inputs = document.querySelectorAll('input[type="radio"]');
@@ -220,6 +259,33 @@
                 
       });
     });
+</script>
+<script>
+    function filtrarUsuario() {
+        // Declare variables
+        var input, filter, table, tr, td, i, j, txt, resultado;
+        input = document.getElementById("id_buscador_contacto");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tableContactos");
+        tr = table.getElementsByTagName("tr");
+        
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            resultado = '';
+            for ( j = 0; j < 4; j++){
+                td = tr[i].getElementsByTagName("td")[j];
+                txt = td.textContent || td.innertext;
+                console.log(td);
+                resultado = resultado + txt + ' ';
+                if (resultado.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    table.style.height = "5vw";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
 </script>
 <script src="{% static 'js/general.js'%} "></script>
 {% endblock contenido %}

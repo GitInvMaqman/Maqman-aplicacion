@@ -5,7 +5,8 @@ app_name = 'reportesMaqman'
 
 urlpatterns = [
     path(''                          , views.HomeTemplateView.as_view()             , name = 'home'),
-    path('Inicio-Sesión/'            , views.LoginFormView.as_view()                , name = 'login'),
+    path('Inicio-Sesión/'            , views.Login1FormView.as_view()               , name = 'login-1'),
+    path('Inicio-Sesión-ADM/'        , views.Login2FormView.as_view()               , name = 'login-2'),
     path('Cerrar-Sesión/'            , views.LogoutView.as_view()                   , name = 'logout'),
 
     path('Perfil/'                   , views.PerfilTemplateView.as_view()           , name = 'perfil'),
@@ -31,9 +32,12 @@ urlpatterns = [
     # Correos automáticos
     path('Vista-Correos/'            , views.CorreosTemplateView.as_view()          , name = 'vistaCorreos'),
     path('Gestion-Contactos/'        , views.ContactosFormView.as_view()            , name = 'gestionContactos'),
+    path('Editar-Contacto/'          , views.ContactosFormView.editar_contacto      , name = 'editarContacto'),
+    path('Borrar-Contacto/<int:id>'  , views.ContactosFormView.borrar_contacto      , name = 'borrarContacto'),
     path('Programar-Correo/'         , views.CorreoFormView.as_view()               , name = 'programarCorreo'),
     path('Correos-Programados/'      , views.CorreosListView.as_view()              , name = 'correosProgramados'),
     path('Detalle-Correo/<int:pk>/'  , views.CorreoDetailView.as_view()             , name = 'detalleCorreo'),
+    path('EnviarCorreo/'             , views.CorreoFormView.enviarCorreo            , name = 'EnviarCorreo'),
     
     path('Pruebas/', views.PruebasView.as_view(), name = 'pruebas'),
 ]

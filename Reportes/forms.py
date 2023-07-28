@@ -9,7 +9,21 @@ from .models import *
 # Formularios
 #----------------------------------------------------------------------------------------------------------------#
 
-class LoginForm(forms.ModelForm):
+class Login1Form(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = [
+            'rut_usuario'
+        ]
+        widgets = {
+            'rut_usuario'     : forms.TextInput(attrs={
+                'class'       : 'text',
+                'placeholder' : 'Rut sin puntos y con guión',
+                'required'    : 'true',
+            }),
+        }
+
+class Login2Form(forms.ModelForm):
     class Meta:
         model = Usuario
         fields = [
@@ -17,15 +31,15 @@ class LoginForm(forms.ModelForm):
             'contraseña_usuario'
         ]
         widgets = {
-            'nombre_usuario'           : forms.TextInput(attrs={
+            'nombre_usuario'  : forms.TextInput(attrs={
                 'class'       : 'text',
                 'placeholder' : 'Nombre de usuario',
                 'required'    : 'true',
             }),
-            'contraseña_usuario'       : forms.PasswordInput(attrs={
-                'class'       : 'text',
-                'placeholder' : 'Contraseña',
-                'required'    : 'true',
+            'contraseña_usuario' : forms.PasswordInput(attrs={
+                'class'          : 'text',
+                'placeholder'    : 'Contraseña',
+                'required'       : 'true',
             }),
         }
 
@@ -162,5 +176,65 @@ class PersonaForm(forms.ModelForm):
             'correo': forms.EmailInput(attrs={
                 'class' : 'email',
                 'placeholder' : 'Correo@email.com',
+            }),
+        }
+class ContactoForm(forms.ModelForm):
+    class Meta:
+        model = Contacto
+        fields= {
+            'nombre',
+            'correo',
+            'empresa',
+            'cargo',
+            'celular',
+        }
+        widgets ={
+            'nombre': forms.TextInput(attrs={
+                'class': 'text',
+                'placeholder': 'Nombre completo del contacto',
+                'required': 'true',
+            }),
+            'correo': forms.EmailInput(attrs={
+                'class': 'email',
+                'placeholder': 'Correo del contacto',
+                'required':'true',
+            }),
+            'empresa': forms.TextInput(attrs={
+                'class': 'text',
+                'placeholder': 'Empresa del contacto',
+                'required': 'true',
+            }),
+            'cargo': forms.TextInput(attrs={
+                'class': 'text',
+                'placeholder': 'Cargo del contacto',
+                'required': 'true',
+            }),
+            'celular': forms.NumberInput(attrs={
+                'class': 'text',
+                'placeholder': 'Celular del contacto',
+                'required': 'true',
+            }),
+        }
+class CorreoForm(forms.ModelForm):
+    class Meta:
+        model = Correo
+        fields= {
+            'asunto',
+            'cuerpo',
+
+        }
+        widgets ={
+            'asunto': forms.TextInput(attrs={
+                'class': 'text',
+                'placeholder': 'Asunto del correo.',
+                'required': 'true',
+            }),
+            'cuerpo': forms.Textarea(attrs={
+                'class': 'email',
+                'placeholder': 'Cuerpo del correo.',
+                'cols'      : '30',
+                'rows'      : '10',
+                'style'     : 'resize: none; font-family: monospace;',
+                'required':'true',
             }),
         }

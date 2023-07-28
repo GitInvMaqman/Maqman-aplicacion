@@ -9,11 +9,33 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 
 import os
+from django.core.mail import EmailMessage
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+
+import threading
+import time
+import datetime
+from dateutil.relativedelta import relativedelta
 
 #----------------------------------------------------------------------------------------------------------------#
 # Funciones
 #----------------------------------------------------------------------------------------------------------------#
+
+class Timer(threading.Thread):
+    def __init__(self):
+        self._timer_runs = threading.Event()
+        self._timer_runs.set()
+        super().__init__()
+
+    def run(self):
+        while self._timer_runs.is_set():
+            self.timer()
+            time.sleep(self.__class__.interval)
+
+    def stop(self):
+        self._timer_runs.clear()
 
 class Login():
 
@@ -22,7 +44,59 @@ class Login():
         titulo = '<h2>No se ha podido iniciar sesión</h2>'
         texto = '<p style="font-size:24px;">' + problema + '</p>'
         messages.error(self.request, titulo+texto)
-        return HttpResponseRedirect(reverse('reportesMaqman:login'))
+        return HttpResponseRedirect(reverse('reportesMaqman:login-1'))
+
+# Ingreso del usuario a través del rut.
+    def login_rut(self, usuario, rutUsuario):
+        if not usuario:
+            problema = 'Verifica que el rut está correctamente ingresado.'
+            return Login.problemas_login(self, problema)
+
+        activo = Usuario.objects.datos_por_rut(rutUsuario)[0][5]
+
+        if not activo:
+            problema = 'Esta cuenta ya no está activa, contáctate con la empresa o intenta iniciar sesión con otra cuenta.'
+            return Login.problemas_login(self, problema)
+        
+        rol_id = Usuario.objects.datos_por_rut(rutUsuario)[0][3]
+        is_rol = Rol.objects.is_rol_nombre(rol_id)
+        # Si el rol del usuario no existe en la base de datos manda un mensaje de alerta, de lo contrario continúa.
+        if not is_rol:
+            problema = 'El rol de esta cuenta no existe, contáctate con la empresa o intenta iniciar sesión con otra cuenta.'
+            return Login.problemas_login(self, problema)
+
+        if rol_id == 1:
+            nomUsuario = Usuario.objects.datos_por_rut(rutUsuario)[0][1]
+            contraseña = Usuario.objects.datos_por_rut(rutUsuario)[0][2]
+
+            autUsuario = authenticate(username=nomUsuario, password=contraseña)
+            # Si la autenticación del usuario es negada manda un mensaje de alerta, de lo contrario continúa.
+            if autUsuario is None:
+                problema = 'La autenticación del usuario ha sido negada, contáctate con la empresa o intenta iniciar sesión con otra cuenta.'
+                return Login.problemas_login(self, problema)
+
+            login(self.request, autUsuario) # Guarda la información para no tener que loguearse en cada instante.
+
+            rol       = self.request.user.r_id_rol.rol
+            nombre    = self.request.user.p_id_persona.nombres.split()
+            redirect_to = 'reportesMaqman:vistaPrincipal'
+
+            titulo = '<h2>Has iniciado sesión como '+ rol.upper() + ': '+ nombre[0] +'</h2>'
+            texto = '<p style="font-size:24px;">¡Inicio de sesión exitoso!</p>'
+            messages.success(self.request,titulo+texto)
+
+            return HttpResponseRedirect(reverse(redirect_to))
+        elif rol_id == 2:
+            redirect_to = 'reportesMaqman:login-2'
+
+            titulo = '<h2>Inicio de sesión Administrativo.</h2>'
+            texto = '<p style="font-size:24px;">Como miembro administrativo de la empresa, debes ingresar tu nombre de usuario y contraseña para una mayor seguridad.</p>'
+            messages.success(self.request,titulo+texto)
+
+            return HttpResponseRedirect(reverse(redirect_to))
+        else:
+            problema = 'Existe un problema actualmente y no es posible iniciar sesión.'
+            return Login.problemas_login(self, problema)
 
 # Autenticación de usuario al loguearse.
     def login_autenticacion(self, usuario, nomUsuario, contraseña):
@@ -30,22 +104,20 @@ class Login():
         if not usuario:
             problema = 'Verifica que la "Contraseñas" y/o el "Usuario" sean los correctos.'
             return Login.problemas_login(self, problema)
-        
+
         activo = Usuario.objects.traer_datos_usuario(nomUsuario, contraseña)[0][5]
 
         if not activo:
             problema = 'Esta cuenta ya no está activa, contáctate con la empresa o intenta iniciar sesión con otra cuenta.'
             return Login.problemas_login(self, problema)
 
-        
-
         rol_id = Usuario.objects.traer_datos_usuario(nomUsuario, contraseña)[0][3]
         is_rol = Rol.objects.is_rol_nombre(rol_id)
         # Si el rol del usuario no existe en la base de datos manda un mensaje de alerta, de lo contrario continúa.
         if not is_rol:
-            problema = 'El rol de esta cuenta no existe, contáctate con la empres o intenta iniciar sesión con otra cuenta.'
+            problema = 'El rol de esta cuenta no existe, contáctate con la empresa o intenta iniciar sesión con otra cuenta.'
             return Login.problemas_login(self, problema)
-        
+
         autUsuario = authenticate(username=nomUsuario, password=contraseña)
         # Si la autenticación del usuario es negada manda un mensaje de alerta, de lo contrario continúa.
         if autUsuario is None:
@@ -76,9 +148,162 @@ class Login():
         logout(request)
         titulo = '<h2>Se ha cerrado la sesión correctamente.</h2>'
         messages.success(request, titulo)
-        return HttpResponseRedirect(reverse('reportesMaqman:login'))
+        return HttpResponseRedirect(reverse('reportesMaqman:login-1'))
     
 class ModificacionesTablas():
+
+    def problemas_correos(request, titulo, texto):
+            messages.error(request, titulo+texto)
+            error = False
+            return error
+
+    def crear_correo(request, form):
+        # Se comprueba si se ingresó al menos un contacto.
+        contactos  = request.POST.getlist('checkbox')
+        if not contactos:
+            titulo = '<h2>¡No hay contactos seleccionados!</h2>'
+            texto = '<p style="font-size:24;">Se necesita ingresar al menos un contacto para poder programar un correo.</p>'
+            return ModificacionesTablas.problemas_correos(request, titulo, texto)
+        
+        # Se comprueba si se ingresó algún tipo de envío.
+        tipoEnvio  = request.POST.get('tipo_envio')
+        if not tipoEnvio:
+            titulo = '<h2>¡No hay algún tipo de envío seleccionado!</h2>'
+            texto = '<p style="font-size:24;">Se necesita ingresar algún tipo de envío para poder programar un correo.</p>'
+            return ModificacionesTablas.problemas_correos(request, titulo, texto)
+
+        # Se registra la fecha y hora según el tipo de envío.
+        fecha = ""
+        hora = ""
+        # Tipo Anual.
+        if tipoEnvio == "1":
+            dia = request.POST.get('diaAnual')
+            mes = request.POST.get('mesAnual')
+            hrs = request.POST.get('horaAnual')
+            fecha = "1998-" + mes + "-" + dia
+        # Tipo Mensual.
+        elif tipoEnvio == "2":
+            dia = request.POST.get("diaMensual")
+            hrs = request.POST.get('horaMensual')
+            fecha = "1998-10-" + dia
+        # Tipo Semanal.
+        elif tipoEnvio == "3":
+            dia = request.POST.get("diaSemanal")
+            hrs = request.POST.get('horaSemanal')
+            fecha = "1998-10-0" + dia
+        # Tipo Único.
+        elif tipoEnvio == "4":
+            fecha = request.POST.get("fechaUnica")
+            hrs = request.POST.get('horaUnica')
+
+        # Si se registró la hora se registra como fecha con hora y se registra el tipo de envío.
+        if hrs:
+            hora = "1998-10-08 " + hrs
+            envio = TipoEnvio.objects.filter(id_tipo = tipoEnvio)
+
+        # Se comprueba si se ingresó la fecha.
+        if not fecha:
+            titulo = '<h2>¡No hay fecha ingresada!</h2>'
+            texto = '<p style="font-size:24;">Se necesita ingresar alguna fecha para poder programar un correo.</p>'
+            return ModificacionesTablas.problemas_correos(request, titulo, texto)
+
+        # Se comprueba si se ingresó la hora.
+        if not hora:
+            titulo = '<h2>¡No hay hora ingresada!</h2>'
+            texto = '<p style="font-size:24;">Se necesita ingresar alguna hora para poder programar un correo.</p>'
+            return ModificacionesTablas.problemas_correos(request, titulo, texto)
+
+        # Se registran los datos necesarios para programar un correo.
+        datos      = form.cleaned_data
+        correoCreado = Correo.objects.crear_correo(
+            datos['asunto'],
+            datos['cuerpo'],
+            envio[0],
+            fecha,
+            hora,
+        )
+
+        # Se agregan los contactos al correo programado.
+        ModificacionesTablas.agregar_contactos(request, contactos, correoCreado)
+
+        # Se ingresan las imagenes en una lista y luego se agregan al correo programado si se ingresaron anteriormente.
+        imagen = request.FILES.getlist('img')
+        if imagen:
+            ModificacionesTablas.agregar_imagenes(request, imagen, correoCreado)
+
+        # Se ingresan los archivos en una lista y luego se agregan al correo programado si se ingresaron anteriormente.
+        archivo = request.FILES.getlist('archivo')
+        if archivo:
+            ModificacionesTablas.agregar_archivos(request, archivo, correoCreado)
+
+# Agregar Mensaje preguntando si está seguro de ingresar esos datos.
+        titulo = '<h2>¡Correo programado exitosamente!</h2>'
+        messages.success(request, titulo)
+        return correoCreado
+
+    def agregar_contactos(request, contactos, correo):
+        lista = []
+        for idContacto in contactos:
+            contactos[contactos.index(idContacto)] = int(idContacto)
+            contacto = Contacto.objects.get(id_contacto = idContacto)
+            detContactoCorreo = CorreoContacto.objects.crear_detalle(contacto, correo)
+            lista.append(detContactoCorreo)
+        return lista
+
+    def agregar_imagenes(request, imagenes, correo):
+        lista = []
+        for imagen in imagenes:
+            imagenCorreo = ImagenCorreo.objects.agregar_imagen(imagen, correo)
+            lista.append(imagenCorreo)
+        return lista
+
+    def agregar_archivos(request, archivos, correo):
+        lista = []
+        for archivo in archivos:
+            archivoCorreo = ArchivoCorreo.objects.agregar_archivo(archivo, correo)
+            lista.append(archivoCorreo)
+        return lista
+
+    def crear_contacto(request, datos):
+        contactoCreado = Contacto.objects.crear_contacto(
+            datos['nombre'],
+            datos['correo'],
+            datos['empresa'],
+            datos['cargo'],
+            datos['celular'],
+        )
+        titulo = '<h2>Contacto N° '+ str(contactoCreado.id_contacto) +' creado exitosamente!</h2>'
+        messages.success(request, titulo)
+        return contactoCreado
+
+    def editar_contacto(request):
+        idContacto = request.POST.get('id_contacto')
+        Nombre     = request.POST.get('nombre')
+        Correo     = request.POST.get('correo')
+        Empresa    = request.POST.get('empresa')
+        Cargo      = request.POST.get('cargo')
+        Celular    = request.POST.get('celular')
+
+        contacto = Contacto.objects.get(id_contacto = idContacto)
+
+        contacto.nombre   = Nombre
+        contacto.correo   = Correo
+        contacto.empresa  = Empresa
+        contacto.cargo    = Cargo
+        contacto.celular  = Celular
+
+        contacto.save()
+
+        titulo = '<h2>¡Contacto actualizado!</h2>'
+        texto  = '<p style="font-size:24;">Los datos del contacto se han editado exitosamente.</p>'
+        messages.success(request, titulo+texto)
+        return HttpResponseRedirect('/Gestion-Contactos/')
+    
+    def borrar_contacto(request, id):
+        contacto = Contacto.objects.get(id_contacto=id)
+        contacto.delete()
+        messages.success(request, 'El contacto se ha borrado con éxito')
+        return HttpResponseRedirect(reverse('reportesMaqman:gestionContactos'))
 
     def crear_reporte(request, datos, idPersona, imgMaquina, imgReport):
         idUsuario = Usuario(idPersona)
@@ -311,7 +536,6 @@ class ModificacionesTablas():
         messages.success(request, titulo+texto)
         # return HttpResponseRedirect('/Detalle-Usuario/'+idPersona)
         return HttpResponseRedirect('/Gestión-Usuarios/')
-
     
 class operacionesFechas():
     def reporte_mes(mes):
@@ -323,3 +547,45 @@ class operacionesFechas():
                 listaReportes.append(r)
         return listaReportes
 
+class EnvioCorreos():
+    def envio(asunto, content, contactos):
+        email = EmailMultiAlternatives(
+            asunto,
+            None,
+            settings.EMAIL_HOST_USER,
+            contactos
+        )
+        email.attach_alternative(content, 'text/html')
+        email.fail_silently = False
+        email.send()
+        return HttpResponseRedirect('/Vista-Correos/')
+
+    def correo(correo, asunto, cuerpo, archivos, imagenes, tipoEnvio, fecha, contactos):
+        template = get_template('email_template.html')
+        context = {
+                'cuerpo': cuerpo,
+                'archivos': archivos,
+                'imagenes': imagenes
+            }
+        content = template.render(context)
+
+        # envio = EnvioCorreos.envio(asunto, content, ["ccm.abarca.tecnologica@gmail.com"])
+        envio = EnvioCorreos.envio(asunto, content, contactos)
+
+        # Tipo Anual.
+        if tipoEnvio == 1:
+            fecha += relativedelta(years=1)
+        # Tipo Mensual.
+        elif tipoEnvio == 2:
+            fecha += relativedelta(months=1)
+        # Tipo Semanal.
+        elif tipoEnvio == 3:
+            fecha += datetime.timedelta(weeks=1)
+        # Tipo Único.
+        elif tipoEnvio == 4:
+            pass
+
+        correo.fecha = fecha
+        correo.save()
+
+        return envio

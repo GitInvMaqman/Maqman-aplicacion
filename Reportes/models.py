@@ -23,6 +23,7 @@ class Persona(models.Model):
     apellido_materno = models.CharField(max_length=30)
     celular          = models.IntegerField(blank=True, null=True)
     correo           = models.CharField(max_length=50, blank=True, null=True)
+    imagen           = models.ImageField(upload_to="imagen_perfil", null=True)
 
     objects = PersonaManager()
 
@@ -41,6 +42,7 @@ class Usuario(models.Model):
     last_login         = models.DateTimeField()
     is_active          = models.IntegerField()
     is_authenticated   = True
+    rut_usuario        = models.CharField(max_length=10)
 
     objects = UsuarioManager()
 
@@ -111,32 +113,39 @@ class Contacto(models.Model):
     id_contacto = models.BigAutoField(primary_key=True)
     nombre      = models.CharField(max_length=50)
     correo      = models.CharField(max_length=100)
+    empresa     = models.CharField(max_length=50)
+    cargo       = models.CharField(max_length=50)
+    celular     = models.IntegerField(blank=True, null=True)
+
+    objects = ContactoManager()
 
     class Meta:
         managed  = False
         db_table = 'contacto'
 
-
 class Correo(models.Model):
     id_correo          = models.BigAutoField(primary_key=True)
     asunto             = models.CharField(max_length=100)
     cuerpo             = models.CharField(max_length=2048)
-    imagen             = models.CharField(max_length=200)
     tipo_envio_id_tipo = models.ForeignKey('TipoEnvio', models.DO_NOTHING, db_column='tipo_envio_id_tipo')
     fecha              = models.DateField()
     hora               = models.DateTimeField()
+
+    objects = CorreoManager()
 
     class Meta:
         managed  = False
         db_table = 'correo'
 
 class CorreoContacto(models.Model):
-    contacto_id_contacto = models.ForeignKey(Contacto, models.DO_NOTHING, db_column='contacto_id_contacto')
+    contacto_id_contacto = models.OneToOneField(Contacto, models.DO_NOTHING, db_column='contacto_id_contacto', primary_key=True)
     correo_id_correo     = models.ForeignKey(Correo, models.DO_NOTHING, db_column='correo_id_correo')
 
+    objects = CorreoContactoManager()
     class Meta:
         managed  = False
         db_table = 'correo_contacto'
+        unique_together = (('contacto_id_contacto', 'correo_id_correo'),)
 
 class TipoEnvio(models.Model):
     id_tipo = models.SmallAutoField(primary_key=True)
@@ -145,3 +154,23 @@ class TipoEnvio(models.Model):
     class Meta:
         managed  = False
         db_table = 'tipo_envio'
+
+class ImagenCorreo(models.Model):
+    id_imagen        = models.AutoField(primary_key=True)
+    imagen           = models.ImageField(upload_to="imagenes_correos", null=True)
+    correo_id_correo = models.ForeignKey(Correo, models.DO_NOTHING, db_column='correo_id_correo')
+
+    objects = CorreoImagenManager()
+    class Meta:
+        managed  = False
+        db_table = 'imagen_correo'
+
+class ArchivoCorreo(models.Model):
+    id_archivo       = models.AutoField(primary_key=True)
+    archivo          = models.FileField(upload_to="archivos_correos", null=True)
+    correo_id_correo = models.ForeignKey('Correo', models.DO_NOTHING, db_column='correo_id_correo')
+
+    objects = CorreoArchivoManager()
+    class Meta:
+        managed  = False
+        db_table = 'archivo_correo'
