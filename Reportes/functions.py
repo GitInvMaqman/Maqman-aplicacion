@@ -561,8 +561,9 @@ class EnvioCorreos():
         return HttpResponseRedirect('/Vista-Correos/')
 
     def correo(correo, asunto, cuerpo, archivos, imagenes, tipoEnvio, fecha, contactos):
-        template = get_template('email_template.html')
+        template = get_template('email_template01.html')
         context = {
+                'asunto': asunto,
                 'cuerpo': cuerpo,
                 'archivos': archivos,
                 'imagenes': imagenes
