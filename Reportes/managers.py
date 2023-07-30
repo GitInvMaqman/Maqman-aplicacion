@@ -22,6 +22,7 @@ class PersonaManager(models.Manager):
             **extra_fields
         )
         return persona
+
 class UsuarioManager(models.Manager):
     # Permite crear un nuevo Usuario.
     def crear_usuario(self,idPersona, nombreUsuario, contraseñaUsuario, idRol, **extra_fields):

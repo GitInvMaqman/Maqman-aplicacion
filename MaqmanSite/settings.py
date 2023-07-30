@@ -9,12 +9,9 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
 from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
-import json
-import os
-import dj_database_url
+import json, os, dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,15 +40,13 @@ DEBUG = 'RENDER' not in os.environ
 # DEBUG = False
 # DEBUG = True
 
+# HOST SETTINGS
 ALLOWED_HOSTS = ['*']
-# ALLOWED_HOSTS = []
-
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-# Application definition
-
+# APPLICATION DEFINITION
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -61,7 +56,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Reportes',
     # 'Correos',
-    # 'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -94,9 +88,8 @@ TEMPLATES = [
 ]
 
 
-# Database
+# DATABASE SETTINGS
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
 DATABASES = {
 
     'default': dj_database_url.config(
@@ -112,9 +105,8 @@ DATABASES = {
 
 WSGI_APPLICATION = 'MaqmanSite.wsgi.application'
 
-# Password validation
+# PASSWORD VALIDATION
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -131,38 +123,30 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
+# INTERNATIONALIZATION
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
-
 LANGUAGE_CODE = 'es'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
+# STATIC FILES (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 if 'RENDER' in os.environ:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Default primary key field type
+# DEFAULT PRIMARY KEY FIELD TYPE
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'Reportes.backends.UsuarioBackend', 
 ]
 
-# Messages
+# MESSAGES SETTINGS
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 # MEDIA SETTINGS

@@ -86,11 +86,29 @@ class PerfilTemplateView(LoginRequiredMixin, TemplateView):
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------------
 
-class PrincipalTemplateView(LoginRequiredMixin, TemplateView):
+class PrincipalView(LoginRequiredMixin, TemplateView):
     template_name = "principal/vista-principal.html"
 
     # Obtención de otros datos.
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, **kwargs):
+        context               = super().get_context_data(**kwargs)
+        context['nombres']    = self.request.user.p_id_persona.nombres.split()
+        return context
+
+class ReportesView(LoginRequiredMixin, TemplateView):
+    template_name = "principal/vista-reportes.html"
+
+    # Obtención de otros datos.
+    def get_context_data(self, **kwargs):
+        context               = super().get_context_data(**kwargs)
+        context['nombres']    = self.request.user.p_id_persona.nombres.split()
+        return context
+
+class CorreosView(LoginRequiredMixin, TemplateView):
+    template_name = "principal/vista-correos.html"
+
+    # Obtención de otros datos.
+    def get_context_data(self, **kwargs):
         context               = super().get_context_data(**kwargs)
         context['nombres']    = self.request.user.p_id_persona.nombres.split()
         return context
@@ -222,19 +240,45 @@ class GenerarReportFormView(LoginRequiredMixin, FormView):
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------------
 
-class VerReportListView(LoginRequiredMixin, ListView):
+class VerReportesView(LoginRequiredMixin, TemplateView):
+    template_name = "reportes/ver-reportes.html"
+
+    # Obtención de otros datos.
+    def get_context_data(self, **kwargs):
+        context               = super().get_context_data(**kwargs)
+        context['nombres']    = self.request.user.p_id_persona.nombres.split()
+        return context
+
+class ReportesValidosListView(LoginRequiredMixin, ListView):
     model               = Reporte
     paginate_by         = 20
-    template_name       = "reportes/verReport.html"
+    template_name       = "reportes/reportes.html"
     context_object_name = "reportes"
 
     def get_queryset(self):
         if self.request.user.r_id_rol.rol == "Operador":
             return Reporte.objects.filter(u_p_id_persona = self.request.user, valido = 0).order_by('-fecha')
-        return Reporte.objects.all().order_by('valido', '-fecha')
+        return Reporte.objects.filter(valido = 0).order_by('-fecha')
 
     # Obtención de otros datos.
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, **kwargs):
+        context            = super().get_context_data(**kwargs)
+        context['nombres'] = self.request.user.p_id_persona.nombres.split()
+        return context
+
+class ReportesInvalidosListView(LoginRequiredMixin, ListView):
+    model               = Reporte
+    paginate_by         = 20
+    template_name       = "reportes/reportes.html"
+    context_object_name = "reportes"
+
+    def get_queryset(self):
+        if self.request.user.r_id_rol.rol == "Operador":
+            return Reporte.objects.filter(u_p_id_persona = self.request.user, valido = 0).order_by('-fecha')
+        return Reporte.objects.filter(valido = 1).order_by('-fecha')
+
+    # Obtención de otros datos.
+    def get_context_data(self, **kwargs):
         context            = super().get_context_data(**kwargs)
         context['nombres'] = self.request.user.p_id_persona.nombres.split()
         return context
@@ -325,15 +369,6 @@ class DescargarExcelTemplateView(LoginRequiredMixin, TemplateView):
 
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------------
-
-class CorreosTemplateView(LoginRequiredMixin, TemplateView):
-    template_name = "autocorreos/vista-correos.html"
-
-    # Obtención de otros datos.
-    def get_context_data(self, **kwargs):
-        context               = super().get_context_data(**kwargs)
-        context['nombres']    = self.request.user.p_id_persona.nombres.split()
-        return context
 
 class ContactosFormView(LoginRequiredMixin, FormView):
     model               = Contacto

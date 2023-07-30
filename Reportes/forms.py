@@ -9,6 +9,7 @@ from .models import *
 # Formularios
 #----------------------------------------------------------------------------------------------------------------#
 
+# Login por rut
 class Login1Form(forms.ModelForm):
     class Meta:
         model = Usuario
@@ -23,6 +24,7 @@ class Login1Form(forms.ModelForm):
             }),
         }
 
+# Login por nombre de usuario y contraseña
 class Login2Form(forms.ModelForm):
     class Meta:
         model = Usuario
@@ -43,6 +45,7 @@ class Login2Form(forms.ModelForm):
             }),
         }
 
+# Formulario de reportes
 class ReporteForm(forms.ModelForm):
     class Meta:
         model = Reporte
@@ -141,6 +144,7 @@ class ReporteForm(forms.ModelForm):
             }),
         }
 
+# Formulario de persona
 class PersonaForm(forms.ModelForm):
     class Meta:
         model = Persona
@@ -178,6 +182,8 @@ class PersonaForm(forms.ModelForm):
                 'placeholder' : 'Correo@email.com',
             }),
         }
+
+# Formulario de contactos
 class ContactoForm(forms.ModelForm):
     class Meta:
         model = Contacto
@@ -215,6 +221,8 @@ class ContactoForm(forms.ModelForm):
                 'required': 'true',
             }),
         }
+
+# Formulario de correos
 class CorreoForm(forms.ModelForm):
     class Meta:
         model = Correo

@@ -10,10 +10,14 @@ urlpatterns = [
     path('Cerrar-Sesión/'            , views.LogoutView.as_view()                   , name = 'logout'),
 
     path('Perfil/'                   , views.PerfilTemplateView.as_view()           , name = 'perfil'),
-    path('Vista-Principal/'          , views.PrincipalTemplateView.as_view()        , name = 'vistaPrincipal'),
+    path('Vista-Principal/'          , views.PrincipalView.as_view()                , name = 'vistaPrincipal'),
+    path('Vista-Reportes/'           , views.ReportesView.as_view()                 , name = 'vistaReportes'),
+    path('Vista-Correos/'            , views.CorreosView.as_view()                  , name = 'vistaCorreos'),
 
     path('Generar-Report/'           , views.GenerarReportFormView.as_view()        , name = 'generarReport'),
-    path('Ver-Reportes/'             , views.VerReportListView.as_view()            , name = 'verReport'),
+    path('Ver-Reportes/'             , views.VerReportesView.as_view()              , name = 'verReportes'),
+    path('Reportes-Válidos/'         , views.ReportesValidosListView.as_view()      , name = 'reportesInvalidos'),
+    path('Reportes-Inválidos/'       , views.ReportesInvalidosListView.as_view()    , name = 'reportesValidos'),
     path('Detalle-Reporte/<int:pk>/' , views.DetalleReportDetailView.as_view()      , name = 'detalleReport'),
     path('Editar-Reporte/'           , views.DetalleReportDetailView.editar_report  , name = 'editarReport'),
     path('Validar-Reporte/'          , views.DetalleReportDetailView.validar_report , name = 'validarReport'),
@@ -30,7 +34,6 @@ urlpatterns = [
     path('reporteMes'          , views.DescargarExcelTemplateView.reportes_mes      , name = 'reporteMes'),
 
     # Correos automáticos
-    path('Vista-Correos/'            , views.CorreosTemplateView.as_view()          , name = 'vistaCorreos'),
     path('Gestion-Contactos/'        , views.ContactosFormView.as_view()            , name = 'gestionContactos'),
     path('Editar-Contacto/'          , views.ContactosFormView.editar_contacto      , name = 'editarContacto'),
     path('Borrar-Contacto/<int:id>'  , views.ContactosFormView.borrar_contacto      , name = 'borrarContacto'),
