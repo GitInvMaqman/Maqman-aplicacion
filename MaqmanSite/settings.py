@@ -149,7 +149,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 if 'RENDER' in os.environ:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
@@ -165,6 +165,7 @@ AUTHENTICATION_BACKENDS = [
 # Messages
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
+# MEDIA SETTINGS
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
