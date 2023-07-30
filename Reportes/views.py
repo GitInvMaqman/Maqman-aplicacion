@@ -402,13 +402,12 @@ class CorreoFormView(LoginRequiredMixin, FormView):
         return context
 
     def enviarCorreo(self):
-
-        idCorreo = 81
-        correo = Correo.objects.get(id_correo = idCorreo)
-        asunto = correo.asunto
-        cuerpo = correo.cuerpo
+        correo    = Correo.objects.all()[0]
+        idCorreo  = correo.id_correo
+        asunto    = correo.asunto
+        cuerpo    = correo.cuerpo
         tipoEnvio = correo.tipo_envio_id_tipo.id_tipo
-        fecha = correo.fecha
+        fecha     = correo.fecha
 
         archivos = ArchivoCorreo.objects.filter(correo_id_correo = idCorreo).values_list()
         listaArchivos = []
