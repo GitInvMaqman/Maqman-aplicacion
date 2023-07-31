@@ -16,8 +16,8 @@ urlpatterns = [
 
     path('Generar-Report/'           , views.GenerarReportFormView.as_view()        , name = 'generarReport'),
     path('Ver-Reportes/'             , views.VerReportesView.as_view()              , name = 'verReportes'),
-    path('Reportes-Válidos/'         , views.ReportesValidosListView.as_view()      , name = 'reportesInvalidos'),
-    path('Reportes-Inválidos/'       , views.ReportesInvalidosListView.as_view()    , name = 'reportesValidos'),
+    path('Reportes-Válidos/'         , views.ReportesValidosListView.as_view()      , name = 'reportesValidos'),
+    path('Reportes-Inválidos/'       , views.ReportesInvalidosListView.as_view()    , name = 'reportesInvalidos'),
     path('Detalle-Reporte/<int:pk>/' , views.DetalleReportDetailView.as_view()      , name = 'detalleReport'),
     path('Editar-Reporte/'           , views.DetalleReportDetailView.editar_report  , name = 'editarReport'),
     path('Validar-Reporte/'          , views.DetalleReportDetailView.validar_report , name = 'validarReport'),

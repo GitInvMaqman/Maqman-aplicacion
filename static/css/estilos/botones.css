@@ -93,6 +93,7 @@
 
 .btn-movil{
     width: 50px;
+    height: 50px;
     border: 2px solid #004aa7;
     border-radius: 50px;
     filter: invert(100%);

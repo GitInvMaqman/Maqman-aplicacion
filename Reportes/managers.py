@@ -10,7 +10,7 @@ from django.db.models import Q
 # Managers
 #----------------------------------------------------------------------------------------------------------------#
 class PersonaManager(models.Manager):
-    def crear_persona(self, Nombres, apellidoPaterno, apellidoMaterno, Celular, Correo, **extra_fields):
+    def crear_persona(self, Nombres, apellidoPaterno, apellidoMaterno, Celular, Correo, Imagen, **extra_fields):
         if Correo == None:
             Correo = ''
         persona = self.create(
@@ -19,19 +19,21 @@ class PersonaManager(models.Manager):
             apellido_materno = apellidoMaterno,
             celular = Celular,
             correo = Correo,
+            imagen = Imagen,
             **extra_fields
         )
         return persona
 
 class UsuarioManager(models.Manager):
     # Permite crear un nuevo Usuario.
-    def crear_usuario(self,idPersona, nombreUsuario, contraseñaUsuario, idRol, **extra_fields):
+    def crear_usuario(self,idPersona, nombreUsuario, contraseñaUsuario, idRol, rutUsuario, **extra_fields):
         usuario = self.create(
             p_id_persona        = idPersona,
             nombre_usuario      = nombreUsuario,
             contraseña_usuario  = contraseñaUsuario,
             r_id_rol            = idRol,
-            is_active = 1,
+            is_active           = 1,
+            rut_usuario         = rutUsuario,
             **extra_fields
         )
         return usuario

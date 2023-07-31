@@ -10,11 +10,13 @@
     <ul class="sidenav__list-perfil">
         <a href="{% url 'reportesMaqman:perfil' %}">
             <li class="sidenav__list-item" style="position: relative;">
-                <span class="sidenav__icon">
-                    <svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"></path>
-                    </svg>
-                </span>
+                
+                {% if user.p_id_persona.imagen %}
+                    <img class="sidenav__icon" src="{{ user.p_id_persona.imagen.url }}" alt="foto de perfil">
+                {% else %}
+                    <img class="sidenav__icon" src="{% static 'img/usuario.png' %}" alt="foto de perfil">
+                {% endif %}
+                    
                 <p class="fs-14px" style="margin: 0px;">{{ user.r_id_rol.rol }} - {{ nombres.0 }}</p>
             </li>
         </a>
@@ -45,12 +47,15 @@
                 Generar reporte
             </a>
 
-            <a class="sidenav__list-item" href="{% url 'reportesMaqman:verReportes' %}">
-                {% if user.r_id_rol.id_rol == 1 %}
+            
+            <a class="sidenav__list-item" 
+            {% if user.r_id_rol.id_rol == 1 %}
+            href="{% url 'reportesMaqman:reportesInvalidos' %}">
                 Mis reportes
-                {% else %}
+            {% else %}
+            href="{% url 'reportesMaqman:verReportes' %}">
                 Ver reportes
-                {% endif %}
+            {% endif %}
             </a>
 
             {% if user.r_id_rol.id_rol == 2 %}

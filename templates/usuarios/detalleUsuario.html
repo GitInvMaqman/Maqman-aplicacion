@@ -8,10 +8,33 @@
 {% block contenido %}
 <h1>{{ usuario.p_id_persona.nombres }} {{ usuario.p_id_persona.apellido_paterno }} {{ usuario.p_id_persona.apellido_materno }}</h1>
 <center>
-    <form action="{% url 'reportesMaqman:editarUsuario' %}" method="POST" style="width:100%;" id="formulario-editar-usuario">{% csrf_token %}
+    <form action="{% url 'reportesMaqman:editarUsuario' %}" method="POST" style="width:100%;" id="formulario-editar-usuario" enctype="multipart/form-data">{% csrf_token %}
         <input type="hidden" name="id_persona" id="id_persona" value="{{usuario.p_id_persona.id_persona}}">
+        <input type="hidden" name="tipo" value="detalle">
         <table>
-            <th class="first" colspan="3">Nombre Completo:</th>
+            <th class="first" colspan="3">Datos personales:</th>
+            <tr>
+                <td rowspan="5" style="width: 20vw;">
+                    <input oninput="mostrarImagen(this, 'imgPerfil');" class="file desaparece" type="file" name="img_perfil" id="id_img_perfil" accept="image/png, image/jpg, image/gif, image/jpeg">
+                    <label for="id_img_perfil" style="text-align: center;">
+                        <center  style="width: 15vw; height: 15vw; border-radius: 50%; display: block; margin: auto;">
+                            <img 
+                                class="img-perfil" 
+                                id="imgPerfil" 
+                            {% if usuario.p_id_persona.imagen %}
+                                src="{{ usuario.p_id_persona.imagen.url }}" 
+                                alt="Perfil" 
+                            {% else %}
+                                src="{% static 'img/usuario.png' %}" 
+                                alt="Imagen no encontrada" 
+                            {% endif %}
+                                height="80%" 
+                                width="80%"
+                                style=" margin-top: 10%; border-radius: 50%;">
+                        </center>
+                    </label>
+                </td>
+            </tr>
             <tr>
                 <td>Nombres:</td>
                 <td>
@@ -30,10 +53,25 @@
                     <input class="text" type="text" name="apellido_materno" id="id_apellido_materno" value="{{ usuario.p_id_persona.apellido_materno }}" required>
                 </td>
             </tr>
+            <tr>
+                <td>RUT:</td>
+                <td>
+                    <input class="text" type="text" name="rut_usuario" id="id_rut_usuario" value="{{ usuario.rut_usuario }}" placeholder="12345678-9">
+                </td>
+            </tr>
             <th colspan="3">Contacto:</th>
             <tr>
+                <td>Correo:</td>
+                <td colspan="2">
+                    <input class="text" type="email" name="correo" id="id_correo" value="{{ usuario.p_id_persona.correo }}"
+                    {% if not usuario.p_id_persona.correo %}
+                        placeholder="No registrado"
+                    {% endif %}>
+                </td>
+            </tr>
+            <tr>
                 <td>Celular:</td>
-                <td>
+                <td colspan="2">
                     <input type="number" min="100000000" max="999999999" name="celular" id="id_celular" value="{{ usuario.p_id_persona.celular }}" 
                     {% if not usuario.p_id_persona.celular %}
                         placeholder="No registrado"
@@ -41,28 +79,10 @@
                         >
                 </td>
             </tr>
-            <tr>
-                <td>Correo:</td>
-                <td>
-                    <input class="text" type="email" name="correo" id="id_correo" value="{{ usuario.p_id_persona.correo }}"
-                    {% if not usuario.p_id_persona.correo %}
-                        placeholder="No registrado"
-                    {% endif %}>
-                </td>
-            </tr>
             <th colspan="3">Usuario:</th>
             <tr>
-                <td>Nombre de Usuario:</td>
-                <td><input type="text" name="nombre_usuario" id="id_nombre_usuario" class="text" placeholder="Nombre de Usuario" required value="{{ usuario.nombre_usuario }}"></td>
-            </tr>
-            <tr>
-                <td>Contraseña de Usuario:</td>
-                <td><input type="text" name="contraseña_usuario" id="id_contraseña_usuario" class="text" placeholder="Contraseña de Usuario" required value="{{ usuario.contraseña_usuario }}">
-                </td>
-            </tr>
-            <tr>
                 <td>Rol:</td>
-                <td>
+                <td colspan="2">
                     <select name="rol" id="id_rol" required>
                         <option value="{{ usuario.r_id_rol.id_rol }}" selected> {{ usuario.r_id_rol.rol }}</option>
                     
@@ -75,6 +95,15 @@
                         {% endfor %}
                         
                     </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Nombre de Usuario:</td>
+                <td colspan="2"><input type="text" name="nombre_usuario" id="id_nombre_usuario" class="text" placeholder="Nombre de Usuario" required value="{{ usuario.nombre_usuario }}"></td>
+            </tr>
+            <tr>
+                <td>Contraseña de Usuario:</td>
+                <td colspan="2"><input type="text" name="contraseña_usuario" id="id_contraseña_usuario" class="text" placeholder="Contraseña de Usuario" required value="{{ usuario.contraseña_usuario }}">
                 </td>
             </tr>
         </table>
@@ -112,4 +141,8 @@
 
 </center>
 <script src="{% static 'js/mensajes.js'%} "></script>
+<script src="{% static 'js/calculos.js'%} "></script>
+<script src="{% static 'js/modal.js'%} "></script>
+<script src="{% static 'js/mensajes.js'%} "></script>
+<script src="{% static 'js/general.js'%} "></script>
 {% endblock contenido %}

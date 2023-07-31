@@ -9,9 +9,31 @@
 <h1>Gestión de Usuarios</h1>
 <center>
     <div class="caja">
-        <form action="" method="post" style="width:100%;">{% csrf_token %}
+        <form action="" method="post" style="width:100%;" enctype="multipart/form-data">{% csrf_token %}
             <table class="tabla-usuario">
-                <th class="first" colspan="2">Nombre Completo:</th>
+                <tr>
+                    <th class="first" colspan="3">Perfil</th>
+                </tr>
+                <tr>
+                    <th colspan="3">Datos Personales:</th>
+                </tr>
+                <tr>
+                    <td rowspan="5" style="width: 10vw;">
+                        <input oninput="mostrarImagen(this, 'imgPerfil');" class="file desaparece" type="file" name="img_perfil" id="id_img_perfil" accept="image/png, image/jpg, image/gif, image/jpeg">
+                        <label for="id_img_perfil" style="text-align: center;">
+                            <center  style="width: 7vw; height: 7vw; border-radius: 50%; display: block; margin: auto;">
+                                <img 
+                                    class="img-perfil" 
+                                    id="imgPerfil" 
+                                    src="{% static 'img/usuario.png' %}" 
+                                    alt="Imagen no encontrada" 
+                                    height="80%" 
+                                    width="80%"
+                                    style=" margin-top: 10%; border-radius: 50%;">
+                            </center>
+                        </label>
+                    </td>
+                </tr>
                 <tr>
                     <td>Nombres:</td>
                     <td>{{ form.nombres }}</td>
@@ -24,28 +46,23 @@
                     <td>Apellido Materno:</td>
                     <td>{{ form.apellido_materno }}</td>
                 </tr>
-                <th colspan="2">Contacto:</th>
+                <tr>
+                    <td>RUT:</td>
+                    <td><input type="text" name="rut_usuario" id="id_rut_usuario" placeholder="12345678-9" required></td>
+                </tr>
+                <th colspan="3">Contacto:</th>
                 <tr>
                     <td>Celular:</td>
-                    <td>{{ form.celular }}</td>
+                    <td colspan="2">{{ form.celular }}</td>
                 </tr>
                 <tr>
                     <td>Correo:</td>
-                    <td>{{ form.correo }}</td>
+                    <td colspan="2">{{ form.correo }}</td>
                 </tr>
-                <th colspan="2">Usuario:</th>
-                <tr>
-                    <td>Nombre de Usuario:</td>
-                    <td><input type="text" name="nombre_usuario" id="id_nombre_usuario" class="text" placeholder="Nombre de Usuario" required></td>
-                </tr>
-                <tr>
-                    <td>Contraseña de Usuario:</td>
-                    <td><input type="text" name="contraseña_usuario" id="id_contraseña_usuario" class="text" placeholder="Contraseña de Usuario" required>
-                    </td>
-                </tr>
+                <th colspan="3">Usuario:</th>
                 <tr>
                     <td>Rol:</td>
-                    <td>
+                    <td colspan="2">
                         <select name="rol" id="id_rol" required>
                             <option value selected> - Seleccionar Rol -</option>
                         
@@ -57,7 +74,16 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input class="btn-submit" type="submit" value="Ingresar Usuario"></td>
+                    <td>Nombre de Usuario:</td>
+                    <td colspan="2"><input type="text" name="nombre_usuario" id="id_nombre_usuario" class="text" placeholder="Nombre de Usuario" required></td>
+                </tr>
+                <tr>
+                    <td>Contraseña de Usuario:</td>
+                    <td colspan="2"><input type="text" name="contraseña_usuario" id="id_contraseña_usuario" class="text" placeholder="Contraseña de Usuario" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"><input class="btn-submit" type="submit" value="Ingresar Usuario"></td>
                 </tr>
             </table>
         </form>
@@ -70,12 +96,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <th class="t1">Activo</th>
+                    <th class="t1">Imagen</th>
                     <th class="t2">Nombres</th>
                     <th class="t2">Apellido Paterno</th>
                     <th class="t2">Apellido Materno</th>
                     <th class="t3">Rol</th>
-                    <th class="t4">Info</th>
                     <th class="t4">Report</th>
                 </tr>
             </table>
@@ -83,28 +108,45 @@
                 <table class="tabla-usuario tu2" id="tablaUsuario">
                     {% for u in usuarios %}
                         {% if u != user %}
+                        
+
                             <tr class="trUsuario">
-                                <td class="t1">
-                                    
-                                    {% if u.is_active %}
-                                        Si
-                                    {% else %}
-                                        No
-                                    {% endif %}
-                                        
+                                <td class="t1" 
+                                    onclick="location.href='{% url 'reportesMaqman:detalleUsuario' u.p_id_persona.id_persona %}'"
+                                    {% if u.is_active == 0 %}
+                                        style="background-color: red; color: white;"
+                                    {% endif %}>
+                                    <img
+                                        style="width: 70px; height: 70px; border-radius: 50%;"
+                                        {% if u.p_id_persona.imagen %}
+                                            src="{{ u.p_id_persona.imagen.url }}" 
+                                            alt="Perfil" 
+                                        {% else %}
+                                            src="{% static 'img/usuario.png' %}" 
+                                            alt="Imagen no encontrada" 
+                                        {% endif %}
+                                        alt="">
                                 </td>
-                                <td class="t2">{{ u.p_id_persona.nombres }}</td>
-                                <td class="t2">{{ u.p_id_persona.apellido_paterno }}</td>
-                                <td class="t2">{{ u.p_id_persona.apellido_materno }}</td>
-                                <td class="t3">{{ u.r_id_rol.rol }}</td>
-                                <td class="t4">
-                                    <a href="{% url 'reportesMaqman:detalleUsuario' u.p_id_persona.id_persona %}">
-                                        <svg preserveAspectRatio="none" width="80%" viewBox="0 0 24 24" height="80%" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12 12.25c1.24 0 2.25-1.01 2.25-2.25S13.24 7.75 12 7.75 9.75 8.76 9.75 10s1.01 2.25 2.25 2.25zm4.5 4c0-1.5-3-2.25-4.5-2.25s-4.5.75-4.5 2.25V17h9v-.75zM19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H6c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h12c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1z"></path>
-                                        </svg>
-                                    </a>
-                                </td>
-                                
+                                <td class="t2" 
+                                    onclick="location.href='{% url 'reportesMaqman:detalleUsuario' u.p_id_persona.id_persona %}'"
+                                    {% if u.is_active == 0 %}
+                                        style="background-color: red; color: white;"
+                                    {% endif %}>{{ u.p_id_persona.nombres }}</td>
+                                <td class="t2" 
+                                    onclick="location.href='{% url 'reportesMaqman:detalleUsuario' u.p_id_persona.id_persona %}'"
+                                    {% if u.is_active == 0 %}
+                                        style="background-color: red; color: white;"
+                                    {% endif %}>{{ u.p_id_persona.apellido_paterno }}</td>
+                                <td class="t2" 
+                                    onclick="location.href='{% url 'reportesMaqman:detalleUsuario' u.p_id_persona.id_persona %}'"
+                                    {% if u.is_active == 0 %}
+                                        style="background-color: red; color: white;"
+                                    {% endif %}>{{ u.p_id_persona.apellido_materno }}</td>
+                                <td class="t3" 
+                                    onclick="location.href='{% url 'reportesMaqman:detalleUsuario' u.p_id_persona.id_persona %}'"
+                                    {% if u.is_active == 0 %}
+                                        style="background-color: red; color: white;"
+                                    {% endif %}>{{ u.r_id_rol.rol }}</td>
                                 {% if u.r_id_rol.rol == "Operador" %}
                                     <td class="t4" style="cursor: pointer;" onclick="DescargarReporte('{{u.p_id_persona.id_persona}}', '{{ u.p_id_persona.nombres }} {{ u.p_id_persona.apellido_paterno }} {{ u.p_id_persona.apellido_materno }}');" >
                                         <svg preserveAspectRatio="none" width="80%" viewBox="0 0 24 24" height="80%" xmlns="http://www.w3.org/2000/svg">
@@ -118,7 +160,6 @@
                                         </svg>
                                     </td>
                                 {% endif %}
-                                        
                             </tr>
                         {% endif %}
                     {% endfor %}
@@ -154,4 +195,8 @@
         }
     }
 </script>
+<script src="{% static 'js/calculos.js'%} "></script>
+<script src="{% static 'js/modal.js'%} "></script>
+<script src="{% static 'js/mensajes.js'%} "></script>
+<script src="{% static 'js/general.js'%} "></script>
 {% endblock contenido %}

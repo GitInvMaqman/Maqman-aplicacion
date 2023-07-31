@@ -448,22 +448,24 @@ class ModificacionesTablas():
         messages.success(request, titulo+texto)
         return HttpResponseRedirect('/Ver-Reportes/')
 
-    def crear_persona(request, datos):
+    def crear_persona(request, datos, imagen):
         personaCreada = Persona.objects.crear_persona(
             datos['nombres'],
             datos['apellido_paterno'],
             datos['apellido_materno'],
             datos['celular'],
             datos['correo'],
+            imagen,
         )
         return personaCreada
-    def crear_usuario(request, idPersona, nUsuario, cUsuario, idRol):
+    def crear_usuario(request, idPersona, nUsuario, cUsuario, idRol, rutUsuario):
         rol = Rol(idRol)
         usuarioCreado = Usuario.objects.crear_usuario(
             idPersona,
             nUsuario,
             cUsuario,
             rol,
+            rutUsuario,
         )
         persona = usuarioCreado.p_id_persona
         titulo = '<h2>El usuario "'+ persona.nombres + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno +'"</h2>'
@@ -472,17 +474,34 @@ class ModificacionesTablas():
         return usuarioCreado
 
     def editar_usuario(request):
+        tipo         = request.POST.get('tipo')
         idPersona    = request.POST.get('id_persona')
-        usuario      = Usuario.objects.get(p_id_persona = idPersona)
         uNombre      = request.POST.get('nombre_usuario')
+        usuario      = Usuario.objects.get(p_id_persona = idPersona)
         usuarioExist = Usuario.objects.filter(nombre_usuario = uNombre)
+        uRUT         = usuario.rut_usuario
 
         if usuarioExist:
             if usuario != usuarioExist[0]:
                 titulo = '<h2>¡Usuario ya existe!</h2>'
                 texto  = '<p style="font-size:24;">El nombre de usuario ya está asignado a alguien más, intenta poner otro nombre de usuario.</p>'
                 messages.error(request, titulo+texto)
-                return HttpResponseRedirect('/Detalle-Usuario/'+idPersona)
+                if tipo == 'perfil':
+                    return HttpResponseRedirect('/Perfil/')
+                else:
+                    return HttpResponseRedirect('/Detalle-Usuario/'+idPersona)
+        if tipo == 'detalle':
+            uRUT = request.POST.get('rut_usuario')
+            rutExist = Usuario.objects.filter(rut_usuario = uRUT)
+            if rutExist:
+                if usuario != rutExist[0]:
+                    titulo = '<h2>¡El rut ya existe!</h2>'
+                    texto  = '<p style="font-size:24;">El rut ya está asignado a alguien más, intenta poner otro rut.</p>'
+                    messages.error(request, titulo+texto)
+                    if tipo == 'perfil':
+                        return HttpResponseRedirect('/Perfil/')
+                    else:
+                        return HttpResponseRedirect('/Detalle-Usuario/'+idPersona)
 
         persona = usuario.p_id_persona
 
@@ -497,6 +516,16 @@ class ModificacionesTablas():
         if pCorreo == 'None':
             pCorreo = ''
 
+        imgPerfil = request.FILES.get('img_perfil')
+        dirImgPerfil = os.path.join(settings.MEDIA_ROOT+'/'+persona.imagen.name)
+        if imgPerfil == None:
+            imgPerfil = persona.imagen
+        elif persona.imagen == '':
+            print('hola')
+        else:
+            os.remove(dirImgPerfil)
+
+        persona.imagen           = imgPerfil
         persona.nombres          = pNombres
         persona.apellido_paterno = pAPaterno
         persona.apellido_materno = pAMaterno
@@ -511,16 +540,25 @@ class ModificacionesTablas():
         usuario.nombre_usuario     = uNombre
         usuario.contraseña_usuario = uContraseña
         usuario.r_id_rol           = rRol
-        usuario.save()
+        usuario.rut_usuario        = uRUT
 
-        titulo = '<h2>¡Usuario actualizado!</h2>'
-        texto  = '<p style="font-size:24;">Los datos del usuario se han editado con éxito.</p>'
-        messages.success(request, titulo+texto)
-        return HttpResponseRedirect('/Detalle-Usuario/'+idPersona)
+        
+        usuario.save()
+        if tipo == 'perfil':
+            titulo = '<h2>¡Perfil actualizado!</h2>'
+            texto  = '<p style="font-size:24;">Los datos de tu perfil se han editado con éxito.</p>'
+            messages.success(request, titulo+texto)
+            return HttpResponseRedirect('/Perfil/')
+        else:
+            titulo = '<h2>¡Usuario actualizado!</h2>'
+            texto  = '<p style="font-size:24;">Los datos del usuario se han editado con éxito.</p>'
+            messages.success(request, titulo+texto)
+            return HttpResponseRedirect('/Detalle-Usuario/'+idPersona)
     
     def cambiar_activo(request):
         idPersona    = request.POST.get('id_persona')
         usuario      = Usuario.objects.get(p_id_persona = idPersona)
+        persona      = usuario.p_id_persona
 
         if usuario.is_active == 0:
             usuario.is_active = 1
@@ -528,6 +566,10 @@ class ModificacionesTablas():
         else:
             usuario.is_active = 0
             activo = 'desactivado'
+            if persona.imagen:
+                os.remove(os.path.join(settings.MEDIA_ROOT+'/'+persona.imagen.name))
+                persona.imagen = ''
+                persona.save()
 
         usuario.save()
 

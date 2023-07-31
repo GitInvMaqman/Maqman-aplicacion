@@ -74,6 +74,7 @@ table.excel td {
     background-color: rgb(255, 166, 0);
     color: white;
     transition: all .2s ease-in-out;
+    cursor: pointer;
 }
 
 /* Non-mobile styles, 1024px breakpoint */
