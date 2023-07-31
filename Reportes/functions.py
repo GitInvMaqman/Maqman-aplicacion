@@ -519,7 +519,7 @@ class ModificacionesTablas():
         imgPerfil = request.FILES.get('img_perfil')
         if imgPerfil == None:
             imgPerfil = persona.imagen
-        elif persona.imagen == '':
+        elif persona.imagen == '' or persona.imagen == None:
             print('hola')
         else:
             dirImgPerfil = os.path.join(settings.MEDIA_ROOT+'/'+persona.imagen.name)
