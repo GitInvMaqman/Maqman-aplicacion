@@ -517,12 +517,12 @@ class ModificacionesTablas():
             pCorreo = ''
 
         imgPerfil = request.FILES.get('img_perfil')
-        dirImgPerfil = os.path.join(settings.MEDIA_ROOT+'/'+persona.imagen.name)
         if imgPerfil == None:
             imgPerfil = persona.imagen
         elif persona.imagen == '':
             print('hola')
         else:
+            dirImgPerfil = os.path.join(settings.MEDIA_ROOT+'/'+persona.imagen.name)
             os.remove(dirImgPerfil)
 
         persona.imagen           = imgPerfil
