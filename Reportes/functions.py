@@ -625,26 +625,26 @@ class EnvioCorreos():
         # envio = EnvioCorreos.envio(asunto, content, ["ccm.abarca.tecnologica@gmail.com"])
         envio = EnvioCorreos.envio(asunto, content, contactos, archivos, imagenes)
 
-        # Tipo Anual.
-        if tipoEnvio == 1:
-            fecha += relativedelta(years=1)
-        # Tipo Mensual.
-        elif tipoEnvio == 2:
-            fecha += relativedelta(months=1)
-        # Tipo Semanal.
-        elif tipoEnvio == 3:
-            fecha += datetime.timedelta(weeks=1)
-        # Tipo Único.
-        elif tipoEnvio == 4:
-            pass
-        print(fecha)
-        print("------------------")
-        print(fecha.strftime("%Y-%m-%d"))
-        nuevaFecha =fecha.strftime("%Y-%m-%d")
-        print("------------------")
-        print(nuevaFecha)
-        print("------------------")
-        correo.fecha = nuevaFecha
-        correo.save()
+        # # Tipo Anual.
+        # if tipoEnvio == 1:
+        #     fecha += relativedelta(years=1)
+        # # Tipo Mensual.
+        # elif tipoEnvio == 2:
+        #     fecha += relativedelta(months=1)
+        # # Tipo Semanal.
+        # elif tipoEnvio == 3:
+        #     fecha += datetime.timedelta(weeks=1)
+        # # Tipo Único.
+        # elif tipoEnvio == 4:
+        #     pass
+        # print(fecha)
+        # print("------------------")
+        # print(fecha.strftime("%Y-%m-%d"))
+        # nuevaFecha =fecha.strftime("%Y-%m-%d")
+        # print("------------------")
+        # print(nuevaFecha)
+        # print("------------------")
+        # correo.fecha = nuevaFecha
+        # correo.save()
 
         return envio
