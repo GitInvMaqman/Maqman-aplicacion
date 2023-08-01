@@ -640,9 +640,11 @@ class EnvioCorreos():
         print(fecha)
         print("------------------")
         print(fecha.strftime("%Y-%m-%d"))
+        nuevaFecha =fecha.strftime("%Y-%m-%d")
         print("------------------")
+        print(nuevaFecha)
         print("------------------")
-        correo.fecha = fecha.strftime("%Y-%m-%d")
+        correo.fecha = nuevaFecha
         correo.save()
 
         return envio
