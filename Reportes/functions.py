@@ -637,8 +637,11 @@ class EnvioCorreos():
         # Tipo Único.
         elif tipoEnvio == 4:
             pass
-
-        correo.fecha = fecha
+        print(str(fecha))
+        print("------------------")
+        print("------------------")
+        print("------------------")
+        correo.fecha = str(fecha)
         correo.save()
 
         return envio
