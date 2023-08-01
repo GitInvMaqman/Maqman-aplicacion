@@ -87,7 +87,6 @@
             <tr>
                 <th colspan="3">Usuario</th>
             </tr>
-            
             {% if user.r_id_rol.id_rol == 2 %}
             <tr>
                 <td>Nombre de Usuario:</td>
@@ -101,9 +100,10 @@
                     <input type="text" name="contraseña_usuario" id="id_contraseña_usuario" class="text" placeholder="Contraseña de Usuario" required value="{{ user.contraseña_usuario }}">
                 </td>
             </tr>
+            {% else %}
+                <input type="hidden" name="nombre_usuario" id="id_nombre_usuario" class="text" value="{{ user.nombre_usuario }}">
+                <input type="hidden" name="contraseña_usuario" id="id_contraseña_usuario" class="text" value="{{ user.contraseña_usuario }}">
             {% endif %}
-            <input type="hidden" name="nombre_usuario" id="id_nombre_usuario" class="text" value="{{ user.nombre_usuario }}">
-            <input type="hidden" name="contraseña_usuario" id="id_contraseña_usuario" class="text" value="{{ user.contraseña_usuario }}">
             <tr>
                 <td>Rol:</td>
                 <td colspan="2">
