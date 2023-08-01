@@ -9,21 +9,22 @@
     <h1>Bienvenido {{ nombres.0 }}</h1>
     <div class="caja">
         {% if user.r_id_rol.rol == 'Operador' %}
-            <a href="{% url 'reportesMaqman:generarReport' %}" class="button button-1">
-                <svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 6c-.55 0-1 .45-1 1v13c0 1.1.9 2 2 2h13c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1-.45-1-1V7c0-.55-.45-1-1-1zm17-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 9h-3v3c0 .55-.45 1-1 1s-1-.45-1-1v-3h-3c-.55 0-1-.45-1-1s.45-1 1-1h3V6c0-.55.45-1 1-1s1 .45 1 1v3h3c.55 0 1 .45 1 1s-.45 1-1 1z"></path>
-                </svg>
-                <br>
-                Generar Reporte
-            </a>
+        <a href="{% url 'reportesMaqman:generarReport' %}" class="button button-1">
+            <svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 6c-.55 0-1 .45-1 1v13c0 1.1.9 2 2 2h13c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1-.45-1-1V7c0-.55-.45-1-1-1zm17-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 9h-3v3c0 .55-.45 1-1 1s-1-.45-1-1v-3h-3c-.55 0-1-.45-1-1s.45-1 1-1h3V6c0-.55.45-1 1-1s1 .45 1 1v3h3c.55 0 1 .45 1 1s-.45 1-1 1z"></path>
+            </svg>
+            <br>
+            Generar Reporte
+        </a>
 
-            <a href="{% url 'reportesMaqman:reportesInvalidos' %}" class="button button-1">
-                <svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 6c-.55 0-1 .45-1 1v13c0 1.1.9 2 2 2h13c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1-.45-1-1V7c0-.55-.45-1-1-1zm17-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 9h-8c-.55 0-1-.45-1-1s.45-1 1-1h8c.55 0 1 .45 1 1s-.45 1-1 1zm-4 4h-4c-.55 0-1-.45-1-1s.45-1 1-1h4c.55 0 1 .45 1 1s-.45 1-1 1zm4-8h-8c-.55 0-1-.45-1-1s.45-1 1-1h8c.55 0 1 .45 1 1s-.45 1-1 1z"></path>
-                </svg>
-                <br>
-                Mis Reportes
-            </a>
+        <a href="{% url 'reportesMaqman:reportesInvalidos' %}" class="button button-1">
+            <svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 6c-.55 0-1 .45-1 1v13c0 1.1.9 2 2 2h13c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1-.45-1-1V7c0-.55-.45-1-1-1zm17-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 9h-8c-.55 0-1-.45-1-1s.45-1 1-1h8c.55 0 1 .45 1 1s-.45 1-1 1zm-4 4h-4c-.55 0-1-.45-1-1s.45-1 1-1h4c.55 0 1 .45 1 1s-.45 1-1 1zm4-8h-8c-.55 0-1-.45-1-1s.45-1 1-1h8c.55 0 1 .45 1 1s-.45 1-1 1z"></path>
+            </svg>
+            <br>
+            Mis Reportes
+        </a>
+    </div>
         {% endif %}
         {% if user.r_id_rol.rol == 'Asistente' %}
             <a href="{% url 'reportesMaqman:vistaReportes' %}" class="button button-1">
@@ -47,7 +48,29 @@
                 <br>
                 Correos
             </a>
+        </div>
+        <div class="caja">
+            <a href="{% url 'reportesMaqman:vistaMantenciones' %}" class="button button-1">
+                <img src="{% static 'img/mantencion.png' %}" alt="Mantencion-img" style="width:18vw;">
+                <br>
+                Mantenciones
+            </a>
+        </div>
         {% endif %}
-    </div>
+        {% if user.r_id_rol.rol == 'Mecánico' %}
+            <a href="{% url 'reportesMaqman:generarMantencion' %}" class="button button-1">
+            <img src="{% static 'img/agregar_mantencion.png' %}" alt="Agregar mantención img" style="width: 15vw;">
+                <br>
+                Generar Mantención
+            </a>
+    
+            <a href="{% url 'reportesMaqman:mantencionesInvalidas' %}" class="button button-1">
+            <img src="{% static 'img/ver_mantenciones.png' %}" alt="Ver mantenciones img" style="width: 15vw;">
+                <br>
+                Ver Mantenciones
+            </a>
+        </div>
+        {% endif %}
+            
 
 {% endblock contenido %}

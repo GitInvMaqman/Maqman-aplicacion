@@ -171,6 +171,70 @@ class ArchivoCorreo(models.Model):
     correo_id_correo = models.ForeignKey('Correo', models.DO_NOTHING, db_column='correo_id_correo')
 
     objects = CorreoArchivoManager()
+
     class Meta:
         managed  = False
         db_table = 'archivo_correo'
+
+# ------------------------------------------------------------------------------------------------------------------------
+# Mantención
+# ------------------------------------------------------------------------------------------------------------------------
+
+class Checkmaquina(models.Model):
+    id_check = models.BigAutoField(primary_key=True)
+    check_1  = models.BooleanField()
+    check_2  = models.BooleanField()
+    check_3  = models.BooleanField()
+    check_4  = models.BooleanField()
+    check_5  = models.BooleanField()
+    check_6  = models.BooleanField()
+    check_7  = models.BooleanField()
+    check_8  = models.BooleanField()
+    check_9  = models.BooleanField()
+    check_10 = models.BooleanField()
+    check_11 = models.BooleanField()
+    check_12 = models.BooleanField()
+    check_13 = models.BooleanField()
+    check_14 = models.BooleanField()
+    check_15 = models.BooleanField()
+
+    objects = CheckMaquinaManager()
+    class Meta:
+        managed  = False
+        db_table = 'checkmaquina'
+
+
+class Inspeccion(models.Model):
+    id_inspeccion   = models.BigAutoField(primary_key=True)
+    m_id_mantencion = models.ForeignKey('Mantencion', models.DO_NOTHING, db_column='m_id_mantencion')
+    inspeccion      = models.CharField(max_length=100)
+    check1          = models.CharField(max_length=50)
+    busqueda        = models.CharField(max_length=512)
+    check2          = models.CharField(max_length=50)
+    estado          = models.CharField(max_length=512)
+
+    objects = InspeccionManager()
+    class Meta:
+        managed  = False
+        db_table = 'inspeccion'
+
+
+class Mantencion(models.Model):
+    id_mantencion   = models.BigAutoField(primary_key=True)
+    u_p_id_persona  = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='u_p_id_persona')
+    fecha           = models.DateField()
+    numero_maquina  = models.CharField(max_length=20)
+    horometro_maq   = models.DecimalField(max_digits=10, decimal_places=1)
+    ch_id_check     = models.ForeignKey(Checkmaquina, models.DO_NOTHING, db_column='ch_id_check')
+    descripcion     = models.CharField(max_length=1024)
+    observacion     = models.CharField(max_length=1024)
+    insumos         = models.CharField(max_length=512)
+    prox_mantencion = models.CharField(max_length=200)
+    prox_horometro  = models.DecimalField(max_digits=10, decimal_places=1)
+    archivo         = models.CharField(max_length=200)
+
+    objects = MantencionManager()
+    class Meta:
+        managed  = False
+        db_table = 'mantencion'
+

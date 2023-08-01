@@ -6,7 +6,7 @@
 {% endblock titulo %}
 
 {% block contenido %}
-<form action="{% url 'reportesMaqman:generarMantenimiento' %}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+<form action="{% url 'reportesMaqman:generarMantencion' %}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
     <table>
         <h1>Generar Certificado</h1>
         <th class="first" colspan="4">Control de Equipos</th>

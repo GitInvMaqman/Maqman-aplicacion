@@ -65,7 +65,8 @@ class Login():
             problema = 'El rol de esta cuenta no existe, contáctate con la empresa o intenta iniciar sesión con otra cuenta.'
             return Login.problemas_login(self, problema)
 
-        if rol_id == 1:
+        rol = Rol.objects.filter(id_rol = rol_id)[0]
+        if rol.rol == "Operador" or rol.rol == "Mecánico":
             nomUsuario = Usuario.objects.datos_por_rut(rutUsuario)[0][1]
             contraseña = Usuario.objects.datos_por_rut(rutUsuario)[0][2]
 
@@ -590,7 +591,7 @@ class operacionesFechas():
         return listaReportes
 
 class EnvioCorreos():
-    def envio(asunto, content, contactos):
+    def envio(asunto, content, contactos, archivos, imagenes):
         email = EmailMultiAlternatives(
             asunto,
             None,
@@ -598,6 +599,13 @@ class EnvioCorreos():
             contactos
         )
         email.attach_alternative(content, 'text/html')
+        if archivos:
+            for archivo in archivos:
+                email.attach(archivo.name.split('/')[-1], archivo.read(), archivo.name)
+        if imagenes:
+            for imagen in imagenes:
+                email.attach(imagen.name.split('/')[-1], imagen.read(), imagen.name)
+
         email.fail_silently = False
         email.send()
         return HttpResponseRedirect('/Vista-Correos/')
@@ -611,9 +619,11 @@ class EnvioCorreos():
                 'imagenes': imagenes
             }
         content = template.render(context)
+        print(archivos)
+        print(imagenes)
 
         # envio = EnvioCorreos.envio(asunto, content, ["ccm.abarca.tecnologica@gmail.com"])
-        envio = EnvioCorreos.envio(asunto, content, contactos)
+        envio = EnvioCorreos.envio(asunto, content, contactos, archivos, imagenes)
 
         # Tipo Anual.
         if tipoEnvio == 1:

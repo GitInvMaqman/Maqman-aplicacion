@@ -4,8 +4,8 @@
 <aside class="sidenav">
     
     <div class="menu-icon">
-        <img src="/static/img/Logo inv maqman.jpg" alt="Logo de Inversiones Maqman S.P.A.">
-        <p>Inversiones Maqman S.P.A.</p>
+        <img src="/static/img/Logo inv maqman.jpg" alt="Logo de Inver-Maq">
+        <p>Inver-Maq</p>
     </div>
     <ul class="sidenav__list-perfil">
         <a href="{% url 'reportesMaqman:perfil' %}">
@@ -33,37 +33,39 @@
                 <p class="fs-14px" style="margin: 0px;">Página Principal</p>
             </li>
         </a>
-        <button class="accordion sidenav__list-item">
-            <span class="sidenav__icon">
-                <svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 6c-.55 0-1 .45-1 1v13c0 1.1.9 2 2 2h13c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1-.45-1-1V7c0-.55-.45-1-1-1zm17-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 9h-8c-.55 0-1-.45-1-1s.45-1 1-1h8c.55 0 1 .45 1 1s-.45 1-1 1zm-4 4h-4c-.55 0-1-.45-1-1s.45-1 1-1h4c.55 0 1 .45 1 1s-.45 1-1 1zm4-8h-8c-.55 0-1-.45-1-1s.45-1 1-1h8c.55 0 1 .45 1 1s-.45 1-1 1z"></path>
-                </svg>
-            </span>
-            Reportes
-        </button>
-        <div class="panel">
+        
+        {% if user.r_id_rol.rol == "Operador" or user.r_id_rol.rol == "Asistente" or user.r_id_rol.rol == "Jefe" %}
+            <button class="accordion sidenav__list-item">
+                <span class="sidenav__icon">
+                    <svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 6c-.55 0-1 .45-1 1v13c0 1.1.9 2 2 2h13c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1-.45-1-1V7c0-.55-.45-1-1-1zm17-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 9h-8c-.55 0-1-.45-1-1s.45-1 1-1h8c.55 0 1 .45 1 1s-.45 1-1 1zm-4 4h-4c-.55 0-1-.45-1-1s.45-1 1-1h4c.55 0 1 .45 1 1s-.45 1-1 1zm4-8h-8c-.55 0-1-.45-1-1s.45-1 1-1h8c.55 0 1 .45 1 1s-.45 1-1 1z"></path>
+                    </svg>
+                </span>
+                Reportes
+            </button>
+            <div class="panel">
 
-            <a class="sidenav__list-item" href="{% url 'reportesMaqman:generarReport' %}">
-                Generar reporte
-            </a>
+                <a class="sidenav__list-item" href="{% url 'reportesMaqman:generarReport' %}">
+                    Generar reporte
+                </a>
 
-            
-            <a class="sidenav__list-item" 
-            {% if user.r_id_rol.id_rol == 1 %}
-            href="{% url 'reportesMaqman:reportesInvalidos' %}">
-                Mis reportes
-            {% else %}
-            href="{% url 'reportesMaqman:verReportes' %}">
-                Ver reportes
-            {% endif %}
-            </a>
+                
+                <a class="sidenav__list-item" 
+                {% if user.r_id_rol.rol == "Operador" %}
+                href="{% url 'reportesMaqman:reportesInvalidos' %}">
+                    Mis reportes
+                {% else %}
+                href="{% url 'reportesMaqman:verReportes' %}">
+                    Ver reportes
+                {% endif %}
+                </a>
 
-            {% if user.r_id_rol.id_rol == 2 %}
-            <a class="sidenav__list-item" href="{% url 'reportesMaqman:descargarReport' %}">
-                Descargar reportes
-            </a>
+            {% if user.r_id_rol.rol == "Asistente" or user.r_id_rol.rol == "Jefe" %}
+                <a class="sidenav__list-item" href="{% url 'reportesMaqman:descargarReport' %}">
+                    Descargar reportes
+                </a>
 
-        </div>
+            </div>
             <a href="{% url 'reportesMaqman:gestionUsuario' %}">
                 <li class="sidenav__list-item">
                     <span class="sidenav__icon">
@@ -97,7 +99,40 @@
                 </a>
 
             </div>
+            {% endif %}
         {% endif %}
+        
+        {% if user.r_id_rol.rol == "Mecánico" or user.r_id_rol.rol == "Asistente" or user.r_id_rol.rol == "Jefe" %}
+            <button class="accordion sidenav__list-item">
+                <span class="sidenav__icon">
+                    <img class="sidenav__icon" style="margin: -5px 0 0 -5px;" src="{% static 'img/mantencion.png' %}" alt="Mantencion-img">
+                </span>
+                Mantenciones
+            </button>
+            <div class="panel">
+
+                <a class="sidenav__list-item" href="{% url 'reportesMaqman:generarMantencion' %}">
+                    Generar mantención
+                </a>
+
+                
+                <a class="sidenav__list-item" 
+                {% if user.r_id_rol.rol == "Mecánico" %}
+                href="{% url 'reportesMaqman:mantencionesInvalidas' %}">
+                {% else %}
+                href="{% url 'reportesMaqman:verMantenciones' %}">
+                {% endif %}
+                    Ver mantenciones
+                </a>
+
+                {% if user.r_id_rol.rol == "Asistente" or user.r_id_rol.rol == "Jefe" %}
+                <a class="sidenav__list-item" href="{% url 'reportesMaqman:descargarMantencion' %}">
+                    Descargar certificados
+                </a>
+                {% endif %}
+            </div>
+        {% endif %}
+            
         </ul>
         <div class="sidenav__list-logout">
             <a href="{% url 'reportesMaqman:logout' %}">

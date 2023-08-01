@@ -246,3 +246,72 @@ class CorreoForm(forms.ModelForm):
                 'required':'true',
             }),
         }
+
+# Formulario de mantencion
+class MantencionForm(forms.ModelForm):
+    class Meta:
+        model = Mantencion
+        fields= {
+            'fecha',
+            'numero_maquina',
+            'horometro_maq',
+            'descripcion',
+            'observacion',
+            'insumos',
+            'prox_mantencion',
+            'prox_horometro',
+
+        }
+        widgets ={
+            'fecha' : forms.DateInput(format=('%d-%m-%Y'), attrs={
+                'class' : 'fechahora',
+                'type' : 'date',
+                'required' : 'true',
+            }),
+            'numero_maquina': forms.TextInput(attrs={
+                'class': 'text',
+                'placeholder': 'N° Máquina',
+                'required': 'true',
+            }),
+            'horometro_maq' : forms.NumberInput(attrs={
+                'class' : 'number',
+                'placeholder' : 'Horómetro de la máquina',
+                'value' : 0,
+                'required' : 'true',
+            }),
+            'descripcion': forms.Textarea(attrs={
+                'class': 'txtarea',
+                'placeholder': 'Descripción',
+                'cols'      : '30',
+                'rows'      : '10',
+                'style'     : 'resize: none; font-family: monospace;',
+                'required':'true',
+            }),
+            'observación': forms.Textarea(attrs={
+                'class': 'txtarea',
+                'placeholder': 'Observaciones',
+                'cols'      : '30',
+                'rows'      : '10',
+                'style'     : 'resize: none; font-family: monospace;',
+                'required':'true',
+            }),
+            'insumos': forms.Textarea(attrs={
+                'class': 'txtarea',
+                'placeholder': 'Insumos',
+                'cols'      : '30',
+                'rows'      : '10',
+                'style'     : 'resize: none; font-family: monospace;',
+                'required':'true',
+            }),
+            'prox_mantencion': forms.TextInput(attrs={
+                'class': 'text',
+                'placeholder': 'Fecha apróximada',
+                'required': 'true',
+            }),
+            'prox_horometro' : forms.NumberInput(attrs={
+                'class' : 'number',
+                'placeholder' : 'Horómetro próxima mantención',
+                'value' : 0,
+                'required' : 'true',
+            }),
+        }

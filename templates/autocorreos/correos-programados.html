@@ -13,12 +13,11 @@
                 <div class="carta-principal">
                     <a  href="{% url 'reportesMaqman:detalleCorreo' c.id_correo %}" class="card">
                         <div class="img-card">
-                            {% if c.imagen %}
-                                <img src="{{ c.imagen }}" alt="imagen adjunta del correo">
-                            {% else %}
-                                <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen no encontrada">
-                            {% endif %}
-                                
+                            {% for i in imagenes %}
+                                {% if i.correo_id_correo == c %}
+                                    <img src="{{ i.imagen.url }}" alt="imagen adjunta del correo">
+                                {% endif %}
+                            {% endfor %}
                         </div>
                         <div class="contenido-card">
                             <textarea cols="50" rows="2" class="textarea-card" readonly>Asunto: {{ c.asunto }}</textarea>

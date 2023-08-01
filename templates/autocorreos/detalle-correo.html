@@ -24,18 +24,35 @@
                 <td colspan="2"><textarea name="cuerpoCorreo" id="idCuerpoCorreo" cols="30" rows="10" placeholder="Cuerpo del correo.">{{ correo.cuerpo }}</textarea></td>
             </tr>
             <tr>
-                <td class="td-img">
+                <td class="td-img" style="padding-top: 0;">
                     <label for="id_archivo">
-                        <center>
+                        <center style="max-width: fit-content;">
                             Archivo
                             <br>
                             <input oninput="mostrarImagen(this, 'imgArchivo');" class="file" type="file" name="archivo" id="id_archivo" accept=".pdf, .docx, .xlsx" multiple/>
                             <br>
                         <!-- </center>
                         <center> -->
-                            <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen del archivo subido" id="imgArchivo" height="150px" width="150px">
+                            
+                            {% if archivo %}
+                                <img src="{% static 'img/archivo.png' %}" alt="archivo adjunta del correo"id="imgArchivo" height="150px" width="150px">
+                            {% else %}
+                                <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen del archivo subido" id="imgArchivo" height="150px" width="150px">
+                            {% endif %}
+                                
                         </center>
                     </label>
+                    {% if archivos %}
+                    <ul class="ulMedia">
+                        {% for a in archivos %}
+                        <li style="width: 50%;">
+                            <a href="{{ a.archivo.url }}" style="width: 300px;">
+                                Archivo {{forloop.counter}}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
                 </td>
                 <td class="td-img">
                     <label for="id_img">
@@ -46,13 +63,36 @@
                             <br>
                         <!-- </center>
                         <center> -->
-                            <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen" id="img" height="150px" width="150px">
+                            {% if imagen %}
+                                <img src="{{ imagen.imagen.url }}" alt="imagen adjunta del correo" id="img" height="150px" width="150px">
+                            {% else %}
+                                <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen" id="img" height="150px" width="150px">
+                            {% endif %}
                         </center>
                     </label>
+                    {% if imagenes %}
+                    <ul class="ulMedia">
+                        {% for i in imagenes %}
+                        <li>
+                            <a href="{{ i.imagen.url }}">
+                                Imagen {{forloop.counter}}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
                 </td>
             </tr>
         </tbody>
     </table>
+    <style>
+        .ulMedia{
+            margin: 0;
+            height: 150px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+    </style>
     <div class="cajita">
         <table>
             <thead>
@@ -80,7 +120,13 @@
                     {% for c in contacto %}
                         <tr>
                             <td>
-                                <input class="check desaparece" type="checkbox" name="checkbox" id="id{{ c.id_contacto }}" value="{{ c.id_contacto }}">
+                                <input 
+                                    {% for d in detalles %}{% if d == c %}checked{% endif %}{% endfor %}
+                                    class="check desaparece" 
+                                    type="checkbox" 
+                                    name="checkbox" 
+                                    id="id{{ c.id_contacto }}" 
+                                    value="{{ c.id_contacto }}">
                                 <label style="width:100%;" for="id{{ c.id_contacto }}">
                                     <center>
                                         {{ c.nombre }}
@@ -108,14 +154,26 @@
                 {% if e.id_tipo == 1 or e.id_tipo == 3 %}
                 <tr>
                     <td>
-                        <input class="radio-btn desaparece" type="radio" name="tipo_envio" id="radio-{{ e.id_tipo }}" value="{{ e.id_tipo }}">
+                        <input 
+                            {% if envio == e %}checked{% endif %}
+                            class="radio-btn desaparece" 
+                            type="radio" 
+                            name="tipo_envio" 
+                            id="radio-{{ e.id_tipo }}" 
+                            value="{{ e.id_tipo }}">
                         <label style="width:100%;" for="radio-{{ e.id_tipo }}">
                             <center>{{ e.tipo }}</center>
                         </label>
                     </td>
                 {% else %}
                     <td>
-                        <input class="radio-btn desaparece" type="radio" name="tipo_envio" id="radio-{{ e.id_tipo }}" value="{{ e.id_tipo }}">
+                        <input 
+                            {% if envio == e %}checked{% endif %}
+                            class="radio-btn desaparece" 
+                            type="radio" 
+                            name="tipo_envio" 
+                            id="radio-{{ e.id_tipo }}" 
+                            value="{{ e.id_tipo }}">
                         <label for="radio-{{ e.id_tipo }}">
                             <center>{{ e.tipo }}</center>
                         </label>
@@ -124,7 +182,10 @@
                 {% endif %}
             {% endfor %}
             <!-- Tipo de envío anual -->
-            <tfoot class="fecha-hora" id="Anual" style="display: none;">
+            <tfoot 
+                class="fecha-hora" 
+                id="Anual" 
+                {% if envio.id_tipo != 1 %}style="display: none;"{% endif %}>
                 <tr>
                     <th colspan="2">Seleccionar Día, Mes y Hora</th>
                 </tr>
@@ -132,21 +193,34 @@
                     <td>
                         <select style="width: 45%;" id="diaAnual" name="diaAnual">
                             {% for d in dias %}
-                                <option value="{{ d }}">{{ d }}</option>
+                                {% if d == fecha.1 %}
+                                    <option selected value="{{ d }}">{{ d }}</option>
+                                {% else %}
+                                    <option value="{{ d }}">{{ d }}</option>
+                                {% endif %}
                             {% endfor %}
                         </select>
                         <select style="width: 45%;" id="mesAnual" name="mesAnual">
                             {% for key, value in meses.items %}
-                                <option value="{{ key }}">{{ value }}</option>
+                                
+                                {% if key == fecha.2 %}
+                                    <option selected value="{{ key }}">{{ value }}</option>
+                                {% else %}
+                                    <option value="{{ key }}">{{ value }}</option>
+                                {% endif %}
+                                    
                             {% endfor %}
                         </select>
                     </td>
-                    <td><input type="time" name="horaAnual" id="horaAnual"></td>
+                    <td><input type="time" name="horaAnual" id="horaAnual" value="{{correo.hora|time:'H:i'}}"></td>
                 </tr>
             </tfoot>
             
             <!-- Tipo de envío mensual -->
-            <tfoot class="fecha-hora" id="Mensual" style="display: none;">
+            <tfoot 
+                class="fecha-hora" 
+                id="Mensual" 
+                {% if envio.id_tipo != 2 %}style="display: none;"{% endif %}>
                 <tr>
                     <th colspan="2">Seleccionar Día del Mes y Hora</th>
                 </tr>
@@ -154,16 +228,23 @@
                     <td>
                         <select style="width: 45%;" id="diaMensual" name="diaMensual">
                             {% for d in dias %}
-                                <option value="{{ d }}">{{ d }}</option>
+                                {% if d == fecha.1 %}
+                                    <option selected value="{{ d }}">{{ d }}</option>
+                                {% else %}
+                                    <option value="{{ d }}">{{ d }}</option>
+                                {% endif %}
                             {% endfor %}
                         </select>
                     </td>
-                    <td><input type="time" name="horaMensual" id="horaMensual"></td>
+                    <td><input type="time" name="horaMensual" id="horaMensual" value="{{correo.hora|time:'H:i'}}"></td>
                 </tr>
             </tfoot>
             
             <!-- Tipo de envío semanal -->
-            <tfoot class="fecha-hora" id="Semanal" style="display: none;">
+            <tfoot 
+                class="fecha-hora" 
+                id="Semanal"
+                {% if envio.id_tipo != 3 %}style="display: none;"{% endif %}>
                 <tr>
                     <th colspan="2">Seleccionar Día y Hora</th>
                 </tr>
@@ -171,22 +252,31 @@
                     <td>
                         <select style="width: 45%;" id="diaSemanal" name="diaSemanal">
                             {% for key, value in semana.items %}
-                                <option value="{{ key }}">{{ value }}</option>
+                                
+                                {% if key == fecha.3 %}
+                                    <option selected value="{{ key }}">{{ value }}</option>
+                                {% else %}
+                                    <option value="{{ key }}">{{ value }}</option>
+                                {% endif %}
+                                    
                             {% endfor %}
                         </select>
                     </td>
-                    <td><input type="time" name="horaSemanal" id="horaSemanal"></td>
+                    <td><input type="time" name="horaSemanal" id="horaSemanal" value="{{correo.hora|time:'H:i'}}"></td>
                 </tr>
             </tfoot>
             
             <!-- Tipo de envío único -->
-            <tfoot class="fecha-hora" id="Unico" style="display: none;">
+            <tfoot 
+                class="fecha-hora" 
+                id="Unico"
+                {% if envio.id_tipo != 4 %}style="display: none;"{% endif %}>
                 <tr>
                     <th colspan="2">Seleccionar Fecha y Hora</th>
                 </tr>
                 <tr>
-                    <td><input type="date" name="fechaUnica" id="fechaUnica"></td>
-                    <td><input type="time" name="horaUnica" id="horaUnica"></td>
+                    <td><input type="date" name="fechaUnica" id="fechaUnica" value="{{fecha.4|date:'Y-m-d'}}"></td>
+                    <td><input type="time" name="horaUnica" id="horaUnica" value="{{correo.hora|time:'H:i'}}"></td>
                 </tr>
             </tfoot>
 

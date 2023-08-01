@@ -64,7 +64,7 @@ class RolManager(models.Manager):
     
     def is_rol_nombre(self, rol_id):
         return self.all().filter(
-            Q(rol="Operador") | Q(rol="Asistente") | Q(rol="Administrador")
+            Q(rol="Operador") | Q(rol="Asistente") | Q(rol="Mecánico") | Q(rol="Jefe")
         ).filter(
             id_rol = rol_id
         ).exists()
@@ -165,3 +165,34 @@ class CorreoArchivoManager(models.Manager):
             **extra_fields
         )
         return correoArchivo
+
+class CheckMaquinaManager(models.Manager):
+    def agregar_checks(self, **extra_fields):
+        # correoArchivo = self.create(
+        #     archivo          = archivo,
+        #     correo_id_correo = correo,
+        #     **extra_fields
+        # )
+        # return correoArchivo
+        pass
+
+class InspeccionManager(models.Manager):
+    def agregar_inspeccion(self, **extra_fields):
+        # correoArchivo = self.create(
+        #     archivo          = archivo,
+        #     correo_id_correo = correo,
+        #     **extra_fields
+        # )
+        # return correoArchivo
+        pass
+
+class MantencionManager(models.Manager):
+    def agregar_mantencion(self, **extra_fields):
+        # correoArchivo = self.create(
+        #     archivo          = archivo,
+        #     correo_id_correo = correo,
+        #     **extra_fields
+        # )
+        # return correoArchivo
+        pass
+
