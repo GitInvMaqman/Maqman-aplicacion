@@ -9,79 +9,160 @@
 <form action="{% url 'reportesMaqman:generarMantencion' %}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
     <table>
         <h1>Generar Certificado</h1>
-        <th class="first" colspan="4">Control de Equipos</th>
+        <th class="first" colspan="5">Certificado de Mantenimiento: Minicargadores</th>
         <tr>
-            <td>Cliente:</td>
-            <td colspan="3">{{ form.cliente }}</td>
+            {% if user.r_id_rol.rol == "Mecánico" %}
+                <td>Persona encargada:</td>
+                <td colspan="2">
+                    <input style="background-color: palegreen;"class="text" type="text" name="nombre_usuario"  id="id_nombre_usuario" value="{{ user.p_id_persona.nombres }} {{ user.p_id_persona.apellido_paterno }} {{ user.p_id_persona.apellido_materno }}" readonly>
+                </td>
+                <input type="hidden" name="p_id_persona"  value="{{ user.p_id_persona.id_persona }}">
+            {% else %}
+                <td>Mecánico:</td>
+                <td colspan="2">
+                    <select class="text" name="idUsuarioSelect" class="form-control" required name="nombre_usuario" id="id_nombre_usuario" onchange="changeFunc();">
+                        <option value>- Elegir Mecánico -</option>
+                        {% for m in mecanicos %}
+                        <option value="{{ m.p_id_persona.id_persona }}">{{ m.p_id_persona.nombres }} {{ m.p_id_persona.apellido_paterno }} {{ m.p_id_persona.apellido_materno }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <div id="idUsuarioInput"></div>
+            {% endif %}
+            <td>Fecha:</td>
+            <td>{{form.fecha}}</td>
         </tr>
         <tr>
-            <td>Obra:</td>
-            <td colspan="3">{{ form.obra }}</td>
+            <td>N° Máquina:</td>
+            <td colspan="2">{{ form.numero_maquina }}</td>
+            <td>Horómetro máquina:</td>
+            <td>{{ form.horometro_maq }}</td>
+        </tr>
+    </table>
+    <table style="border-top-left-radius: 0; border-top-right-radius: 0;">
+        <tr>
+            <th colspan="5">Inspección previa a la mantención</th>
+        </tr>
+        <tr>
+            <th style="width: 200px;">¿Qué está inspeccionando?</th>
+            <th style="width: 50px;" class="chk"></th>
+            <th style="width: 350px;">¿Qué está buscando?</th>
+            <th style="width: 50px;" class="chk"></th>
+            <th style="width: 350px;">Estado actual</th>
+        </tr>
+        <tr>
+            <th colspan="5">Estructural</th>
+        </tr>
+        
+        {% for key, value in estructural.items %}
+            <tr style="width: 1040px;">
+                <td style="width: 240px; max-width: 200px;">  
+                    <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly style="width: 240px;">
+                </td>
+                <td style="width: 50px;">  
+                    <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 70px;">
+                </td>
+                <td style="width: 350px;">  
+                    <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="1"></textarea>
+                </td>
+                <td style="width: 50px;">  
+                    <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="X" style="width: 70px;">
+                </td>
+                <td style="width: 350px;">  
+                    <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="1"></textarea>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <th colspan="5">Fluidos</th>
+        </tr>
+        {% for key, value in fluidos.items %}
+            <tr style="width: 1040px;">
+                <td style="width: 240px; max-width: 200px;">  
+                    <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly style="width: 240px;">
+                </td>
+                <td style="width: 50px;">  
+                    <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 70px;">
+                </td>
+                <td style="width: 350px;">  
+                    <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="1"></textarea>
+                </td>
+                <td style="width: 50px;">  
+                    <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="X" style="width: 70px;">
+                </td>
+                <td style="width: 350px;">  
+                    <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="1"></textarea>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <th colspan="5">Interior Cabina</th>
+        </tr>
+        {% for key, value in cabina.items %}
+            <tr style="width: 1040px;">
+                <td style="width: 240px; max-width: 200px;">  
+                    <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly style="width: 240px;">
+                </td>
+                <td style="width: 50px;">  
+                    <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 70px;">
+                </td>
+                <td style="width: 350px;">  
+                    <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="1"></textarea>
+                </td>
+                <td style="width: 50px;">  
+                    <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="X" style="width: 70px;">
+                </td>
+                <td style="width: 350px;">  
+                    <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="1"></textarea>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <ul>
+        {% for c in checks %}
+        <li>
+            <input type="checkbox" name="check_{{c}}" id="idCheck_{{c}}"> Check {{c}}
+        </li>
+        {% endfor %}
+    </ul>
+        
+
+    <table style="border-top-left-radius: 0; border-top-right-radius: 0;">
+        <tr>
+            <th colspan="4">Post-mantención</th>
+        </tr>
+        <tr>
+            <th colspan="4">Descripción de la mantención realizada</th>
+        </tr>
+        <tr>
+            <td colspan="4">
+                {{ form.descripcion }}
+            </td>
+        </tr>
+        <tr>
+            <th colspan="4">Observaciones</th>
+        </tr>
+        <tr>
+            <td colspan="4">
+                {{ form.observacion }}
+            </td>
+        </tr>
+        <tr>
+            <th colspan="4">Insumos utilizados</th>
+        </tr>
+        <tr>
+            <td colspan="4">
+                {{ form.insumos }}
+            </td>
+        </tr>
+        <tr>
+            <th colspan="4">Próxima mantención</th>
         </tr>
         <tr>
             <td>Fecha:</td>
-            <td>{{ form.fecha }}</td>
-            
-            {% if user.r_id_rol.id_rol == 1 %}
-                <td colspan="2">Operador:<input style="background-color: palegreen;"class="text" type="text" name="nombre_usuario"  id="id_nombre_usuario" value="{{ user.p_id_persona.nombres }} {{ user.p_id_persona.apellido_paterno }} {{ user.p_id_persona.apellido_materno }}" readonly></td>
-                <input type="hidden" name="p_id_persona"  value="{{ user.p_id_persona.id_persona }}">
-            {% else %}
-                <td colspan="2">Operador: 
-                    <select class="text" name="idUsuarioSelect" class="form-control" required name="nombre_usuario" id="id_nombre_usuario" onchange="changeFunc();">
-                        <option value>- Elegir Operador -</option>
-                        {% for o in operadores %}
-                        <option value="{{ o.p_id_persona.id_persona }}">{{ o.p_id_persona.nombres }} {{ o.p_id_persona.apellido_paterno }} {{ o.p_id_persona.apellido_materno }}</option>
-                        {% endfor %}
-                    </select>
-                <div id="idUsuarioInput"></div>
-            {% endif %}
-                
-        </tr>
-        <th colspan="4">Horómetro</th>
-        <tr>
-            <td>Hora Ingreso:</td>
-            <td>{{ form.hora_ingreso }}</td>
-            <td>Horómetro Inicial:</td>
-            <td>{{ form.horometro_inicial }}</td>
-        </tr>
-        <tr>
-            <td>Hora Término:</td>
-            <td>{{ form.hora_termino }}</td>
-            <td>Horómetro Final:</td>
-            <td>{{ form.horometro_final }}</td>
-        </tr>
-        <tr>
-            <td>N° Horas Arriendo:</td>
-            <td id="horasArriendo">{{ form.horas_arriendo }}</td>
-            <td>Horómetro Total:</td>
-            <td id="horometroTotal">{{ form.horometro_total }}</td>
-        </tr>
-        <tr>
-            <td>Equipo N°:</td>
-            <td>{{ form.equipo_numero }}</td>
-            <td>Hora Mínima:</td>
-            <td>{{ form.hora_minima }}</td>
-        </tr>
-        <th colspan="4">Accesorios</th>
-        {% for a in accesorios %}
-            
-            {% if a.id_accesorio == 1 or a.id_accesorio == 3 %}
-            <tr>
-                <td id="am{{a.id_accesorio}}" colspan="2">
-                    <input onclick="ChangeColColor(this,'am{{a.id_accesorio}}')" class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}">{{ a.accesorio_minicargador }}
-                </td>
-            {% else %}
-                <td id="am{{a.id_accesorio}}" colspan="2">
-                    <input onclick="ChangeColColor(this,'am{{a.id_accesorio}}')" class="check" type="checkbox" name="accesorios" id="accesorio_{{ a.id_accesorio }}" value="{{ a.id_accesorio }}">{{ a.accesorio_minicargador }}
-                </td>
-            </tr>
-            {% endif %}
-            
-        {% endfor %}
-            
-        <th colspan="4">Observaciones</th>
-        <tr>
-            <td colspan="4">{{ form.observaciones }}</td>
+            <td>{{ form.prox_mantencion }}</td>
+            <td>Horómetro:</td>
+            <td>{{ form.prox_horometro }}</td>
         </tr>
     </table>
     <table style="border-radius: 0;">
@@ -99,27 +180,16 @@
                     <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen del reporte físico" id="imgReport" height="150px" width="150px">
                 </center>
             </td>
-            <td class="td-img">
-                <label for="id_img_maquinaria">
-                    <center>
-                        Maquinaria
-                        <br>
-                        <input oninput="mostrarImagen(this, 'imgMaquinaria');" class="file" required type="file" name="img_maquinaria" id="id_img_maquinaria" accept="image/png, image/jpg, image/gif, image/jpeg"/>
-                        <br>
-                    </center>
-                </label>
-                <center>
-                    <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen de la Maquinaria" id="imgMaquinaria" height="150px" width="150px">
-                </center>
-            </td>
         </tr>
         <tr>
-            <td colspan="2">
-                <input class="btn-submit" type="submit" value="Mandar Reporte">
+            <td>
+                <input class="btn-submit" type="submit" value="Mandar Certificado">
             </td>
         </tr>
     </table>
 </form>
+
+
 <script src="{% static 'js/calculos.js'%} "></script>
 <script src="{% static 'js/general.js'%} "></script>
 {% endblock contenido %}

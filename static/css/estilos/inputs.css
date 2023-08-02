@@ -31,7 +31,7 @@ input[type="checkbox"]:checked ~ td{
     background-color: palegreen;
 }
 input, textarea, select{
-    font-size: 2vw;
+    font-size: 1.4vw;
 }
 input.text, select{
     width: 100%;

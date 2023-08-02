@@ -579,7 +579,9 @@ class ModificacionesTablas():
         messages.success(request, titulo+texto)
         # return HttpResponseRedirect('/Detalle-Usuario/'+idPersona)
         return HttpResponseRedirect('/Gestión-Usuarios/')
-    
+
+    def crear_mantencion(request, datos):
+        pass
 class operacionesFechas():
     def reporte_mes(mes):
         reportes = Reporte.objects.filter(valido = 1).order_by('fecha')

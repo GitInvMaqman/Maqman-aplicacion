@@ -287,7 +287,7 @@ class MantencionForm(forms.ModelForm):
                 'style'     : 'resize: none; font-family: monospace;',
                 'required':'true',
             }),
-            'observación': forms.Textarea(attrs={
+            'observacion': forms.Textarea(attrs={
                 'class': 'txtarea',
                 'placeholder': 'Observaciones',
                 'cols'      : '30',

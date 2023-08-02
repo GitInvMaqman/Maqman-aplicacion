@@ -1,6 +1,9 @@
 table, th, td, select{
-    font-size: 2vw;
+    font-size: 1.4vw;
     color: black;
+}
+th.chk{
+    width: 10px;
 }
 table{
     border: 2px solid black;

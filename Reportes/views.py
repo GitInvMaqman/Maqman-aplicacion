@@ -616,13 +616,8 @@ class GenerarMantencionFormView(LoginRequiredMixin, FormView):
 
     # Validación del formulario y posterior creación de tarea.
     def form_valid(self, form):
-        # datos      = form.cleaned_data
-        # idPersona  = self.request.POST.get('p_id_persona')
-        # imgMaquina = self.request.FILES.get('img_maquinaria')
-        # imgReport  = self.request.FILES.get('img_report')
-        # lista      = self.request.POST.getlist('accesorios')
-
-        # reporteCreado = ModificacionesTablas.crear_reporte(self.request, datos, idPersona, imgMaquina, imgReport)
+        datos      = form.cleaned_data
+        reporteCreado = ModificacionesTablas.crear_reporte(self.request, datos)
         # if lista:
         #     ModificacionesTablas.crear_detalle(lista, reporteCreado)
 
@@ -638,7 +633,16 @@ class GenerarMantencionFormView(LoginRequiredMixin, FormView):
         context               = super().get_context_data(**kwargs)
         context['nombres']    = self.request.user.p_id_persona.nombres.split()
         # context["accesorios"] = Accesorio.objects.all()
-        # context["mecanicos"] = Usuario.objects.filter(r_id_rol = 1) # CAMBIAR
+        idRol = Rol.objects.get(rol = "Mecánico")
+        context["mecanicos"] = Usuario.objects.filter(r_id_rol = idRol)
+        estructural = {1:"Estado general", 2:"Luces",3:"Motor",4:"Ruedas",5:"Frenos",6:"Tracción",7:"Check Engine",8:"Eléctrica",9:"Hidráulica",10:"Tubo de escape",11:"Grasa",12:"Sistema de ventilación",13:"Turbo"}
+        context['estructural'] = estructural
+        fluidos = {14:"Aceite motor",15:"Agua verde o coolant",16:"Aceite hidráulico",17:"Filtro aire interior",18:"Filtro aire exterior",19:"Filtro petróleo",20:"Filtro petróleo linea",21:"Filtro petróleo",22:"Filtro aceite motor",23:"Aceite de cadenas",24:"Filtro hidráulico"}
+        context['fluidos'] = fluidos
+        cabina = {25:"Interior general",26:"Estado del asiento",27:"Cinturón de seguridad",28:"Indicadores tablero",29:"Ventanas",30:"Horómetros",31:"Botones joystick"}
+        context['cabina'] = cabina
+        checks = range(1,16)
+        context['checks'] = checks
         return context
 
 class VerMantencionesView(LoginRequiredMixin, TemplateView):
