@@ -39,9 +39,22 @@ a{
     align-content: center;
 }
 
+.caja.inicio-sesion{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.texto-maqman{
+    font-size: 40px;
+}
 /* ------------------------------------------------------ */
 /* Pantallas medianas, punto de quiebre: 1024px de ancho  */
 /* ------------------------------------------------------ */
+@media only screen and (max-width: 64em){
+    .texto-maqman{
+        font-size: 35px;
+    }
+}
 @media only screen and (min-width: 64em) {
     body{
         display: flex;
