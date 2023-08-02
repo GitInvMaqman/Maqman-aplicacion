@@ -68,6 +68,7 @@ class RolManager(models.Manager):
         ).filter(
             id_rol = rol_id
         ).exists()
+    
 
     def crear_rol(self, nombreRol, **extra_fields):
         rol = self.create(
