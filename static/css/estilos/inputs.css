@@ -1,7 +1,7 @@
 input:valid,
 select:valid,
 textarea:valid{
-    border: 6px solid green;
+    border: 2px solid palegreen;
     /* background-color: palegreen; */
     transition: all .2s ease-in-out;
 }

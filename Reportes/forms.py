@@ -19,8 +19,10 @@ class Login1Form(forms.ModelForm):
         widgets = {
             'rut_usuario'     : forms.TextInput(attrs={
                 'class'       : 'text',
+                'id'          : "idRut",
                 'placeholder' : 'Rut sin puntos y con guión',
                 'required'    : 'true',
+                'oninput'     :"formatRut('idRut')",
             }),
         }
 

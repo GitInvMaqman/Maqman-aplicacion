@@ -56,7 +56,7 @@
             <tr>
                 <td>RUT:</td>
                 <td>
-                    <input class="text" type="text" name="rut_usuario" id="id_rut_usuario" value="{{ usuario.rut_usuario }}" placeholder="12345678-9">
+                    <input maxlength="10" oninput="formatRut('id_rut_usuario')" class="text" type="text" name="rut_usuario" id="id_rut_usuario" value="{{ usuario.rut_usuario }}" placeholder="12345678-9">
                 </td>
             </tr>
             <th colspan="3">Contacto:</th>

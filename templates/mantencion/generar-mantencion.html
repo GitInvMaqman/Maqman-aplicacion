@@ -60,16 +60,16 @@
                     <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly class="inspeccion">
                 </td>
                 <td style="width: 50px;">  
-                    <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 70px;">
+                    <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 100%;">
                 </td>
                 <td style="width: 350px;">  
-                    <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="1"></textarea>
+                    <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="1" style="resize: none; font-family: monospace;"></textarea>
                 </td>
                 <td style="width: 50px;">  
-                    <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="X" style="width: 70px;">
+                    <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="X" style="width: 100%;">
                 </td>
                 <td style="width: 350px;">  
-                    <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="1"></textarea>
+                    <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="1" style="resize: none; font-family: monospace;"></textarea>
                 </td>
             </tr>
         {% endfor %}
@@ -82,16 +82,16 @@
                     <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly class="inspeccion">
                 </td>
                 <td style="width: 50px;">  
-                    <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 70px;">
+                    <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 100%;">
                 </td>
                 <td style="width: 350px;">  
-                    <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="1"></textarea>
+                    <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="1" style="resize: none; font-family: monospace;"></textarea>
                 </td>
                 <td style="width: 50px;">  
-                    <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="X" style="width: 70px;">
+                    <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="X" style="width: 100%;">
                 </td>
                 <td style="width: 350px;">  
-                    <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="1"></textarea>
+                    <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="1" style="resize: none; font-family: monospace;"></textarea>
                 </td>
             </tr>
         {% endfor %}
@@ -104,61 +104,20 @@
                     <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly class="inspeccion">
                 </td>
                 <td style="width: 50px;">  
-                    <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 70px;">
+                    <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 100%;">
                 </td>
                 <td style="width: 350px;">  
-                    <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="1"></textarea>
+                    <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="1" style="resize: none; font-family: monospace;"></textarea>
                 </td>
                 <td style="width: 50px;">  
-                    <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="X" style="width: 70px;">
+                    <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="X" style="width: 100%;">
                 </td>
                 <td style="width: 350px;">  
-                    <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="1"></textarea>
+                    <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="1" style="resize: none; font-family: monospace;"></textarea>
                 </td>
             </tr>
         {% endfor %}
     </table>
-    <style>
-        input.inspeccion{
-            width: 300px;
-        }
-
-        input.checkMaquina + label{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        input.checkMaquina + label>center{
-            background-color: red;
-            color: white;
-            width: 50px; height: 50px;
-            margin: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        input.checkMaquina:checked + label>center{
-            background-color: green;
-            color: black;
-        }
-        img.img_minicargador{
-            width: 49%;
-        }
-        @media only screen and (max-width: 64em) {
-            input.inspeccion{
-                width: 200px;
-            }
-            td.img_minicargador{
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-direction: column;
-            }
-            img.img_minicargador{
-                width: 80%;
-            }
-        }
-    </style>
     <table style="border-top-left-radius: 0; border-top-right-radius: 0;">
         <tr>
             <td style="height: 100%;">
@@ -220,19 +179,72 @@
     <table style="border-radius: 0;">
         <tr>
             <td class="td-img">
-                <label for="id_img_report">
+                <label for="id_img_mantencion">
                     <center>
-                        Reporte físico
+                        Subir archivo
+                        <input onChange="onLoadImage(event.target.files)" class="file desaparece" required type="file" name="img_mantencion" id="id_img_mantencion" accept=".pdf, .docx, .doc, .xlsx">
                         <br>
-                        <input oninput="mostrarImagen(this, 'imgReport');" class="file" required type="file" name="img_report" id="id_img_report" accept="image/png, image/jpg, image/gif, image/jpeg">
-                        <br>
+                        <span id="nombreArchivo"> - </span>
+                        <!-- <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen del reporte físico" id="imgMantencion" height="150px" width="150px"> -->
                     </center>
                 </label>
-                <center>
-                    <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen del reporte físico" id="imgReport" height="150px" width="150px">
-                </center>
             </td>
+            
         </tr>
+        <style>
+            input.inspeccion{
+                width: 100%;
+            }
+    
+            input.checkMaquina + label{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            input.checkMaquina + label>center{
+                background-color: red;
+                color: white;
+                width: 50px; height: 50px;
+                margin: 5px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            input.checkMaquina:checked + label>center{
+                background-color: green;
+                color: black;
+            }
+            img.img_minicargador{
+                width: 49%;
+            }
+            @media only screen and (max-width: 64em) {
+                input.inspeccion{
+                    width: 200px;
+                }
+                td.img_minicargador{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                }
+                img.img_minicargador{
+                    width: 80%;
+                }
+            }
+        </style>
+        <script>
+            function onLoadImage(files){
+                console.log(files)
+                if (files && files[0]) {
+                    console.log(files[0])
+                    const objetoURL = URL.createObjectURL(files[0]);
+                    document
+                    .getElementById('nombreArchivo')
+                    .innerHTML = files[0].name
+                    // + "<img src='"+objetoURL+"' alt='"+files[0].type+"'>"
+                }
+            }
+        </script>
         <tr>
             <td>
                 <input class="btn-submit" type="submit" value="Mandar Certificado">
@@ -240,8 +252,4 @@
         </tr>
     </table>
 </form>
-
-
-<script src="{% static 'js/calculos.js'%} "></script>
-<script src="{% static 'js/general.js'%} "></script>
 {% endblock contenido %}

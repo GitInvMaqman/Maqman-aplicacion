@@ -13,6 +13,24 @@ function mostrarImagen(input, prev){
         };
     });
 }
+function formatRut(idRut){
+    // XXXXXXXX-X
+    const rut = document.getElementById(idRut).value;
+    const newRut = rut.replace(/\./g,'').replace(/\-/g, '').trim().toLowerCase();
+    const lastDigit = newRut.substr(-1, 1);
+    const rutDigit = newRut.substr(0, newRut.length-1)
+    let format = '';
+    for (let i = rutDigit.length; i > 0; i--) {
+        const e = rutDigit.charAt(i-1);
+        format = e.concat(format);
+        // XX.XXX.XXX-X
+        // if (i % 3 === 0){
+        //     format = '.'.concat(format);
+        // }
+    }
+    format = format.concat('-').concat(lastDigit);
+    document.getElementById(idRut).value = format
+  }
 function ChangeColColor(chkCol,col) {
     var varCol = document.getElementById(col);
     var varColor = "gainsboro";
