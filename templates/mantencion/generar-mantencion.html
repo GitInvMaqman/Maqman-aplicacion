@@ -57,7 +57,7 @@
         {% for key, value in estructural.items %}
             <tr style="width: 1040px;">
                 <td style="width: 240px; max-width: 200px;">  
-                    <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly style="width: 300px;">
+                    <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly class="inspeccion">
                 </td>
                 <td style="width: 50px;">  
                     <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 70px;">
@@ -79,7 +79,7 @@
         {% for key, value in fluidos.items %}
             <tr style="width: 1040px;">
                 <td style="width: 240px; max-width: 200px;">  
-                    <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly style="width: 300px;">
+                    <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly class="inspeccion">
                 </td>
                 <td style="width: 50px;">  
                     <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 70px;">
@@ -101,7 +101,7 @@
         {% for key, value in cabina.items %}
             <tr style="width: 1040px;">
                 <td style="width: 240px; max-width: 200px;">  
-                    <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly style="width: 300px;">
+                    <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly class="inspeccion">
                 </td>
                 <td style="width: 50px;">  
                     <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 70px;">
@@ -118,13 +118,65 @@
             </tr>
         {% endfor %}
     </table>
-    <ul>
-        {% for c in checks %}
-        <li>
-            <input type="checkbox" name="check_{{c}}" id="idCheck_{{c}}"> Check {{c}}
-        </li>
-        {% endfor %}
-    </ul>
+    <style>
+        input.inspeccion{
+            width: 300px;
+        }
+
+        input.checkMaquina + label{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        input.checkMaquina + label>center{
+            background-color: red;
+            color: white;
+            width: 50px; height: 50px;
+            margin: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        input.checkMaquina:checked + label>center{
+            background-color: green;
+            color: black;
+        }
+        img.img_minicargador{
+            width: 49%;
+        }
+        @media only screen and (max-width: 64em) {
+            input.inspeccion{
+                width: 200px;
+            }
+            td.img_minicargador{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+            }
+            img.img_minicargador{
+                width: 80%;
+            }
+        }
+    </style>
+    <table>
+        <tr>
+            <td style="height: 100%;">
+                {% for c in checks %}
+                    <input class="checkMaquina desaparece" type="checkbox" name="check_{{c}}" id="idCheck_{{c}}">
+                    <label for="idCheck_{{c}}">
+                        <center>
+                            {{c}}
+                        </center>
+                    </label>
+                {% endfor %}
+            </td>
+            <td class="img_minicargador">
+                <img class="img_minicargador" src="{% static 'img/minicargador_lado.png' %}" alt="">
+                <img class="img_minicargador" src="{% static 'img/minicargador_atras.png' %}" alt="">
+            </td>
+        </tr>
+    </table>
         
 
     <table style="border-top-left-radius: 0; border-top-right-radius: 0;">
