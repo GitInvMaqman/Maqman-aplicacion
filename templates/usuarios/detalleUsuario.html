@@ -89,7 +89,12 @@
                         {% for r in roles %}
                             
                             {% if usuario.r_id_rol != r %}
-                                <option value="{{ r.id_rol }}">{{ r.rol }}</option>
+                            
+                            {% if r.rol != "Jefe" %}
+                            <option value="{{ r.id_rol }}">{{ r.rol }}</option>
+                                
+                            {% endif %}
+                                
                             {% endif %}
                                 
                         {% endfor %}
