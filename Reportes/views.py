@@ -172,7 +172,7 @@ class GestionUsuarioFormView(LoginRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         context             = super().get_context_data(**kwargs)
         context['nombres']  = self.request.user.p_id_persona.nombres.split()
-        context["usuarios"] = Usuario.objects.order_by('-is_active', 'r_id_rol')
+        context["usuarios"] = Usuario.objects.order_by('-is_active', 'r_id_rol', 'p_id_persona')
         context["roles"]    = Rol.objects.all()
         return context
     
@@ -183,9 +183,6 @@ class GestionUsuarioFormView(LoginRequiredMixin, FormView):
             return ReportesExcel.reporte_operador(request, pk)
         else:
             return Login.verificar_permisos_rol(permiso, request)
-
-# --------------------------------------------------------------------------------------------------------------- #
-# --------------------------------------------------------------------------------------------------------------- #
 
 class DetalleUsuarioFormView(LoginRequiredMixin, DetailView):
     model               = Usuario
@@ -542,7 +539,7 @@ class CorreosListView(LoginRequiredMixin, ListView):
         else:
             return Login.verificar_permisos_rol(permiso, request)
     def get_queryset(self):
-        return Correo.objects.all().order_by('-fecha')
+        return Correo.objects.all().order_by('-tipo_envio_id_tipo', '-fecha')
 
     # Obtención de otros datos.
     def get_context_data(self, *args, **kwargs):
@@ -616,10 +613,9 @@ class GenerarMantencionFormView(LoginRequiredMixin, FormView):
 
     # Validación del formulario y posterior creación de tarea.
     def form_valid(self, form):
-        datos      = form.cleaned_data
-        reporteCreado = ModificacionesTablas.crear_reporte(self.request, datos)
-        # if lista:
-        #     ModificacionesTablas.crear_detalle(lista, reporteCreado)
+        datos            = form.cleaned_data
+        mantencionCreada = ModificacionesTablas.crear_mantencion(self.request, datos)
+        ModificacionesTablas.crear_inspeccion(self.request, mantencionCreada)
 
         return super(GenerarMantencionFormView, self).form_valid(form)
 

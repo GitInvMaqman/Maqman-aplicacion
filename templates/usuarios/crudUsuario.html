@@ -48,7 +48,7 @@
                 </tr>
                 <tr>
                     <td>RUT:</td>
-                    <td><input oninput="formatRut('id_rut_usuario')" type="text" name="rut_usuario" id="id_rut_usuario" placeholder="12345678-9" required></td>
+                    <td><input oninput="formatRut('id_rut_usuario')" type="text" name="rut_usuario" id="id_rut_usuario" placeholder="12345678-9" required maxlength="10"></td>
                 </tr>
                 <th colspan="3">Contacto:</th>
                 <tr>
@@ -67,7 +67,9 @@
                             <option value selected> - Seleccionar Rol -</option>
                         
                             {% for r in roles %}
-                                <option value="{{ r.id_rol }}">{{ r.rol }}</option>
+                                {% if r.rol != "Jefe" %}
+                                    <option value="{{ r.id_rol }}">{{ r.rol }}</option>
+                                {% endif %}
                             {% endfor %}
                             
                         </select>

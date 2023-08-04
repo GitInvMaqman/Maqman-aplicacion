@@ -114,9 +114,7 @@
                 <a class="sidenav__list-item" href="{% url 'reportesMaqman:generarMantencion' %}">
                     Generar mantención
                 </a>
-
-                
-                <a class="sidenav__list-item" 
+                <!-- <a class="sidenav__list-item" 
                 {% if user.r_id_rol.rol == "Mecánico" %}
                 href="{% url 'reportesMaqman:mantencionesInvalidas' %}">
                 {% else %}
@@ -129,7 +127,7 @@
                 <a class="sidenav__list-item" href="{% url 'reportesMaqman:descargarMantencion' %}">
                     Descargar certificados
                 </a>
-                {% endif %}
+                {% endif %} -->
             </div>
         {% endif %}
             

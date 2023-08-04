@@ -231,7 +231,7 @@ class Mantencion(models.Model):
     insumos         = models.CharField(max_length=512)
     prox_mantencion = models.CharField(max_length=200)
     prox_horometro  = models.DecimalField(max_digits=10, decimal_places=1)
-    archivo         = models.CharField(max_length=200)
+    archivo         = models.FileField(upload_to="archivos_mantenciones", null=True)
 
     objects = MantencionManager()
     class Meta:

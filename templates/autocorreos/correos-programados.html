@@ -11,7 +11,17 @@
         <div class="cartas-principales">
             {% for c in correos %}
                 <div class="carta-principal">
-                    <a  href="{% url 'reportesMaqman:detalleCorreo' c.id_correo %}" class="card">
+                    <a  href="{% url 'reportesMaqman:detalleCorreo' c.id_correo %}" class="card" 
+                    {% if c.tipo_envio_id_tipo.tipo == "Anual" %}
+                        style="background-color: paleturquoise;"
+                    {% elif c.tipo_envio_id_tipo.tipo == "Mensual" %}
+                        style="background-color: palegoldenrod;"
+                    {% elif c.tipo_envio_id_tipo.tipo == "Semanal" %}
+                        style="background-color: palegreen;"
+                    {% elif c.tipo_envio_id_tipo.tipo == "Una sola vez" %}
+                        style="background-color: palevioletred;"
+                    {% endif %}
+                        >
                         <div class="img-card">
                             {% for i in imagenes %}
                                 {% if i.correo_id_correo == c %}

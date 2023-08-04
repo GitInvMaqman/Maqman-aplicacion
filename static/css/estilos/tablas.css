@@ -1,5 +1,5 @@
 table, th, td, select{
-    font-size: 1.4vw;
+    font-size: 2.2vw;
     color: black;
 }
 th.chk{
@@ -82,6 +82,9 @@ table.excel td {
 
 /* Non-mobile styles, 1024px breakpoint */
 @media only screen and (min-width: 64em) {
+    table, th, td, select{
+        font-size: 1.4vw;
+    }
     .tabla-usuario{
         width: 40%;
         margin-left: 15px;

@@ -44,31 +44,31 @@
             <th colspan="5">Inspección previa a la mantención</th>
         </tr>
         <tr>
-            <th style="width: 200px;">¿Qué está inspeccionando?</th>
-            <th style="width: 50px;" class="chk"></th>
-            <th style="width: 350px;">¿Qué está buscando?</th>
-            <th style="width: 50px;" class="chk"></th>
-            <th style="width: 350px;">Estado actual</th>
+            <th style="width: 20px;">¿Qué está inspeccionando?</th>
+            <th style="width: 5%;" class="chk"></th>
+            <th style="width: 35%;">¿Qué está buscando?</th>
+            <th style="width: 5%;" class="chk"></th>
+            <th style="width: 35%;">Estado actual</th>
         </tr>
         <tr>
             <th colspan="5">Estructural</th>
         </tr>
         
         {% for key, value in estructural.items %}
-            <tr style="width: 1040px;">
-                <td style="width: 240px; max-width: 200px;">  
+            <tr>
+                <td>  
                     <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly class="inspeccion">
                 </td>
-                <td style="width: 50px;">  
+                <td>  
                     <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 100%;">
                 </td>
-                <td style="width: 350px;">  
+                <td>  
                     <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="1" style="resize: none; font-family: monospace;"></textarea>
                 </td>
-                <td style="width: 50px;">  
+                <td>  
                     <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="X" style="width: 100%;">
                 </td>
-                <td style="width: 350px;">  
+                <td>  
                     <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="1" style="resize: none; font-family: monospace;"></textarea>
                 </td>
             </tr>
@@ -77,20 +77,20 @@
             <th colspan="5">Fluidos</th>
         </tr>
         {% for key, value in fluidos.items %}
-            <tr style="width: 1040px;">
-                <td style="width: 240px; max-width: 200px;">  
+            <tr>
+                <td>  
                     <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly class="inspeccion">
                 </td>
-                <td style="width: 50px;">  
+                <td>  
                     <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 100%;">
                 </td>
-                <td style="width: 350px;">  
+                <td>  
                     <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="1" style="resize: none; font-family: monospace;"></textarea>
                 </td>
-                <td style="width: 50px;">  
+                <td>  
                     <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="X" style="width: 100%;">
                 </td>
-                <td style="width: 350px;">  
+                <td>  
                     <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="1" style="resize: none; font-family: monospace;"></textarea>
                 </td>
             </tr>
@@ -99,26 +99,26 @@
             <th colspan="5">Interior Cabina</th>
         </tr>
         {% for key, value in cabina.items %}
-            <tr style="width: 1040px;">
-                <td style="width: 240px; max-width: 200px;">  
+            <tr>
+                <td>  
                     <input type="text" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value }}" readonly class="inspeccion">
                 </td>
-                <td style="width: 50px;">  
+                <td>  
                     <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="X" style="width: 100%;">
                 </td>
-                <td style="width: 350px;">  
+                <td>  
                     <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="1" style="resize: none; font-family: monospace;"></textarea>
                 </td>
-                <td style="width: 50px;">  
+                <td>  
                     <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="X" style="width: 100%;">
                 </td>
-                <td style="width: 350px;">  
+                <td>  
                     <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="1" style="resize: none; font-family: monospace;"></textarea>
                 </td>
             </tr>
         {% endfor %}
     </table>
-    <table style="border-top-left-radius: 0; border-top-right-radius: 0;">
+    <table style="border-top-left-radius: 0; border-top-right-radius: 0;"style="height: 100%;">
         <tr>
             <td style="height: 100%;">
                 {% for c in checks %}
@@ -130,7 +130,7 @@
                     </label>
                 {% endfor %}
             </td>
-            <td class="img_minicargador">
+            <td style="height: 100%;" class="img_minicargador">
                 <img class="img_minicargador" src="{% static 'img/minicargador_lado.png' %}" alt="">
                 <img class="img_minicargador" src="{% static 'img/minicargador_atras.png' %}" alt="">
             </td>
@@ -247,7 +247,7 @@
         </script>
         <tr>
             <td>
-                <input class="btn-submit" type="submit" value="Mandar Certificado">
+                <button class="btn-submit btn-1" style="width: 100%; height: 70px; background-color: rgb(255, 148, 148); color: gray;" disabled>Mandar Certificado</button>
             </td>
         </tr>
     </table>

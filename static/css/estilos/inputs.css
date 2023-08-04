@@ -78,3 +78,8 @@ label > center{
 label > center:hover{
     background-color: orange;
 }
+@media only screen and (max-width:64em){
+    input, textarea, select{
+        font-size: 2.2vw;
+    }
+}

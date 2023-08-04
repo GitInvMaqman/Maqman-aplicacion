@@ -581,7 +581,61 @@ class ModificacionesTablas():
         return HttpResponseRedirect('/Gestión-Usuarios/')
 
     def crear_mantencion(request, datos):
+        checks = {}
+        for i in range(1,16):
+            check = request.POST.get(f'check_{i}')
+            if check == None:
+                check = False
+            else:
+                check = True
+            checks[f'check_{i}'] = check
+        checkmaquina = ModificacionesTablas.crear_checkmaquina(checks)
+        usuario = Usuario.objects.get(p_id_persona = request.POST.get('p_id_persona'))
+        mantencion = Mantencion.objects.agregar_mantencion(
+            usuario,
+            datos['fecha'],
+            datos['numero_maquina'],
+            datos['horometro_maq'],
+            checkmaquina,
+            datos['descripcion'],
+            datos['observacion'],
+            datos['insumos'],
+            datos['prox_mantencion'],
+            datos['prox_horometro'],
+            request.FILES.get('img_mantencion')
+        )
+        return mantencion
+    def crear_checkmaquina(checks):
+        checkMaquinacreado = Checkmaquina.objects.agregar_checks(
+            checks['check_1'],
+            checks['check_2'],
+            checks['check_3'],
+            checks['check_4'],
+            checks['check_5'],
+            checks['check_6'],
+            checks['check_7'],
+            checks['check_8'],
+            checks['check_9'],
+            checks['check_10'],
+            checks['check_11'],
+            checks['check_12'],
+            checks['check_13'],
+            checks['check_14'],
+            checks['check_15']
+        )
+        return checkMaquinacreado
+    def crear_inspeccion(request, mantencion):
+        for i in range(1,32):
+            Inspeccion.objects.agregar_inspeccion(
+                mantencion,
+                request.POST.get(f'inspeccion{i}'),
+                request.POST.get(f'chk1_{i}'),
+                request.POST.get(f'busqueda{i}'),
+                request.POST.get(f'chk2_{i}'),
+                request.POST.get(f'estado_{i}')
+            )
         pass
+
 class operacionesFechas():
     def reporte_mes(mes):
         reportes = Reporte.objects.filter(valido = 1).order_by('fecha')

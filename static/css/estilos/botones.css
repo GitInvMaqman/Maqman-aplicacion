@@ -141,7 +141,8 @@ margin-left: 5px;
 }
 
 .active:after {
-content: "\2212";
+/* content: "\2212"; */
+content: '\002B';
 }
 
 .panel {
