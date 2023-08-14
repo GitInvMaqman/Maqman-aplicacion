@@ -121,12 +121,51 @@ function DesactivarActivarUsuario(isActive, nombreCompleto) {
         }
     })
 }
+function validarMantencion(valido, nombreCompleto, fecha) {
+    if (valido == 1) {
+        var validez = 'inválidar'
+        var accion1 = ''
+        var accion2 = 'ya <strong style="color:red;">NO estará</strong>'
+    } else if (valido == 0) {
+        var validez = 'válidar'
+        var accion1 = 'ya <strong style="color:red;">NO</strong> '
+        var accion2 = '<strong style="color:red;">pasará a estar</strong>'
+    }
+    const titulo = '<h2>¿Estás seguro de querer <strong style="color:red;">' + validez + '</strong> este certificado?</h2>'
+    let   texto  = '<p style="font-size:24px;"><strong style="color:red;">' + validez.charAt(0).toUpperCase() + validez.slice(1) + 'ás</strong> '
+    texto       += 'el certificado realizado por <strong style="color:blue;">"' + nombreCompleto + '"</strong> del <strong style="color:blue;">"' + fecha + '"</strong>, ';
+    texto       += 'con esto, el certificado ' + accion1 + 'se podrá editar por parte de un mecánico y ' + accion2 + ' en el historial de certificados en excel.</p>';
+    Swal.fire({
+        html: titulo+texto,
+        icon: 'warning',
+        showDenyButton: true,
+        denyButtonText: 'Si, ' + validez,
+        confirmButtonText: 'No, cancelar',
+        backdrop: 'rgba(255, 0, 0, 0.1)',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const titulo = '<h2>Cancelado</h2>'
+            const texto = '<p style="font-size:24px;">No se <strong style="color:red;">' + validez + 'á</strong> el certificado.</p>'
+            Swal.fire({
+                html: titulo+texto,
+                icon: 'info',
+                confirmButtonText: 'Ok',
+                backdrop: 'rgba(0, 0, 255, 0.1)',
+            })
+        } else if (result.isDenied) {
+            const titulo = '<h2>¡Ok!</h2>'
+            const texto  = '<p style="font-size:24px;">Se <strong style="color:red;">' + validez + 'á</strong> el certificado de <strong style="color:blue;">"' + nombreCompleto + '"</strong> en los próximos segundos...</p>'
+            Swal.fire({
+                html: titulo+texto,
+                icon: 'success',
+                confirmButtonText: 'Ok',
+                backdrop: 'rgba(0, 255, 0, 0.1)',
+            })
+            setTimeout(function(){ document.forms["formulario-validar-mantencion"].submit(); }, 2000);
+        }
+    })
+}
 function validarReporte(valido, nombreCompleto, fecha) {
-    console.log(valido)
-    console.log(nombreCompleto)
-    console.log(fecha)
-    console.log('---------------------------')
-    
     if (valido == 1) {
         var validez = 'inválidar'
         var accion1 = ''

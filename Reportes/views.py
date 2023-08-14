@@ -70,20 +70,8 @@ class LogoutView(View):
 # --------------------------------------------------------------------------------------------------------------- #
 
 # ------------------------- #
-# Usuario                   #
+# Vistas                    #
 # ------------------------- #
-
-# --------------------------------------------------------------------------------------------------------------- #
-# --------------------------------------------------------------------------------------------------------------- #
-
-class PerfilTemplateView(LoginRequiredMixin, TemplateView):
-    template_name = "principal/perfil.html"
-
-    # Obtención de otros datos.
-    def get_context_data(self, **kwargs):
-        context            = super().get_context_data(**kwargs)
-        context['nombres'] = self.request.user.p_id_persona.nombres.split()
-        return context
 
 # --------------------------------------------------------------------------------------------------------------- #
 # --------------------------------------------------------------------------------------------------------------- #
@@ -122,6 +110,25 @@ class MantencionesView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context               = super().get_context_data(**kwargs)
         context['nombres']    = self.request.user.p_id_persona.nombres.split()
+        return context
+
+# --------------------------------------------------------------------------------------------------------------- #
+# --------------------------------------------------------------------------------------------------------------- #
+
+# ------------------------- #
+# Usuario                   #
+# ------------------------- #
+
+# --------------------------------------------------------------------------------------------------------------- #
+# --------------------------------------------------------------------------------------------------------------- #
+
+class PerfilTemplateView(LoginRequiredMixin, TemplateView):
+    template_name = "principal/perfil.html"
+
+    # Obtención de otros datos.
+    def get_context_data(self, **kwargs):
+        context            = super().get_context_data(**kwargs)
+        context['nombres'] = self.request.user.p_id_persona.nombres.split()
         return context
 
 # --------------------------------------------------------------------------------------------------------------- #
@@ -590,8 +597,8 @@ class CorreoDetailView(LoginRequiredMixin, DetailView):
         context['fecha'] = {1:fecha1, 2:fecha2, 3:fecha3, 4:fecha4}
         return context
 
-    # def editar_report(request):
-    #     return ModificacionesTablas.editar_report(request)
+    def editar_correo(request):
+        return ModificacionesTablas.editar_correo(request)
 
     # def validar_report(request):
     #     return ModificacionesTablas.validar_report(request)
@@ -605,6 +612,7 @@ class CorreoDetailView(LoginRequiredMixin, DetailView):
 
 # --------------------------------------------------------------------------------------------------------------- #
 # --------------------------------------------------------------------------------------------------------------- #
+
 class GenerarMantencionFormView(LoginRequiredMixin, FormView):
     model         = Mantencion
     form_class    = MantencionForm
@@ -625,10 +633,9 @@ class GenerarMantencionFormView(LoginRequiredMixin, FormView):
         return super(GenerarMantencionFormView, self).form_invalid(form)
 
     # Obtención de otros datos.
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, **kwargs):
         context               = super().get_context_data(**kwargs)
         context['nombres']    = self.request.user.p_id_persona.nombres.split()
-        # context["accesorios"] = Accesorio.objects.all()
         idRol = Rol.objects.get(rol = "Mecánico")
         context["mecanicos"] = Usuario.objects.filter(r_id_rol = idRol)
         estructural = {1:"Estado general", 2:"Luces",3:"Motor",4:"Ruedas",5:"Frenos",6:"Tracción",7:"Check Engine",8:"Eléctrica",9:"Hidráulica",10:"Tubo de escape",11:"Grasa",12:"Sistema de ventilación",13:"Turbo"}
@@ -641,6 +648,9 @@ class GenerarMantencionFormView(LoginRequiredMixin, FormView):
         context['checks'] = checks
         return context
 
+# --------------------------------------------------------------------------------------------------------------- #
+# --------------------------------------------------------------------------------------------------------------- #
+
 class VerMantencionesView(LoginRequiredMixin, TemplateView):
     template_name = "mantencion/ver-mantencion.html"
 
@@ -651,16 +661,16 @@ class VerMantencionesView(LoginRequiredMixin, TemplateView):
         return context
 
 class MantencionesValidosListView(LoginRequiredMixin, ListView):
-    model               = Reporte
+    model               = Mantencion
     paginate_by         = 20
-    template_name       = "reportes/reportes.html"
-    context_object_name = "reportes"
+    template_name       = "mantencion/mantenciones.html"
+    context_object_name = "mantenciones"
 
-    # Obtiene los reportes válidos y los ordena por fecha
+    # Obtiene los mantenciones válidos y los ordena por fecha
     def get_queryset(self):
-        if self.request.user.r_id_rol.rol == "Operador":
-            return Reporte.objects.filter(u_p_id_persona = self.request.user, valido = 0).order_by('-fecha')
-        return Reporte.objects.filter(valido = 0).order_by('-fecha')
+        if self.request.user.r_id_rol.rol == "Mecánico":
+            return Mantencion.objects.filter(u_p_id_persona = self.request.user, valido = 0).order_by('-fecha')
+        return Mantencion.objects.filter(valido = 1).order_by('-fecha')
 
     # Obtención de otros datos.
     def get_context_data(self, **kwargs):
@@ -669,16 +679,16 @@ class MantencionesValidosListView(LoginRequiredMixin, ListView):
         return context
 
 class MantencionesInvalidosListView(LoginRequiredMixin, ListView):
-    model               = Reporte
+    model               = Mantencion
     paginate_by         = 20
     template_name       = "mantencion/mantenciones.html"
-    context_object_name = "reportes"
+    context_object_name = "mantenciones"
 
-    # Obtiene los reportes inválidos y los ordena por fecha
+    # Obtiene los mantenciones inválidos y los ordena por fecha
     def get_queryset(self):
-        if self.request.user.r_id_rol.rol == "Operador":
-            return Reporte.objects.filter(u_p_id_persona = self.request.user, valido = 0).order_by('-fecha')
-        return Reporte.objects.filter(valido = 1).order_by('-fecha')
+        if self.request.user.r_id_rol.rol == "Mecánico":
+            return Mantencion.objects.filter(u_p_id_persona = self.request.user, valido = 0).order_by('-fecha')
+        return Mantencion.objects.filter(valido = 0).order_by('-fecha')
 
     # Obtención de otros datos.
     def get_context_data(self, **kwargs):
@@ -686,30 +696,48 @@ class MantencionesInvalidosListView(LoginRequiredMixin, ListView):
         context['nombres'] = self.request.user.p_id_persona.nombres.split()
         return context
 
+# --------------------------------------------------------------------------------------------------------------- #
+# --------------------------------------------------------------------------------------------------------------- #
+
 class DetalleMantencionDetailView(LoginRequiredMixin, DetailView):
-    model               = Reporte
-    template_name       = "reportes/detalleReport.html"
-    context_object_name = "reporte"
+    model               = Mantencion
+    template_name       = "mantencion/detalleMantencion.html"
+    context_object_name = "mantencion"
 
     # Obtención de otros datos.
     def get_context_data(self, **kwargs):
-        idReporte             = self.object.id_reporte
-        context               = super().get_context_data(**kwargs)
-        context["accesorios"] = Accesorio.objects.all()
-        context['nombres']    = self.request.user.p_id_persona.nombres.split()
-        context["operadores"] = Usuario.objects.filter(r_id_rol = 1)
-        # Se obtienen los accesorios seleccionados en el reporte.
-        detalle               = AccesorioReporte.objects.filter(r_id_reporte = idReporte).values_list()
-        context['detalles']   = []
-        for d in detalle:
-            context['detalles'].append(Accesorio.objects.get(id_accesorio = d[1]))
+        mantencion = self.object
+        mecanico   = Rol.objects.get(rol = "Mecánico")
+        context    = super().get_context_data(**kwargs)
+        context['nombres']   = self.request.user.p_id_persona.nombres.split()
+        context["mecanicos"] = Usuario.objects.filter(r_id_rol = mecanico.id_rol)
+
+        check = Checkmaquina.objects.filter(id_check = mantencion.ch_id_check.id_check).values_list()
+        context["checks"] = {}
+        for i in range(1,16):
+            context['checks'][i] = check[0][i]
+
+        inspecciones = Inspeccion.objects.filter(m_id_mantencion = mantencion.id_mantencion)
+        context['estructural'] = {}
+        context['fluidos']     = {}
+        context['cabina']      = {}
+        for i in range(0,31):
+            if i < 14:
+                context['estructural'][i+1] = inspecciones[i]
+            elif 14 <= i < 25:
+                context['fluidos'][i+1] = inspecciones[i]
+            else:
+                context['cabina'][i+1] = inspecciones[i]
+
+        # context['archivo'] = open(os.path.join(settings.MEDIA_ROOT+'/'+ mantencion.archivo.name), "rb")
         return context
 
     def editar_mantencion(request):
-        return ModificacionesTablas.editar_report(request)
+        return ModificacionesTablas.editar_mantencion(request)
 
     def validar_mantencion(request):
-        return ModificacionesTablas.validar_report(request)
+        return ModificacionesTablas.validar_mantencion(request)
+
 # --------------------------------------------------------------------------------------------------------------- #
 # --------------------------------------------------------------------------------------------------------------- #
 

@@ -44,3 +44,14 @@ function changeFunc() {
     let selectedValue = selectBox.options[selectBox.selectedIndex].value;
     document.getElementById("idUsuarioInput").innerHTML = '<input type="hidden" name="p_id_persona" id="id_p_id_persona" value="'+selectedValue+'">'
 }
+
+function onLoadImage(files){
+    console.log(files)
+    if (files && files[0]) {
+        console.log(files[0])
+        const objetoURL = URL.createObjectURL(files[0]);
+        document
+        .getElementById('nombreArchivo')
+        .innerHTML = files[0].name
+    }
+}

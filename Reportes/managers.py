@@ -216,6 +216,7 @@ class MantencionManager(models.Manager):
             prox_mantencion = proxMant,
             prox_horometro  = proxHor,
             archivo         = archivo,
+            valido = 0,
             **extra_fields
         )
         return correoArchivo

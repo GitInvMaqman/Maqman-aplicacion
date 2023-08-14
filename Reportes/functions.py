@@ -241,7 +241,6 @@ class ModificacionesTablas():
         titulo = '<h2>¡Correo programado exitosamente!</h2>'
         messages.success(request, titulo)
         return correoCreado
-
     def agregar_contactos(request, contactos, correo):
         lista = []
         for idContacto in contactos:
@@ -250,20 +249,21 @@ class ModificacionesTablas():
             detContactoCorreo = CorreoContacto.objects.crear_detalle(contacto, correo)
             lista.append(detContactoCorreo)
         return lista
-
     def agregar_imagenes(request, imagenes, correo):
         lista = []
         for imagen in imagenes:
             imagenCorreo = ImagenCorreo.objects.agregar_imagen(imagen, correo)
             lista.append(imagenCorreo)
         return lista
-
     def agregar_archivos(request, archivos, correo):
         lista = []
         for archivo in archivos:
             archivoCorreo = ArchivoCorreo.objects.agregar_archivo(archivo, correo)
             lista.append(archivoCorreo)
         return lista
+
+    def editar_correo(request):
+        pass
 
     def crear_contacto(request, datos):
         contactoCreado = Contacto.objects.crear_contacto(
@@ -328,7 +328,6 @@ class ModificacionesTablas():
         titulo = '<h2>Reporte N° '+ str(reporteCreado.id_reporte) +' creado exitosamente!</h2>'
         messages.success(request, titulo)
         return reporteCreado
-    
     def crear_detalle(lista, reporte):
         lista_detalles = []
         for idAccesorio in lista:
@@ -410,18 +409,6 @@ class ModificacionesTablas():
 
         titulo = '<h2>¡Reporte actualizado!</h2>'
         texto  = '<p style="font-size:24;">Los datos del reporte se han editado exitosamente.</p>'
-        # texto += '<p>Fecha: ' + reporte.fecha + '</p>'
-        # texto += '<p>Cliente: ' + reporte.cliente + ' Obra: ' + reporte.obra + '</p>'
-        # texto += '<p>Operador: ' + persona.nombres + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno + '</p>'
-        # texto += '<p>Hora Ingreso: ' + reporte.hora_ingreso + ' Hora Término: ' + reporte.hora_termino + '</p>'
-        # texto += '<p>Horas Arriendo: ' + reporte.horas_arriendo + '</p>'
-        # texto += '<p>Horóm. Inicial: ' + reporte.horometro_inicial + ' Horóm. Final: ' + reporte.horometro_final + '</p>'
-        # texto += '<p>Horómetro Total: ' + reporte.horometro_total + '</p>'
-        # texto += '<p>Equipo Número: ' + reporte.equipo_numero + ' Hora Mínima: ' + reporte.hora_minima + '</p>'
-        # texto += '<p>Observaciones: ' + reporte.observaciones + '</p>'
-        # if reporte.img_maquinaria and reporte.img_report:
-        #     texto += '<img src="'+ reporte.img_report.url +'" alt="Reporte físico" id="imgReport" height="150px" width="150px">'
-        #     texto += '<img src="'+reporte.img_maquinaria.url+'" alt="Maquinaria" id="imgMaquinaria" height="150px" width="150px">'
         messages.success(request, titulo+texto)
         return HttpResponseRedirect('/Detalle-Reporte/' + id_report)
     
@@ -625,16 +612,118 @@ class ModificacionesTablas():
         )
         return checkMaquinacreado
     def crear_inspeccion(request, mantencion):
+        listaInspecciones = []
         for i in range(1,32):
-            Inspeccion.objects.agregar_inspeccion(
+            inspeccionCreada = Inspeccion.objects.agregar_inspeccion(
                 mantencion,
                 request.POST.get(f'inspeccion{i}'),
                 request.POST.get(f'chk1_{i}'),
                 request.POST.get(f'busqueda{i}'),
                 request.POST.get(f'chk2_{i}'),
-                request.POST.get(f'estado_{i}')
+                request.POST.get(f'estado{i}')
             )
-        pass
+            
+            listaInspecciones.append(inspeccionCreada)
+            titulo = '<h2>¡Mantención creada!</h2>'
+            texto  = '<p style="font-size:24;">El certificado de mantención del minicargador se ha creado con éxito.</p>'
+            messages.success(request, titulo+texto)
+        return listaInspecciones
+
+    def editar_mantencion(request):
+        mantencion   = Mantencion.objects.get(id_mantencion = request.POST.get('id_mantencion'))
+        checkMaq     = Checkmaquina.objects.get(id_check = mantencion.ch_id_check.id_check)
+        inspecciones = Inspeccion.objects.filter(m_id_mantencion = mantencion.id_mantencion)
+        persona      = Usuario.objects.get(p_id_persona = request.POST.get('p_id_persona'))
+
+        for i in range(0, 31):
+            print(inspecciones[i])
+            print(inspecciones)
+            inspeccion = inspecciones[i]
+            inspeccion.inspeccion = request.POST.get(f'inspeccion{i+1}')
+            inspeccion.check1     = request.POST.get(f'chk1_{i+1}')
+            inspeccion.busqueda   = request.POST.get(f'busqueda{i+1}')
+            inspeccion.check2     = request.POST.get(f'chk2_{i+1}')
+            inspeccion.estado     = request.POST.get(f'estado{i+1}')
+
+            inspeccion.save()
+
+        checks = {}
+        for i in range(1,16):
+            check = request.POST.get(f'check_{i}')
+            if check == None:
+                check = False
+            else:
+                check = True
+            checks[f'check_{i}'] = check
+
+        checkMaq.check_1  = checks['check_1']
+        checkMaq.check_2  = checks['check_2']
+        checkMaq.check_3  = checks['check_3']
+        checkMaq.check_4  = checks['check_4']
+        checkMaq.check_5  = checks['check_5']
+        checkMaq.check_6  = checks['check_6']
+        checkMaq.check_7  = checks['check_7']
+        checkMaq.check_8  = checks['check_8']
+        checkMaq.check_9  = checks['check_9']
+        checkMaq.check_10 = checks['check_10']
+        checkMaq.check_11 = checks['check_11']
+        checkMaq.check_12 = checks['check_12']
+        checkMaq.check_13 = checks['check_13']
+        checkMaq.check_14 = checks['check_14']
+        checkMaq.check_15 = checks['check_15']
+        
+        checkMaq.save()
+
+        mantencion.u_p_id_persona  = persona
+        mantencion.fecha           = request.POST.get('fecha')
+        mantencion.numero_maquina  = request.POST.get('numero_maquina')
+        mantencion.horometro_maq   = request.POST.get('horometro_maq')
+        mantencion.descripcion     = request.POST.get('descripcion')
+        mantencion.observacion     = request.POST.get('observacion')
+        mantencion.insumos         = request.POST.get('insumos')
+        mantencion.prox_mantencion = request.POST.get('prox_mantencion')
+        mantencion.prox_horometro  = request.POST.get('prox_horometro')
+        
+        archivoMantencion = request.FILES.get('img_mantencion')
+
+        dirArchivoMantencion = os.path.join(settings.MEDIA_ROOT+'/'+mantencion.archivo.name)
+
+        if archivoMantencion == None:
+            archivoMantencion = mantencion.archivo
+        elif mantencion.archivo == '':
+            print('hola')
+        else:
+            os.remove(dirArchivoMantencion)
+
+        mantencion.archivo = archivoMantencion
+
+        mantencion.save()
+
+        titulo = '<h2>¡Mantención actualizada!</h2>'
+        texto  = '<p style="font-size:24;">Los datos del certificado se han editado con éxito.</p>'
+        messages.success(request, titulo+texto)
+        return HttpResponseRedirect('/Detalle-Mantencion/' + request.POST.get('id_mantencion'))
+
+    def validar_mantencion(request):
+        idMantencion = request.POST.get('id_mantencion')
+        mantencion   = Mantencion.objects.get(id_mantencion = idMantencion)
+
+        if mantencion.valido == 0:
+            mantencion.valido = 1
+            validez        = 'validada'
+            if mantencion.archivo != '':
+                os.remove(os.path.join(settings.MEDIA_ROOT+'/'+mantencion.archivo.name))
+                mantencion.archivo = ''
+        else:
+            mantencion.valido = 0
+            validez        = 'invalidada'
+
+        mantencion.save()
+
+        titulo = '<h2>¡Mantención ' + validez + '!</h2>'
+        texto  = '<p style="font-size:24;">La mantención se ha '+ validez + ' con éxito.</p>'
+        messages.success(request, titulo+texto)
+        return HttpResponseRedirect('/Ver-Mantenciones/')
 
 class operacionesFechas():
     def reporte_mes(mes):

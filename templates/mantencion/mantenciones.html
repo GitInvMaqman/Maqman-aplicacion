@@ -7,36 +7,27 @@
 
 {% block contenido %}    
     <h1>Ver Mantenciones</h1>
-    {% if reportes %}
+    {% if mantenciones %}
         <div class="cartas-principales">
-            {% for r in reportes %}
+            {% for m in mantenciones %}
                 <div class="carta-principal">
-                    <a  href="{% url 'reportesMaqman:detalleReport' r.id_reporte %}" 
+                    <a  href="{% url 'reportesMaqman:detalleMantencion' m.id_mantencion %}" 
                         class="card"
-                        {% if r.valido == 1 %}
+                        {% if m.valido == 1 %}
                             style = "background-color: palegreen;"
                             onmouseover="this.style.backgroundColor='orange'" 
                             onmouseout="this.style.backgroundColor='palegreen'"
                         {% endif %}>
-                        <div class="img-card">
-                            
-                            {% if r.img_report %}
-                                <img src="{{ r.img_report.url }}" alt="imagen del reporte físico">
-                            {% else %}
-                                <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen no encontrada">
-                            {% endif %}
-                                
-                        </div>
                         <div class="contenido-card">
-                            <textarea cols="50" rows="2" class="textarea-card" readonly>{{ r.u_p_id_persona.p_id_persona.nombres }}</textarea>
+                            <textarea cols="50" rows="2" class="textarea-card" readonly>{{ m.u_p_id_persona.p_id_persona.nombres }}</textarea>
                         </div>
-                        <p class="pie-card">{{ r.fecha|date:'F d' }}</p>
+                        <p class="pie-card">{{ m.fecha|date:'F d' }}</p>
                     </a>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <h1>No existen reportes en este momento.</h1>
+        <h1>No existen mantenciones en este momento.</h1>
     {% endif %}
     {% include 'includes/pagination.html' %}
         

@@ -43,13 +43,14 @@ urlpatterns = [
     path('Programar-Correo/'            , views.CorreoFormView.as_view()                       , name = 'programarCorreo'),
     path('Correos-Programados/'         , views.CorreosListView.as_view()                      , name = 'correosProgramados'),
     path('Detalle-Correo/<int:pk>/'     , views.CorreoDetailView.as_view()                     , name = 'detalleCorreo'),
+    path('Editar-Correo/'               , views.CorreoDetailView.editar_correo                 , name = 'editarCorreo'),
     path('EnviarCorreo/'                , views.CorreoFormView.enviarCorreo                    , name = 'EnviarCorreo'),
     
     # Mantención de máquinas
     path('Generar-Mantencion/'          , views.GenerarMantencionFormView.as_view()            , name = 'generarMantencion'),
     path('Ver-Mantenciones/'            , views.VerMantencionesView.as_view()                  , name = 'verMantenciones'),
-    path('Mantenciones-Válidos/'        , views.MantencionesValidosListView.as_view()          , name = 'mantencionesValidas'),
-    path('Mantenciones-Inválidos/'      , views.MantencionesInvalidosListView.as_view()        , name = 'mantencionesInvalidas'),
+    path('Mantenciones-Válidas/'        , views.MantencionesValidosListView.as_view()          , name = 'mantencionesValidas'),
+    path('Mantenciones-Inválidas/'      , views.MantencionesInvalidosListView.as_view()        , name = 'mantencionesInvalidas'),
     path('Detalle-Mantencion/<int:pk>/' , views.DetalleMantencionDetailView.as_view()          , name = 'detalleMantencion'),
     path('Editar-Mantencion/'           , views.DetalleMantencionDetailView.editar_mantencion  , name = 'editarMantencion'),
     path('Validar-Mantencion/'          , views.DetalleMantencionDetailView.validar_mantencion , name = 'validarMantencion'),

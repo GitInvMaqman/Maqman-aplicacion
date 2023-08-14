@@ -1,0 +1,573 @@
+{% extends 'baseCuenta.html' %}
+{% load static %}
+
+{% block titulo %}
+    Mantención Minicargadores
+{% endblock titulo %}
+
+{% block contenido %}
+<form action="{% url 'reportesMaqman:editarMantencion' %}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+    <table>
+        <input type="hidden" name="id_mantencion" value="{{ mantencion.id_mantencion }}">
+        <h1>Mantencion del {{ mantencion.fecha }}</h1>
+        <th class="first" colspan="5">Certificado de Mantenimiento: Minicargadores</th>
+        <tr>
+            {% if user.r_id_rol.rol == "Mecánico" %}
+                <td>Persona encargada:</td>
+                <td colspan="2">
+                    <input style="background-color: palegreen;"class="text" type="text" name="nombre_usuario"  id="id_nombre_usuario" value="{{ mantencion.u_p_id_persona.p_id_persona.nombres }} {{ mantencion.u_p_id_persona.p_id_persona.apellido_paterno }} {{ mantencion.u_p_id_persona.p_id_persona.apellido_materno }}" readonly>
+                </td>
+                <input type="hidden" name="p_id_persona" value="{{ mantencion.u_p_id_persona.p_id_persona.id_persona }}">
+            {% else %}
+                <td>Persona encargada:</td>
+                <td colspan="2">
+                    <select class="text" name="idUsuarioSelect" class="form-control" required name="nombre_usuario" id="id_nombre_usuario" onchange="changeFunc();">
+                        {% for m in mecanicos %}
+                            {% if m == mantencion.u_p_id_persona %}
+                                <option selected value="{{ m.p_id_persona.id_persona }}">{{ m.p_id_persona.nombres }} {{ m.p_id_persona.apellido_paterno }} {{ m.p_id_persona.apellido_materno }}</option>
+                            {% else %}
+                                <option value="{{ m.p_id_persona.id_persona }}">{{ m.p_id_persona.nombres }} {{ m.p_id_persona.apellido_paterno }} {{ m.p_id_persona.apellido_materno }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </td>
+                <div id="idUsuarioInput"><input type="hidden" name="p_id_persona" id="id_p_id_persona" value="{{ mantencion.u_p_id_persona.p_id_persona.id_persona }}"></div>
+            {% endif %}
+            <td>Fecha:</td>
+            <td><input type="date" name="fecha" class="fechahora" required id="id_fecha" value="{{ mantencion.fecha | date:'Y-m-d' }}"></td>
+        </tr>
+        <tr>
+            <td>N° Máquina:</td>
+            <td colspan="2">
+                <input type="text" name="numero_maquina" class="text" placeholder="N° Máquina" required maxlength="20" id="id_numero_maquina" value="{{ mantencion.numero_maquina }}">
+            </td>
+            <td>Horómetro máquina:</td>
+            <td>
+                <input type="number" name="horometro_maq" class="number" placeholder="Horómetro de la máquina" value="{{ mantencion.horometro_maq|floatformat:'u' }}" required="" step="0.1" id="id_horometro_maq">
+            </td>
+        </tr>
+    </table>
+    <table style="border-top-left-radius: 0; border-top-right-radius: 0;">
+        <tr>
+            <th colspan="5">Inspección previa a la mantención</th>
+        </tr>
+        <tr>
+            <th style="width: 20px;">¿Qué está inspeccionando?</th>
+            <th style="width: 5%;" class="chk"></th>
+            <th style="width: 35%;">¿Qué está buscando?</th>
+            <th style="width: 5%;" class="chk"></th>
+            <th style="width: 35%;">Estado actual</th>
+        </tr>
+        <tr>
+            <th colspan="5">Estructural</th>
+        </tr>
+        
+        {% for key, value in estructural.items %}
+            <tr>
+                <input type="hidden" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value.inspeccion }}" readonly class="inspeccion" required>
+                <td>
+                    {{ value.inspeccion }}
+                </td>
+                <td>  
+                    <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="{{ value.check1 }}" style="width: 100%;" required>
+                </td>
+                <td>  
+                    <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="2" style="resize: none; font-family: monospace;" required>{{ value.busqueda }}</textarea>
+                </td>
+                <td>  
+                    <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="{{ value.check2 }}" style="width: 100%;" required>
+                </td>
+                <td>  
+                    <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="2" style="resize: none; font-family: monospace;" required>{{ value.estado }}</textarea>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <th colspan="5">Fluidos</th>
+        </tr>
+        {% for key, value in fluidos.items %}
+            <tr>
+                <input type="hidden" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value.inspeccion }}" readonly class="inspeccion" required>
+                <td>
+                    {{key}} - {{ value.inspeccion }}
+                </td>
+                <td>  
+                    <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="{{ value.check1 }}" style="width: 100%;" required>
+                </td>
+                <td>  
+                    <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="2" style="resize: none; font-family: monospace;" required>{{ value.busqueda }}</textarea>
+                </td>
+                <td>  
+                    <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="{{ value.check2 }}" style="width: 100%;" required>
+                </td>
+                <td>  
+                    <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="2" style="resize: none; font-family: monospace;" required>{{ value.estado }}</textarea>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <th colspan="5">Interior Cabina</th>
+        </tr>
+        {% for key, value in cabina.items %}
+            <tr>
+                <input type="hidden" name="inspeccion{{ key }}" id="idInspeccion{{ key }}" value="{{ value.inspeccion }}" readonly class="inspeccion" required>
+                <td>
+                    {{key}} - {{ value.inspeccion }}
+                </td>
+                <td>  
+                    <input type="text" name="chk1_{{ key }}" id="idchk1_{{ key }}" value="{{ value.check1 }}" style="width: 100%;" required>
+                </td>
+                <td>  
+                    <textarea name="busqueda{{ key }}" id="idBusqueda{{ key }}" cols="500" rows="2" style="resize: none; font-family: monospace;" required>{{ value.busqueda }}</textarea>
+                </td>
+                <td>  
+                    <input type="text" name="chk2_{{ key }}" id="idchk2_{{ key }}" value="{{ value.check2 }}" style="width: 100%;" required>
+                </td>
+                <td>  
+                    <textarea name="estado{{ key }}" id="idEstado{{ key }}" cols="500" rows="2" style="resize: none; font-family: monospace;" required>{{ value.estado }}</textarea>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <table style="border-top-left-radius: 0; border-top-right-radius: 0;"style="height: 100%;">
+        <tr>
+            <td style="height: 100%;">
+                {% for key, value in checks.items %}
+                    <input 
+                        class="checkMaquina desaparece"
+                        type="checkbox"
+                        name="check_{{ key }}"
+                        id="idCheck_{{ key }}"
+                        {% if value == 1 %}
+                            checked
+                        {% endif %}
+                        >
+                    <label for="idCheck_{{ key }}">
+                        <center>
+                            {{ key }}
+                        </center>
+                    </label>
+                {% endfor %}
+            </td>
+            <td style="height: 100%;" class="img_minicargador">
+                <img class="img_minicargador" src="{% static 'img/minicargador_lado.png' %}" alt="">
+                <img class="img_minicargador" src="{% static 'img/minicargador_atras.png' %}" alt="">
+            </td>
+        </tr>
+    </table>
+        
+
+    <table style="border-top-left-radius: 0; border-top-right-radius: 0;">
+        <tr>
+            <th colspan="4">Post-mantención</th>
+        </tr>
+        <tr>
+            <th colspan="4">Descripción de la mantención realizada</th>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <textarea name="descripcion" rows="5" class="txtarea" placeholder="Descripción" style="resize: none; font-family: monospace;" required="" maxlength="1024" id="id_descripcion">{{ mantencion.descripcion }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="4">Observaciones</th>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <textarea name="observacion" rows="5" class="txtarea" placeholder="Observaciones" style="resize: none; font-family: monospace;" required="" maxlength="1024" id="id_observacion">{{ mantencion.observacion }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="4">Insumos utilizados</th>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <textarea name="insumos" rows="3" class="txtarea" placeholder="Insumos" style="resize: none; font-family: monospace;" required="" maxlength="512" id="id_insumos">{{ mantencion.insumos }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="4">Próxima mantención</th>
+        </tr>
+        <tr>
+            <td>Fecha:</td>
+            <td>
+                <input value="{{ mantencion.prox_mantencion }}" type="text" name="prox_mantencion" class="text" placeholder="Fecha apróximada" required="" maxlength="200" id="id_prox_mantencion">
+            </td>
+            <td>Horómetro:</td>
+            <td>
+                <input value="{{ mantencion.prox_horometro|floatformat:'u' }}" type="number" name="prox_horometro" class="number" placeholder="Horómetro próxima mantención" required="" step="0.1" id="id_prox_horometro">
+            </td>
+        </tr>
+    </table>
+    <table style="border-radius: 0;">
+        <tr>
+            <td class="td-img"
+            {% if user.r_id_rol.rol == "Asistente" %}
+                colspan="2"
+            {% endif %}
+            >
+                <label for="id_img_mantencion">
+                    <center>
+                        Subir archivo
+                        <input onChange="onLoadImage(event.target.files)" class="file desaparece" type="file" name="img_mantencion" id="id_img_mantencion" accept=".pdf, .docx, .doc, .xlsx">
+                        <br>
+                        <span id="nombreArchivo"> {{ mantencion.archivo.name }} </span>
+                    </center>
+                </label>
+                <center>
+                    <a class="descImg" href="{{mantencion.archivo.url}}">
+                        <img src="{% static 'img/descargar_archivo.png' %}" alt="Imagen del certificado de mantención" id="archivoMantencion" height="150px" width="150px">
+                        Descargar archivo
+                    </a>
+                </center>
+            </td>
+        </tr>
+        <tr>
+            {% if user.r_id_rol.rol == "Asistente" %}
+            <td>
+                <input  class="btn-submit btn-1" 
+                        type="button" 
+                        {% if mantencion.valido == 0 %}
+                            value="Validar Certificado"
+                            onclick="modalValidarMantencion();"
+                        {% else %}
+                            value="Invalidar Certificado"
+                            onclick="validarMantencion('{{ mantencion.valido }}', '{{ mantencion.u_p_id_persona.p_id_persona.nombres }} {{ mantencion.u_p_id_persona.p_id_persona.apellido_paterno }} {{ mantencion.u_p_id_persona.p_id_persona.apellido_materno }}', '{{ mantencion.fecha }}');"
+                        {% endif %}>
+            </td>
+            {% endif %}
+            
+            {% if user.r_id_rol.rol == "Operador" %}
+            <td colspan="2">
+            {% else %}
+            <td>
+            {% endif %}
+                <button class="btn-submit btn-2" type="submit">Editar Certificado</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+    <span class="close">&otimes;</span>
+    <!-- <img class="modal-content" id="img01"> -->
+    <div id="caption">
+        <table>
+            <th class="first" colspan="4">Certificado de mantención</th>
+            <tr>
+                <td>Persona encargada: </td>
+                <td>
+                    <input 
+                        class="sbg-skyblue text"
+                        type="text"
+                        id="modalCliente"
+                        value="{{ mantencion.u_p_id_persona.p_id_persona.nombres }} {{ mantencion.u_p_id_persona.p_id_persona.apellido_paterno }} {{ mantencion.u_p_id_persona.p_id_persona.apellido_materno }}"
+                        readonly>
+                </td>
+                <td>Fecha:</td>
+                <td>
+                    <input
+                        class="sbg-skyblue"
+                        type="date"
+                        id="modalFecha"
+                        value="{{ mantencion.fecha | date:'Y-m-d' }}"
+                        readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>N° Máquina:</td>
+                <td>
+                    <input 
+                        class="sbg-skyblue text"
+                        type="text"
+                        id="modalNumero_maquina" 
+                        value="{{ mantencion.numero_maquina }}">
+                </td>
+                <td>Horómetro máquina:</td>
+                <td>
+                    <input 
+                        class="sbg-skyblue" 
+                        type="number"
+                        id="modalHorometro_maq"
+                        value="{{ mantencion.horometro_maq|floatformat:'u' }}"
+                        readonly>
+                </td>
+            </tr>
+        </table>
+        <table style="border-top-left-radius: 0; border-top-right-radius: 0;">
+            <tr>
+                <th colspan="5">Inspección previa a la mantención</th>
+            </tr>
+            <tr>
+                <th style="width: 20px;">¿Qué está inspeccionando?</th>
+                <th style="width: 5%;" class="chk"></th>
+                <th style="width: 35%;">¿Qué está buscando?</th>
+                <th style="width: 5%;" class="chk"></th>
+                <th style="width: 35%;">Estado actual</th>
+            </tr>
+            <tr>
+                <th colspan="5">Estructural</th>
+            </tr>
+            
+            {% for key, value in estructural.items %}
+                <tr>
+                    <td>
+                        {{ value.inspeccion }}
+                    </td>
+                    <td>  
+                        <input
+                            class="sbg-skyblue"
+                            type="text"
+                            id="idchk1_{{ key }}"
+                            value="{{ value.check1 }}"
+                            style="width: 100%;"
+                            readonly>
+                    </td>
+                    <td>  
+                        <textarea
+                            class="sbg-skyblue"
+                            id="idBusqueda{{ key }}"
+                            cols="500" rows="2"
+                            style="resize: none; font-family: monospace;"
+                            readonly
+                            >{{ value.busqueda }}</textarea>
+                    </td>
+                    <td>  
+                        <input
+                            class="sbg-skyblue"
+                            type="text"
+                            id="idchk2_{{ key }}"
+                            style="width: 100%;"
+                            value="{{ value.check2 }}"
+                            readonly>
+                    </td>
+                    <td>  
+                        <textarea
+                            class="sbg-skyblue"
+                            id="idEstado{{ key }}"
+                            cols="500" rows="2"
+                            style="resize: none; font-family: monospace;"
+                            readonly
+                            >{{ value.estado }}</textarea>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <th colspan="5">Fluidos</th>
+            </tr>
+            {% for key, value in fluidos.items %}
+                <tr>
+                    <td>
+                        {{ value.inspeccion }}
+                    </td>
+                    <td>  
+                        <input
+                            class="sbg-skyblue"
+                            type="text"
+                            id="idchk1_{{ key }}"
+                            value="{{ value.check1 }}"
+                            style="width: 100%;"
+                            readonly>
+                    </td>
+                    <td>  
+                        <textarea
+                            class="sbg-skyblue"
+                            id="idBusqueda{{ key }}"
+                            cols="500" rows="2"
+                            style="resize: none; font-family: monospace;"
+                            readonly
+                            >{{ value.busqueda }}</textarea>
+                    </td>
+                    <td>  
+                        <input
+                            class="sbg-skyblue"
+                            type="text"
+                            id="idchk2_{{ key }}"
+                            style="width: 100%;"
+                            value="{{ value.check2 }}"
+                            readonly>
+                    </td>
+                    <td>  
+                        <textarea
+                            class="sbg-skyblue"
+                            id="idEstado{{ key }}"
+                            cols="500" rows="2"
+                            style="resize: none; font-family: monospace;"
+                            readonly
+                            >{{ value.estado }}</textarea>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <th colspan="5">Interior Cabina</th>
+            </tr>
+            {% for key, value in cabina.items %}
+                <tr>
+                    <td>
+                        {{ value.inspeccion }}
+                    </td>
+                    <td>  
+                        <input
+                            class="sbg-skyblue"
+                            type="text"
+                            id="idchk1_{{ key }}"
+                            value="{{ value.check1 }}"
+                            style="width: 100%;"
+                            readonly>
+                    </td>
+                    <td>  
+                        <textarea
+                            class="sbg-skyblue"
+                            id="idBusqueda{{ key }}"
+                            cols="500" rows="2"
+                            style="resize: none; font-family: monospace;"
+                            readonly
+                            >{{ value.busqueda }}</textarea>
+                    </td>
+                    <td>  
+                        <input
+                            class="sbg-skyblue"
+                            type="text"
+                            id="idchk2_{{ key }}"
+                            style="width: 100%;"
+                            value="{{ value.check2 }}"
+                            readonly>
+                    </td>
+                    <td>  
+                        <textarea
+                            class="sbg-skyblue"
+                            id="idEstado{{ key }}"
+                            cols="500" rows="2"
+                            style="resize: none; font-family: monospace;"
+                            readonly
+                            >{{ value.estado }}</textarea>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <table style="border-top-left-radius: 0; border-top-right-radius: 0;"style="height: 100%;">
+            <tr>
+                <td style="height: 100%;">
+                    {% for key, value in checks.items %}
+                        <input 
+                            class="checkMaquina desaparece"
+                            type="checkbox"
+                            name="check_{{ key }}"
+                            id="idCheck_{{ key }}"
+                            {% if value == 1 %}
+                            checked
+                            {% endif %}
+                            >
+                        <label for="idCheck_{{ key }}">
+                            <center
+                                {% if value == 1 %}
+                                    style="background-color: skyblue;"
+                                {% else %}
+                                    style="background-color: gray;"
+                                {% endif %}>
+                                {{ key }}
+                            </center>
+                        </label>
+                    {% endfor %}
+                </td>
+                <td style="height: 100%;" class="img_minicargador">
+                    <img class="img_minicargador" src="{% static 'img/minicargador_lado.png' %}" alt="">
+                    <img class="img_minicargador" src="{% static 'img/minicargador_atras.png' %}" alt="">
+                </td>
+            </tr>
+        </table>
+        <table style="border-top-left-radius: 0; border-top-right-radius: 0;">
+            <tr>
+                <th colspan="4">Post-mantención</th>
+            </tr>
+            <tr>
+                <th colspan="4">Descripción de la mantención realizada</th>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <textarea
+                        class="txtarea sbg-skyblue"
+                        rows="5"
+                        style="resize: none; font-family: monospace;"
+                        id="id_descripcion"
+                        readonly
+                        >{{ mantencion.descripcion }}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="4">Observaciones</th>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <textarea
+                        class="txtarea sbg-skyblue"
+                        rows="5"
+                        style="resize: none; font-family: monospace;"
+                        id="id_observacion"
+                        readonly
+                        >{{ mantencion.observacion }}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="4">Insumos utilizados</th>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <textarea
+                        class="txtarea sbg-skyblue"
+                        rows="3"
+                        style="resize: none; font-family: monospace;"
+                        id="id_insumos"
+                        readonly
+                        >{{ mantencion.insumos }}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="4">Próxima mantención</th>
+            </tr>
+            <tr>
+                <td>Fecha:</td>
+                <td>
+                    <input
+                        class="text sbg-skyblue"
+                        type="text"
+                        id="id_prox_mantencion"
+                        value="{{ mantencion.prox_mantencion }}"
+                        readonly>
+                </td>
+                <td>Horómetro:</td>
+                <td>
+                    <input
+                        class="number sbg-skyblue"
+                        type="number"
+                        id="id_prox_horometro"
+                        step="0.1"
+                        value="{{ mantencion.prox_horometro|floatformat:'u' }}"
+                        readonly>
+                </td>
+            </tr>
+        </table>
+        <table style="border-top-left-radius: 0; border-top-right-radius: 0;">
+            <form action="{% url 'reportesMaqman:validarMantencion' %}" method="POST" id="formulario-validar-mantencion">{% csrf_token %}
+                <input type="hidden" name="id_mantencion" value="{{ mantencion.id_mantencion }}">
+                <tr>
+                    <td colspan="4">
+                        <input  class="btn-submit btn-2"
+                                type="button"
+                                value="Validar Certificado"
+                                onclick="validarMantencion('{{ mantencion.valido }}', '{{ mantencion.u_p_id_persona.p_id_persona.nombres }} {{ mantencion.u_p_id_persona.p_id_persona.apellido_paterno }} {{ mantencion.u_p_id_persona.p_id_persona.apellido_materno }}', '{{ mantencion.fecha }}');">
+                    </td>
+                </tr>
+            </form>
+        </table>
+    </div>
+</div>
+<a href="{% url 'reportesMaqman:verMantenciones' %}" style="margin-top: 100px;">
+    <svg preserveAspectRatio="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="btn-movil">
+        <path d="M10 9V7.41c0-.89-1.08-1.34-1.71-.71L3.7 11.29c-.39.39-.39 1.02 0 1.41l4.59 4.59c.63.63 1.71.19 1.71-.7V14.9c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"></path>
+    </svg>
+</a>
+
+<link rel="stylesheet" href="{% static 'css/estilos/estilo-mantencion.css' %}">
+{% endblock contenido %}
