@@ -6,9 +6,10 @@
 {% endblock titulo %}
 
 {% block contenido %}
-
-<h1>Error 500</h1>
-<h2>¡Ha habido un problema!</h2>
-<h2>En estos momentos hay problemas con el servidor, por favor vuelve a intentarlo más tarde.</h2>
+<center>
+    <img src="{% static 'img/error_500.png' %}" alt="error 500 imagen">
+    <h2>¡Ha habido un problema!</h2>
+    <h2>En estos momentos hay problemas con el servidor, por favor vuelve a intentarlo más tarde.</h2>
+</center>
 
 {% endblock contenido %}
