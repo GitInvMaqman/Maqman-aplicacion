@@ -712,7 +712,7 @@ class DetalleMantencionDetailView(LoginRequiredMixin, DetailView):
         context['nombres']   = self.request.user.p_id_persona.nombres.split()
         context["mecanicos"] = Usuario.objects.filter(r_id_rol = mecanico.id_rol)
 
-        check = Checkmaquina.objects.filter(id_check = mantencion.ch_id_check.id_check).values_list()
+        check = Checkmaquina.objects.filter(id_check = mantencion.ch_id_check.id_check).order_by('id_check').values_list()
         context["checks"] = {}
         for i in range(1,16):
             context['checks'][i] = check[0][i]
