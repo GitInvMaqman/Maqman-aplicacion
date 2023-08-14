@@ -717,7 +717,7 @@ class DetalleMantencionDetailView(LoginRequiredMixin, DetailView):
         for i in range(1,16):
             context['checks'][i] = check[0][i]
 
-        inspecciones = Inspeccion.objects.filter(m_id_mantencion = mantencion.id_mantencion)
+        inspecciones = Inspeccion.objects.filter(m_id_mantencion = mantencion.id_mantencion).order_by('id_inspeccion')
         context['estructural'] = {}
         context['fluidos']     = {}
         context['cabina']      = {}
