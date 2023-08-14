@@ -209,17 +209,33 @@
                 <label for="id_img_mantencion">
                     <center>
                         Subir archivo
-                        <input onChange="onLoadImage(event.target.files)" class="file desaparece" type="file" name="img_mantencion" id="id_img_mantencion" accept=".pdf, .docx, .doc, .xlsx">
+                        <input
+                            onChange="onLoadImage(event.target.files)"
+                            class="file desaparece"
+                            type="file"
+                            name="img_mantencion"
+                            id="id_img_mantencion"
+                            accept=".pdf, .docx, .doc"
+                            
+                            {% if mantencion.archivo %}
+                            {% else %}
+                            required
+                            {% endif %}
+                                
+                            >
                         <br>
                         <span id="nombreArchivo"> {{ mantencion.archivo.name }} </span>
                     </center>
                 </label>
-                <center>
-                    <a class="descImg" href="{{mantencion.archivo.url}}">
-                        <img src="{% static 'img/descargar_archivo.png' %}" alt="Imagen del certificado de mantención" id="archivoMantencion" height="150px" width="150px">
-                        Descargar archivo
-                    </a>
-                </center>
+                
+                {% if mantencion.archivo %}
+                    <center>
+                        <a class="descImg" href="{{mantencion.archivo.url}}">
+                            <img src="{% static 'img/descargar_archivo.png' %}" alt="Imagen del certificado de mantención" id="archivoMantencion" height="150px" width="150px">
+                            Descargar archivo
+                        </a>
+                    </center>
+                {% endif %}
             </td>
         </tr>
         <tr>

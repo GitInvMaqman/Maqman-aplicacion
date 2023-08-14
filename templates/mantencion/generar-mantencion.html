@@ -185,7 +185,14 @@
                 <label for="id_img_mantencion">
                     <center>
                         Subir archivo
-                        <input onChange="onLoadImage(event.target.files)" class="file desaparece" required type="file" name="img_mantencion" id="id_img_mantencion" accept=".pdf, .docx, .doc, .xlsx">
+                        <input
+                            onChange="onLoadImage(event.target.files)"
+                            class="file desaparece"
+                            required
+                            type="file"
+                            name="img_mantencion"
+                            id="id_img_mantencion"
+                            accept=".pdf, .docx, .doc">
                         <br>
                         <span id="nombreArchivo"> - </span>
                         <!-- <img src="{% static 'img/imageNotFound.png' %}" alt="Imagen del reporte físico" id="imgMantencion" height="150px" width="150px"> -->
