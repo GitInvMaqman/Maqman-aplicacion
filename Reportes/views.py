@@ -729,7 +729,6 @@ class DetalleMantencionDetailView(LoginRequiredMixin, DetailView):
             else:
                 context['cabina'][i+1] = inspecciones[i]
 
-        # context['archivo'] = open(os.path.join(settings.MEDIA_ROOT+'/'+ mantencion.archivo.name), "rb")
         return context
 
     def editar_mantencion(request):

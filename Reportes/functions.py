@@ -632,7 +632,7 @@ class ModificacionesTablas():
     def editar_mantencion(request):
         mantencion   = Mantencion.objects.get(id_mantencion = request.POST.get('id_mantencion'))
         checkMaq     = Checkmaquina.objects.get(id_check = mantencion.ch_id_check.id_check)
-        inspecciones = Inspeccion.objects.filter(m_id_mantencion = mantencion.id_mantencion)
+        inspecciones = Inspeccion.objects.filter(m_id_mantencion = mantencion.id_mantencion).order_by('id_inspeccion')
         persona      = Usuario.objects.get(p_id_persona = request.POST.get('p_id_persona'))
 
         for i in range(0, 31):
