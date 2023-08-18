@@ -120,6 +120,7 @@ class ReporteForm(forms.ModelForm):
                 'placeholder' : 'Horómetro Total',
                 'value': 0,
                 'required' : 'true',
+                'readonly' : 'true',
             }),
             'equipo_numero' : forms.TextInput(attrs={
                 'class' : 'text',

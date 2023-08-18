@@ -263,6 +263,85 @@ class ModificacionesTablas():
         return lista
 
     def editar_correo(request):
+            # Se comprueba si se ingresó al menos un contacto.
+        # contactos  = request.POST.getlist('checkbox')
+        # if not contactos:
+        #     titulo = '<h2>¡No hay contactos seleccionados!</h2>'
+        #     texto = '<p style="font-size:24;">Se necesita ingresar al menos un contacto para poder programar un correo.</p>'
+        #     return ModificacionesTablas.problemas_correos(request, titulo, texto)
+        # correo = Correo.objects.get(id_correo = request.POST.get('id_correo'))
+        # contactos = CorreoContacto.objects.filter(correo_id_correo = correo.id_correo)
+        # imagenes = ImagenCorreo.objects.filter(correo_id_correo = correo.id_correo)
+        # archivos = ArchivoCorreo.objects.filter(correo_id_correo = correo.id_correo)
+
+        # if archivos:
+        #     nuevosArchivos = request.FILES.getlist('archivo')
+        #     if nuevosArchivos:
+        #         for archivo in archivos:
+        #             dirArchivo = os.path.join(settings.MEDIA_ROOT+'/'+archivo.archivo.name)
+        #             os.remove(dirArchivo)
+        #             archivo.delete()
+        #         for nuevoArchivo in nuevosArchivos:
+        #             ModificacionesTablas.agregar_archivos(request, nuevoArchivo, correo)
+        # if imagenes:
+        #     nuevasImagenes = request.FILES.getlist('img')
+        #     if nuevasImagenes:
+        #         for imagen in imagenes:
+        #             dirImagen = os.path.join(settings.MEDIA_ROOT+'/'+imagen.imagen.name)
+        #             os.remove(dirImagen)
+        #             imagen.delete()
+        #         for nuevaImagen in nuevasImagenes:
+        #             ModificacionesTablas.agregar_archivos(request, nuevaImagen, correo)
+
+        # nuevosContactos = request.POST.getlist('checkbox')
+        # for contacto in contactos:
+        #     contacto.delete()
+        # ModificacionesTablas.agregar_contactos(request, nuevosContactos, correo)
+
+        # tipoEnvio  = request.POST.get('tipo_envio')
+        # # Se registra la fecha y hora según el tipo de envío.
+        # fecha = ""
+        # hora = ""
+        # # Tipo Anual.
+        # if tipoEnvio == "1":
+        #     dia = request.POST.get('diaAnual')
+        #     mes = request.POST.get('mesAnual')
+        #     hrs = request.POST.get('horaAnual')
+        #     fecha = "1998-" + mes + "-" + dia
+        # # Tipo Mensual.
+        # elif tipoEnvio == "2":
+        #     dia = request.POST.get("diaMensual")
+        #     hrs = request.POST.get('horaMensual')
+        #     fecha = "1998-10-" + dia
+        # # Tipo Semanal.
+        # elif tipoEnvio == "3":
+        #     dia = request.POST.get("diaSemanal")
+        #     hrs = request.POST.get('horaSemanal')
+        #     fecha = "1998-10-0" + dia
+        # # Tipo Único.
+        # elif tipoEnvio == "4":
+        #     fecha = request.POST.get("fechaUnica")
+        #     hrs = request.POST.get('horaUnica')
+
+        # # Si se registró la hora se registra como fecha con hora y se registra el tipo de envío.
+        # if hrs:
+        #     hora = "1998-10-08 " + hrs
+        #     envio = TipoEnvio.objects.filter(id_tipo = tipoEnvio)
+
+        # # Se comprueba si se ingresó la fecha.
+        # if not fecha:
+        #     titulo = '<h2>¡No hay fecha ingresada!</h2>'
+        #     texto = '<p style="font-size:24;">Se necesita ingresar alguna fecha para poder programar un correo.</p>'
+        #     return ModificacionesTablas.problemas_correos(request, titulo, texto)
+
+        # # Se comprueba si se ingresó la hora.
+        # if not hora:
+        #     titulo = '<h2>¡No hay hora ingresada!</h2>'
+        #     texto = '<p style="font-size:24;">Se necesita ingresar alguna hora para poder programar un correo.</p>'
+        #     return ModificacionesTablas.problemas_correos(request, titulo, texto)
+
+        # correo.asunto = request.POST.get('asuntoCorreo')
+        # correo.cuerpo = request.POST.get('cuerpoCorreo')
         pass
 
     def crear_contacto(request, datos):
@@ -361,8 +440,8 @@ class ModificacionesTablas():
             if detalle:
                 detalle.delete()
 
-        img_maquinaria    = request.FILES.get('img_maquinaria')
-        img_report        = request.FILES.get('img_report')
+        img_maquinaria = request.FILES.get('img_maquinaria')
+        img_report     = request.FILES.get('img_report')
 
         reporte = Reporte.objects.get(id_reporte = id_report)
         usuario = Usuario.objects.get(p_id_persona = p_id_persona)
@@ -756,20 +835,6 @@ class EnvioCorreos():
         return HttpResponseRedirect('/Vista-Correos/')
 
     def correo(correo, asunto, cuerpo, archivos, imagenes, tipoEnvio, fecha, contactos):
-        template = get_template('email_template01.html')
-        context = {
-                'asunto': asunto,
-                'cuerpo': cuerpo,
-                'archivos': archivos,
-                'imagenes': imagenes
-            }
-        content = template.render(context)
-        print(archivos)
-        print(imagenes)
-
-        # envio = EnvioCorreos.envio(asunto, content, ["ccm.abarca.tecnologica@gmail.com"])
-        envio = EnvioCorreos.envio(asunto, content, contactos, archivos, imagenes)
-
         # # Tipo Anual.
         # if tipoEnvio == 1:
         #     fecha += relativedelta(years=1)
@@ -792,4 +857,12 @@ class EnvioCorreos():
         # correo.fecha = nuevaFecha
         # correo.save()
 
-        return envio
+        template = get_template('email_template01.html')
+        context = {
+                'asunto': asunto,
+                'cuerpo': cuerpo,
+                'archivos': archivos,
+                'imagenes': imagenes
+            }
+        content = template.render(context)
+        return EnvioCorreos.envio(asunto, content, contactos, archivos, imagenes)

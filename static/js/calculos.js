@@ -41,5 +41,5 @@ function CalculoHorometroTotal(){
 
     strMsg = horometro_total.toFixed(2);
 
-    document.getElementById('horometroTotal').innerHTML = '<input style="background-color: palegreen;" value="'+strMsg+'" type="number" name="horometro_total" class="form-reporte" placeholder="Horómetro Total" id="id_horometro_total" required="" step="0.01">';
+    document.getElementById('horometroTotal').innerHTML = '<input style="background-color: palegreen;" value="'+strMsg+'" type="number" name="horometro_total" class="form-reporte" placeholder="Horómetro Total" id="id_horometro_total" required="" step="0.01" readonly>';
 }
